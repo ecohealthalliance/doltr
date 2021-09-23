@@ -1,4 +1,4 @@
 library(testthat)
-library(doltery)
+library(doltr)
 
-test_check("doltery")
+test_check("doltr")

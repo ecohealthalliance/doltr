@@ -1,4 +1,4 @@
-Package: doltery
+Package: doltr
 Title: A client for the dolt database
 Version: 0.0.0.9000
 Authors@R: 
@@ -7,19 +7,30 @@ Authors@R:
            role = c("aut", "cre"),
            email = "noam.ross@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Creates a DBI-compliant interface to dolt databases, also manages
-  local dolt server processes, provides convenience functions for dolt
-  versioning, and an RStudio connection pane interface.
+Description: Creates a DBI-compliant interface to dolt databases
+    (<https://www.dolthub.com>). Also manages local dolt server processes, 
+    provides convenience functions for dolt versioning, and an RStudio
+    connection pane interface.
 License: MIT + file LICENSE
+URL: https://github.com/noamross/rdolt
+BugReports: https://github.com/noamross/rdolt/issues
+Imports: 
+    DBI,
+    methods,
+    RMariaDB
+Suggests: 
+    covr,
+    DBItest,
+    dbplyr,
+    dbx,
+    dplyr,
+    lintr,
+    ps,
+    spelling,
+    sys,
+    testthat
 Encoding: UTF-8
+Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
-Imports: 
-    ps,
-    DBI,
-    RMariaDB,
-    sys
