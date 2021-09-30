@@ -12,22 +12,23 @@ Description: Creates a DBI-compliant interface to dolt databases
     provides convenience functions for dolt versioning, and an RStudio
     connection pane interface.
 License: MIT + file LICENSE
-URL: https://github.com/noamross/rdolt
-BugReports: https://github.com/noamross/rdolt/issues
+URL: https://github.com/ecohealthalliance/doltr
+BugReports: https://github.com/ecohealthalliance/doltr/issues
 Imports: 
+    cli,
     DBI,
+    dbplyr,
+    dplyr,
     methods,
-    RMariaDB
+    ps,
+    RMariaDB,
+    sys,
+    httpuv
 Suggests: 
     covr,
     DBItest,
-    dbplyr,
-    dbx,
-    dplyr,
     lintr,
-    ps,
     spelling,
-    sys,
     testthat
 Encoding: UTF-8
 Language: en-US
