@@ -2,8 +2,7 @@
 % Please edit documentation in R/server.R
 \name{dolt_server}
 \alias{dolt_server}
-\title{Fire up a dolt server and return the process ID of the shell process
-If already running, return the PID of the process}
+\title{Start up a dolt SQL server and return the server process handle}
 \usage{
 dolt_server(
   dir = Sys.getenv("DOLT_DIR", "doltdb"),
@@ -11,6 +10,7 @@ dolt_server(
   password = Sys.getenv("DOLT_PASSWORD", ""),
   port = Sys.getenv("DOLT_PORT", 3306L),
   host = Sys.getenv("DOLT_HOST", "127.0.0.1"),
+  find_port = TRUE,
   multi_db = FALSE,
   autocommit = TRUE,
   read_only = FALSE,
@@ -19,10 +19,54 @@ dolt_server(
   timeout = 0,
   query_parallelism = 2,
   max_connections = 100,
-  config_file = NULL
+  config_file = Sys.getenv("DOLT_CONFIG_FILE", "")
 )
 }
+\arguments{
+\item{dir}{The dolt directory to serve}
+
+\item{username}{The username. Defaults to "root"}
+
+\item{password}{The login password.  Defaults to empty.}
+
+\item{port}{The TCP port for connnections. Defaults to 3306.}
+
+\item{host}{The IP of the host. Defaults to the local machine, \verb{127.0.0.1}}
+
+\item{find_port}{if TRUE, switch to a different port if \code{port} is used by
+another process}
+
+\item{multi_db}{Serve multiple databases? If \code{TRUE}, \code{dir} should be a
+directory with multiple subdirectories that are dolt databases}
+
+\item{autocommit}{Automatically commit database changes to the working set?
+If \code{FALSE}, anything not manually committed will be lost.}
+
+\item{read_only}{should the database only allow read_only connections?}
+
+\item{log_level}{Defines the level of logging provided. Options are "trace",
+debug", "info", "warning", "error", and "fatal" (default "info").}
+
+\item{log_out}{Where logging output should be directed.  If \code{TRUE} it is passed
+to \code{std_out()}, if \code{FALSE} (default), it is suppressed.  Can also take
+a filename, connection, or callback function.  See \code{\link[sys:exec]{sys::exec()}}.}
+
+\item{timeout}{Defines the timeout, in seconds, used for connections
+A value of \code{0} represents an infinite timeout (default \code{28800000})}
+
+\item{query_parallelism}{Set the number of go routines spawned to handle each
+query (default \code{2})}
+
+\item{max_connections}{Set the number of connections handled by the server
+(default \code{100})}
+
+\item{config_file}{The path to a YAML config file to set these and additional
+server configuration values.  See options in the
+\href{https://docs.dolthub.com/interfaces/cli#dolt-sql-server}{dolt documentation}.}
+}
+\value{
+A \code{dolt_server} object that is also a \code{\link[ps:ps_handle]{ps::ps_handle()}}
+}
 \description{
-Fire up a dolt server and return the process ID of the shell process
-If already running, return the PID of the process
+Start up a dolt SQL server and return the server process handle
 }

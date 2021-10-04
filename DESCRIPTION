@@ -22,6 +22,8 @@ Imports:
     methods,
     ps,
     RMariaDB,
+    rscontract,
+    rstudioapi,
     sys,
     httpuv
 Suggests: 
@@ -35,3 +37,15 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+Collate: 
+    'config.R'
+    'server.R'
+    'connection-remote.R'
+    'connection-local.R'
+    'dolt.R'
+    'doltr-package.R'
+    'install.R'
+    'pane.R'
+    'queries.R'
+    'query.R'
+    'utils.R'

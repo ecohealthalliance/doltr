@@ -6,8 +6,9 @@
 #' - `DOLT_PORT` sets the port to connect to or to run the server on. Defaults
 #'    to 3306. - `DOLT_HOST` sets the host IP to connect to or to run the server
 #'    on. Defaults to 127.0.0.1.
-#'  - `DOLT_DB` set the default directory to look for
-#'    a dolt database and run a server when using [doltdb()]. You likely want to
+#'  - `DOLT_DIR` set the default directory to look for
+#'    a dolt database and run a server when using [dolt_local()] and [dolt()].
+#'    You likely want to
 #'    set this on a project-level and .gitignore it when your project contains its
 #'    own database. Defaults to "doltdb".
 #'  - `DOLT_CONFIG_FILE` is the path to a
@@ -27,6 +28,7 @@
 #'  - `DOLT_SHOW_SQL` will print the SQL statements executed when running dolt
 #'     convenience functions.
 #'
-#' @rdname config
-#' @name config
+#' @rdname dolt-config
+#' @name dolt-config
+#' @aliases dolt_config config
 NULL
