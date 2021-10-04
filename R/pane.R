@@ -26,7 +26,7 @@ dolt_pane <- function(conn = doltr::dolt()) {
           list(
             table = list(contains = "data"),
             versioning = list(
-              icon = ifile("history.png"),
+              icon = ifile("diff.png"),
               contains = list(
                 table = list(contains = "data")
               )
@@ -109,6 +109,10 @@ dolt_pane <- function(conn = doltr::dolt()) {
       Push = list(
         icon = ifile("push.png"),
         callback = function() doltr::dolt_push(conn = conn)
+      ),
+      History = list(
+        icon = ifile("history.png"),
+        callback = function() View(x = dolt_log(conn = conn), title = "Dolt Log")
       )
     )
   )
