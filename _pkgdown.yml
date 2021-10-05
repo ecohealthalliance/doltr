@@ -17,3 +17,10 @@ template:
     info: "#28B3ED"
     warning: "#FD7424"
     danger: "#F7367E"
+
+authors:
+  Noam Ross:
+    href: "https://www.noamross.net/"
+  EcoHealth Alliance:
+    href: "https://www.ecohealthalliance.org"
+    html: "<img src='https://github.com/ecohealthalliance.png' alt='EcoHealth Alliance' height=24> EcoHealth Alliance"

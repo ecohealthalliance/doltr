@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "noam.ross@gmail.com",
            comment = c(ORCID = "0000-0002-2136-0000")),
-      person("EcoHealth Alliance", role = c("cph", "fnd"))
+      person("EcoHealth Alliance", role = c("cph"))
           )
 Description: Creates a DBI-compliant interface to dolt databases
     (<https://www.dolthub.com>). Also manages local dolt server processes, 
