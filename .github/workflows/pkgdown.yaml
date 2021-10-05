@@ -27,7 +27,10 @@ jobs:
           needs: website
 
       - name: Install Dolt
-        run: sudo bash -c 'curl -L https://github.com/dolthub/dolt/releases/latest/download/install.sh | bash'
+        run: |
+          sudo bash -c 'curl -L https://github.com/dolthub/dolt/releases/latest/download/install.sh | bash'
+          dolt config --global --add user.email pd@enko.com
+          dolt config --global --add user.name "P.D. En'ko"
 
       - name: Deploy package
         run: |

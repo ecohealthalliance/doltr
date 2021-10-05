@@ -56,10 +56,10 @@ jobs:
           extra-packages: rcmdcheck
 
       - name: Install Dolt
-        shell: bash
-        run: sudo bash -c 'curl -L https://github.com/dolthub/dolt/releases/latest/download/install.sh | bash'
-
-
+        run: |
+          sudo bash -c 'curl -L https://github.com/dolthub/dolt/releases/latest/download/install.sh | bash'
+          dolt config --global --add user.email pd@enko.com
+          dolt config --global --add user.name "P.D. En'ko"
 
       - uses: r-lib/actions/check-r-package@v1
 
