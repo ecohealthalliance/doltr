@@ -27,7 +27,8 @@ Imports:
     rscontract,
     rstudioapi,
     sys,
-    httpuv
+    httpuv,
+    httr
 Suggests: 
     covr,
     DBItest,
@@ -45,6 +46,7 @@ Collate:
     'connection-remote.R'
     'connection-local.R'
     'dolt.R'
+    'dolthub.R'
     'doltr-package.R'
     'install.R'
     'pane.R'
