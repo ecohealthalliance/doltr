@@ -22,7 +22,7 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item EcoHealth Alliance [copyright holder, funder]
+  \item EcoHealth Alliance [copyright holder]
 }
 
 }

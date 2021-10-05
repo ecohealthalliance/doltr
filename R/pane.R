@@ -10,6 +10,7 @@
 #' @examples
 #' if (!is.null(getOption("connectionObserver"))) dolt_pane()
 #' @importFrom rscontract rscontract_spec rscontract_open rscontract_ide
+#' @importFrom utils View
 dolt_pane <- function(conn = doltr::dolt()) {
   conn_arg <- paste(deparse(substitute(conn)), collapse = "\n")
   info <- dbGetInfo(conn)

@@ -82,7 +82,7 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
 
 # TODO figure out how to format this
 #' @export
-format.dolt_server <- function(p) {
+format.dolt_server <- function(p, ...) {
   pid <- ps::ps_pid(p)
   dir <-   ps::ps_cwd(p)
   port <- ps::ps_connections(p)$lport
@@ -94,7 +94,7 @@ format.dolt_server <- function(p) {
 }
 
 #' @export
-print.dolt_server <- function(p) {
+print.dolt_server <- function(p, ...) {
   cat(format(p))
   invisible(p)
 }
