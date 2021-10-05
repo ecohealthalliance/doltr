@@ -2,16 +2,18 @@ Package: doltr
 Title: A client for the dolt database
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Noam",
+    c(person(given = "Noam",
            family = "Ross",
            role = c("aut", "cre"),
            email = "noam.ross@gmail.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           comment = c(ORCID = "0000-0002-2136-0000")),
+      person("EcoHealth Alliance", role = c("cph", "fnd"))
+          )
 Description: Creates a DBI-compliant interface to dolt databases
     (<https://www.dolthub.com>). Also manages local dolt server processes, 
     provides convenience functions for dolt versioning, and an RStudio
     connection pane interface.
-License: MIT + file LICENSE
+License: AGPL (>= 3)
 URL: https://ecohealthalliance.github.io/doltr, https://github.com/ecohealthalliance/doltr
 BugReports: https://github.com/ecohealthalliance/doltr/issues
 Imports: 
