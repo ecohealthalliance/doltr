@@ -47,7 +47,7 @@ dolt_branches <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
 #' @rdname dolt-info
 dolt_remotes <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
   collect <- .collect(collect); show_sql <- .show_sql(show_sql)
-  query <- "select * from dolt_docs"
+  query <- "select * from dolt_remotes"
   dolt_query(query, conn, collect, show_sql)
 }
 
@@ -55,7 +55,7 @@ dolt_remotes <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
 #' @rdname dolt-info
 dolt_docs <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
   collect <- .collect(collect); show_sql <- .show_sql(show_sql)
-  query <- "select * from dolt_remotes"
+  query <- "select * from dolt_docs"
   dolt_query(query, conn, collect, show_sql)
 }
 
