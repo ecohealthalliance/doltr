@@ -243,6 +243,8 @@ dolt_head_ref <- function(conn = dolt(), show_sql = NULL) {
   unname(dolt_query(query, conn, collect = TRUE, show_sql)[[1]])
 }
 
+#' @export
+#' @rdname dolt-refs
 dolt_head_hash <- function(conn = dolt(), show_sql = NULL) {
   show_sql <- .show_sql(show_sql)
   dbname <- dbGetInfo(conn)$dbname
@@ -250,6 +252,8 @@ dolt_head_hash <- function(conn = dolt(), show_sql = NULL) {
   unname(dolt_query(query, conn, collect = TRUE, show_sql)[[1]])
 }
 
+#' @export
+#' @rdname dolt-refs
 dolt_staged_hash <- function(conn = dolt(), show_sql = NULL) {
   show_sql <- .show_sql(show_sql)
   dbname <- dbGetInfo(conn)$dbname
@@ -257,6 +261,8 @@ dolt_staged_hash <- function(conn = dolt(), show_sql = NULL) {
   unname(dolt_query(query, conn, collect = TRUE, show_sql)[[1]])
 }
 
+#' @export
+#' @rdname dolt-refs
 dolt_working_hash <- function(conn = dolt(), show_sql = NULL) {
   show_sql <- .show_sql(show_sql)
   dbname <- dbGetInfo(conn)$dbname

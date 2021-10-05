@@ -2,9 +2,18 @@
 % Please edit documentation in R/queries.R
 \name{dolt_head_ref}
 \alias{dolt_head_ref}
+\alias{dolt_head_hash}
+\alias{dolt_staged_hash}
+\alias{dolt_working_hash}
 \title{Return the hashes and refspecs of the dolt database}
 \usage{
 dolt_head_ref(conn = dolt(), show_sql = NULL)
+
+dolt_head_hash(conn = dolt(), show_sql = NULL)
+
+dolt_staged_hash(conn = dolt(), show_sql = NULL)
+
+dolt_working_hash(conn = dolt(), show_sql = NULL)
 }
 \arguments{
 \item{conn}{The dolt database to query}
