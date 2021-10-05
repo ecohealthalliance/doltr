@@ -152,10 +152,10 @@ dolt_commit <- function(all = TRUE, message = NULL, author = NULL, date = NULL,
 dolt_reset <- function(hard = FALSE, tables = NULL, conn = dolt(),
                        collect = NULL, show_sql = NULL) {
   collect <- .collect(collect); show_sql <- .show_sql(show_sql)
-  args <- ""
+  args <- c()
   if (!is.null(tables)) args <- paste0(sql_quote(tables, "'"), collapse = ", ")
-  if (hard) args <- paste0(sql_quote("--hard", "'"), ", ", args)
-  query <- paste0("select dolt_reset(", args, ")")
+  if (hard) args <- c(sql_quote("--hard", "'"), args)
+  query <- paste0("select dolt_reset(", paste(args, collapse = ", ", ")"))
   dolt_query(query, conn, collect, show_sql)
 }
 
