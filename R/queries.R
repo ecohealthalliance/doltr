@@ -230,24 +230,36 @@ dolt_fetch <- function(remote = NULL, ref = FALSE, force = FALSE,
 }
 
 
-# Return the name of the HEAD
-dolt_head_ref <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
-  collect <- .collect(collect); show_sql <- .show_sql(show_sql)
+#' Return the hashes and refspecs of the dolt database
+#'
+#' @inheritParams dolt_status
+#' @export
+#' @rdname dolt-refs
+#' @family dolt-sql-commands
+dolt_head_ref <- function(conn = dolt(), show_sql = NULL) {
+  show_sql <- .show_sql(show_sql)
   dbname <- dbGetInfo(conn)$dbname
   query <- paste0("select @@", dbname, "_head_ref")
-  dolt_query(query, conn, collect, show_sql)
+  unname(dolt_query(query, conn, collect = TRUE, show_sql)[[1]])
 }
 
-dolt_head_hash <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
-  collect <- .collect(collect); show_sql <- .show_sql(show_sql)
+dolt_head_hash <- function(conn = dolt(), show_sql = NULL) {
+  show_sql <- .show_sql(show_sql)
   dbname <- dbGetInfo(conn)$dbname
   query <- paste0("select @@", dbname, "_head")
-  dolt_query(query, conn, collect, show_sql)
+  unname(dolt_query(query, conn, collect = TRUE, show_sql)[[1]])
 }
 
-dolt_working_hash <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
-  collect <- .collect(collect); show_sql <- .show_sql(show_sql)
+dolt_staged_hash <- function(conn = dolt(), show_sql = NULL) {
+  show_sql <- .show_sql(show_sql)
   dbname <- dbGetInfo(conn)$dbname
-  query <- paste0("select @@", dbname, "_head")
-  dolt_query(query, conn, collect, show_sql)
+  query <- paste0("select @@", dbname, "_staged")
+  unname(dolt_query(query, conn, collect = TRUE, show_sql)[[1]])
+}
+
+dolt_working_hash <- function(conn = dolt(), show_sql = NULL) {
+  show_sql <- .show_sql(show_sql)
+  dbname <- dbGetInfo(conn)$dbname
+  query <- paste0("select @@", dbname, "_working")
+  unname(dolt_query(query, conn, collect = TRUE, show_sql)[[1]])
 }

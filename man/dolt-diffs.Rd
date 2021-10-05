@@ -30,6 +30,7 @@ Examine information about dolt tables and diffs
 \seealso{
 Other dolt-sql-commands: 
 \code{\link{dolt_add}()},
+\code{\link{dolt_head_ref}()},
 \code{\link{dolt_push}()},
 \code{\link{dolt_status}()}
 }

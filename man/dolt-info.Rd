@@ -36,6 +36,7 @@ Get information about the dolt database
 Other dolt-sql-commands: 
 \code{\link{dolt_add}()},
 \code{\link{dolt_diffs}()},
+\code{\link{dolt_head_ref}()},
 \code{\link{dolt_push}()}
 }
 \concept{dolt-sql-commands}

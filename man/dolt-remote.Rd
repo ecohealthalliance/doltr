@@ -63,6 +63,7 @@ Work with dolt repository remotes
 Other dolt-sql-commands: 
 \code{\link{dolt_add}()},
 \code{\link{dolt_diffs}()},
+\code{\link{dolt_head_ref}()},
 \code{\link{dolt_status}()}
 }
 \concept{dolt-sql-commands}

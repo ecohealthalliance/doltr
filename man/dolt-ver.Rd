@@ -61,6 +61,7 @@ Add, commit, and reset tables in a dolt database
 \seealso{
 Other dolt-sql-commands: 
 \code{\link{dolt_diffs}()},
+\code{\link{dolt_head_ref}()},
 \code{\link{dolt_push}()},
 \code{\link{dolt_status}()}
 }
