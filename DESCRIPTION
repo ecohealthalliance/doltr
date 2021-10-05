@@ -31,7 +31,8 @@ Suggests:
     DBItest,
     lintr,
     spelling,
-    testthat
+    testthat,
+    pkgdown
 Encoding: UTF-8
 Language: en-US
 LazyData: true
