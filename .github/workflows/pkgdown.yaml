@@ -26,6 +26,9 @@ jobs:
           extra-packages: r-lib/pkgdown
           needs: website
 
+      - name: Install Dolt
+        run: sudo bash -c 'curl -L https://github.com/dolthub/dolt/releases/latest/download/install.sh | bash'
+
       - name: Deploy package
         run: |
           git config --local user.name "$GITHUB_ACTOR"
