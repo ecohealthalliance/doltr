@@ -28,7 +28,7 @@ DBI::dbConnect(doltr::dolt_local(), ...)
 
 \item{password}{The login password.  Defaults to empty.}
 
-\item{port}{The TCP port for connnections. Defaults to 3306.}
+\item{port}{The TCP port for connections. Defaults to 3306.}
 
 \item{host}{The IP of the host. Defaults to the local machine, \verb{127.0.0.1}}
 
@@ -44,7 +44,7 @@ takes a directory name for an on-disk dolt database, starts and manages a
 connects to it and returns the connection. Parameters govern both the server
 and connection
 
-Multi-user or other, more complicated networking steups should
+Multi-user or other, more complicated networking set-ups should
 use \code{\link[=dolt_server]{dolt_server()}} and \code{\link[=dolt_remote]{dolt_remote()}} directly.
 }
 \seealso{

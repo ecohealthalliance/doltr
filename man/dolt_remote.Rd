@@ -28,7 +28,7 @@ DBI::dbConnect(doltr::dolt_remote(), ...)
 
 \item{host}{The IP of the host. Defaults to the local machine, \verb{127.0.0.1}}
 
-\item{port}{The TCP port for connnections. Defaults to 3306.}
+\item{port}{The TCP port for connections. Defaults to 3306.}
 
 \item{...}{other arguments passed to \link[RMariaDB:dbConnect-MariaDBDriver-method]{RMariaDB::MariaDB}}
 }
@@ -38,7 +38,7 @@ a port. It, \code{DoltDriver},
 and \code{DoltConnection} class are wrappers around the around classes and methods
 from the \code{\link[RMariaDB:dbConnect-MariaDBDriver-method]{RMariaDB}} package.
 
-Most parameters can be specified with environment variabales. See \link{config}.
+Most parameters can be specified with environment variables See \link{config}.
 }
 \details{
 Most methods fall back to those for \code{\link[RMariaDB:dbConnect-MariaDBDriver-method]{RMariaDB}}.

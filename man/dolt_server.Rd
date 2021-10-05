@@ -29,7 +29,7 @@ dolt_server(
 
 \item{password}{The login password.  Defaults to empty.}
 
-\item{port}{The TCP port for connnections. Defaults to 3306.}
+\item{port}{The TCP port for connections. Defaults to 3306.}
 
 \item{host}{The IP of the host. Defaults to the local machine, \verb{127.0.0.1}}
 

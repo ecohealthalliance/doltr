@@ -124,60 +124,6 @@ ifile <- function(f) {
   system.file("img", f, package = "doltr")
 }
 
-dolt_pane2 <- function() {
-  observer <- getOption("connectionObserver")
-  if (!is.null(observer) && interactive()) {
-    observer$connectionOpened(
-      type = "dolt",
-      host = "citesdb",
-      displayName = "CITES Transaction Tables",
-      icon = system.file("img", "eha_logo.png", package = "citesdb"),
-      connectCode = "doltr::dolt_pane()",
-      disconnect = citesdb::cites_disconnect,
-      listObjectTypes = function() {
-        list(
-          table = list(contains = "data")
-        )
-      },
-      listObjects = function(type = "datasets") {
-        tbls <- DBI::dbListTables(cites_db())
-        data.frame(
-          name = tbls,
-          type = rep("table", length(tbls)),
-          stringsAsFactors = FALSE
-        )
-      },
-      listColumns = function(table) {
-        res <- DBI::dbGetQuery(
-          cites_db(),
-          paste("SELECT * FROM", table, "LIMIT 1")
-        )
-        data.frame(
-          name = names(res), type = vapply(res, function(x) class(x)[1], character(1)),
-          stringsAsFactors = FALSE
-        )
-      },
-      previewObject = function(rowLimit, table) { # nolint
-        DBI::dbGetQuery(
-          cites_db(),
-          paste("SELECT * FROM", table, "LIMIT", rowLimit)
-        )
-      },
-      actions = list(
-        Status = list(
-          icon = system.file("img", "cites-logo.png", package = "citesdb"),
-          callback = cites_status
-        ),
-        SQL = list(
-          icon = system.file("img", "edit-sql.png", package = "citesdb"),
-          callback = sql_action
-        )
-      ),
-      connectionObject = dolt()
-    )
-  }
-}
-
 # update_dolt_pane <- function() {
 #   observer <- getOption("connectionObserver")
 #   if (!is.null(observer)) {

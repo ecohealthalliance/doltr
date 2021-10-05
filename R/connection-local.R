@@ -7,7 +7,7 @@
 #'  connects to it and returns the connection. Parameters govern both the server
 #'  and connection
 #'
-#' Multi-user or other, more complicated networking steups should
+#' Multi-user or other, more complicated networking set-ups should
 #' use [dolt_server()] and [dolt_remote()] directly.
 #' @usage DBI::dbConnect(doltr::dolt_local(), ...)
 #' @param drv an object of class `DoltLocalDriver`, created by `dolt_local()`.

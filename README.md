@@ -27,8 +27,8 @@ remotes::install_github("ecohealthalliance/doltr")
 
 The package provides two DBI-compliant drivers to connect to a dolt database.
 `dolt_remote()` connects to a dolt server via TCP.  `dolt_local()` connects
-to a local database directory. (Behind the scenses `dolt_local()` launches and
-manages a server process, which can also be done manually with `dolt_server()`).
+to a local database directory. (Behind the scenes `dolt_local()` launches and
+manages a background server process, which can also be done manually with `dolt_server()`).
 
 `dolt()` serves a connection that is cached during the R session and connects
 via default parameters than can be defined via environment variables. (See

@@ -5,7 +5,7 @@
 #' and `DoltConnection` class are wrappers around the around classes and methods
 #' from the [`RMariaDB`][RMariaDB::MariaDB] package.
 #'
-#' Most parameters can be specified with environment variabales. See [config].
+#' Most parameters can be specified with environment variables See [config].
 #'
 #' @usage DBI::dbConnect(doltr::dolt_remote(), ...)
 #' @param drv an object of class `DoltDriver`, created by `dolt_remote()`.
@@ -13,7 +13,7 @@
 #' @param username The username. Defaults to "root"
 #' @param password The login password.  Defaults to empty.
 #' @param host The IP of the host. Defaults to the local machine, `127.0.0.1`
-#' @param port The TCP port for connnections. Defaults to 3306.
+#' @param port The TCP port for connections. Defaults to 3306.
 #' @param ... other arguments passed to [RMariaDB::MariaDB]
 #' @details Most methods fall back to those for [`RMariaDB`][RMariaDB::MariaDB].
 #' @export

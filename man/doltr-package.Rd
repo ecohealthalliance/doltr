@@ -11,13 +11,19 @@ Creates a DBI-compliant interface to dolt databases (<https://www.dolthub.com>).
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://ecohealthalliance.github.io/doltr}
   \item \url{https://github.com/ecohealthalliance/doltr}
   \item Report bugs at \url{https://github.com/ecohealthalliance/doltr/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Noam Ross \email{noam.ross@gmail.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Noam Ross \email{noam.ross@gmail.com} (\href{https://orcid.org/0000-0002-2136-0000}{ORCID})
+
+Other contributors:
+\itemize{
+  \item EcoHealth Alliance [copyright holder, funder]
+}
 
 }
 \keyword{internal}
