@@ -75,7 +75,6 @@ dolt_pane <- function(conn = doltr::dolt()) {
           stringsAsFactors = FALSE
         )
       }
-    print(out)
     return(out)
     },
     listColumns = function(schema = "", table, versioning = NULL) {
