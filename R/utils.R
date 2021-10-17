@@ -47,4 +47,9 @@ port_fallback <- function(port, ...) {
   }
 }
 
+`%||%` <- function(x, y) if (is.null(x)) return(y) else return(x)
+
+view2 <- function(x, ...) {
+  if (Sys.getenv("RSTUDIO") == "1") View(x, ...) else utils::View(x)
+}
 

@@ -6,11 +6,10 @@
 #' explore the database.
 #'
 #' @export
-#'
+#' @return The connection object (invisibly)
 #' @examples
 #' if (!is.null(getOption("connectionObserver"))) dolt_pane()
 #' @importFrom rscontract rscontract_spec rscontract_open rscontract_ide
-#' @importFrom utils View
 dolt_pane <- function(conn = doltr::dolt()) {
   conn_arg <- paste(deparse(substitute(conn)), collapse = "\n")
   info <- dbGetInfo(conn)
@@ -18,8 +17,8 @@ dolt_pane <- function(conn = doltr::dolt()) {
     connectionObject = conn,
     type = paste0(info$username, "@", info$host, ":", info$port),
     host = paste0(info$username, "@", info$host, ":", info$port),
-    displayName = paste0(info$dbname, ": ", info$head_ref, ", ", info$head),
-    connectCode = paste0("conn <- doltr::dolt_pane(", conn_arg, ")"),
+    displayName = info$dir %||% info$dbname,
+    connectCode = paste0("doltr::dolt_pane(", conn_arg, ")"),
     disconnect = function() DBI::dbDisconnect(conn),
     listObjectTypes = function() {
       list(
@@ -33,19 +32,23 @@ dolt_pane <- function(conn = doltr::dolt()) {
               )
             )
           ),
-        table = list(contains = "data")))
+        table = list(contains = "data")),
+        info = list())
     },
     listObjects = function(schema = NULL, versioning = NULL) {
       if (is.null(schema)) {
+        HEAD_REF <- paste0("Branch: ", dbGetQuery(conn, "select @@doltdb_head_ref")[[1]])
+        HEAD_HASH <- paste0("Head Hash: ", dbGetQuery(conn, paste0("select @@", info$dbname, "_head"))[[1]])
+        WORKING_HASH <- paste0("Working Hash:" , dbGetQuery(conn, paste0("select @@", info$dbname, "_working"))[[1]])
         tbls <- dbListTables(conn)
         out <- data.frame(
-          name = c(tbls, "dolt_sys", "information_schema"),
-          type = c(rep("table", length(tbls)), "schema", "schema"),
+          name = c(HEAD_REF, HEAD_HASH, WORKING_HASH, tbls, "dolt_system_tables", "information_schema"),
+          type = c("info", "info", "info", rep("table", length(tbls)), "schema", "schema"),
           stringsAsFactors = FALSE
         )
       } else if (schema == "information_schema") {
         out <- dbGetQuery(conn, "select table_name as name, 'table' as type from information_schema.tables where table_schema = 'information_schema'")
-      } else if (schema == "dolt_sys" && is.null(versioning)) {
+      } else if (schema == "dolt_system_tables" && is.null(versioning)) {
         names <- paste0("dolt_", c("branches", "docs", "log", "status",
                                    "procedures", "remotes"))
         present <- vapply(names, function(n) {
@@ -60,8 +63,7 @@ dolt_pane <- function(conn = doltr::dolt()) {
           type = c(rep("table", length(names[present])), rep("versioning", length(tabs))),
           stringsAsFactors = FALSE
         )
-      } else if (schema == "dolt_sys" && !is.null(versioning)) {
-        cat("hello!")
+      } else if (schema == "dolt_system_tables" && !is.null(versioning)) {
         tab <- strsplit(versioning, " ")[[1]][1]
         names <- paste0(c("dolt_commit_diff_", "dolt_diff_", "dolt_history_", "dolt_conflicts_"), tab)
         present <- present <- vapply(names, function(n) {
@@ -78,12 +80,11 @@ dolt_pane <- function(conn = doltr::dolt()) {
     return(out)
     },
     listColumns = function(schema = "", table, versioning = NULL) {
-      s <- if (schema == "information_schema") "information_schema." else ""
-      res <- DBI::dbGetQuery(conn, paste0("select * from ", s, table, " limit 1"))
-      data.frame(
-        name = names(res), type = vapply(res, function(x) class(x)[1], character(1)),
-        stringsAsFactors = FALSE
-      )
+      s <- if (schema == "dolt_system_tables") "" else if (schema == "") "" else paste0(schema, ".")
+      #res <- DBI::dbGetQuery(conn, paste0("select * from ", s, table, " limit 1"))
+      structure(DBI::dbGetQuery(conn, paste0("describe ", s, table))[,1:2],
+                .Names = c("name", "type"))
+
     },
     previewObject = function(limit = 1000, table, schema = "", versioning = NULL) { # nolint
       s <- if (schema == "information_schema") "information_schema." else ""
@@ -112,12 +113,12 @@ dolt_pane <- function(conn = doltr::dolt()) {
       ),
       History = list(
         icon = ifile("history.png"),
-        callback = function() View(x = dolt_log(conn = conn), title = "Dolt Log")
+        callback = function() view2(x = dolt_log(conn = conn), title = "Dolt Log")
       )
     )
   )
   rscontract_open(spec)
-  return(conn)
+  invisible(conn)
 }
 
 ifile <- function(f) {
