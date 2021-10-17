@@ -1,8 +1,9 @@
 #' Find and check for the presence of a dolt binary.
 #' @export
 #' @rdname dolt-binary
+#' @importFrom processx run
 is_dolt_installed <- function() {
-  ret <- sys::exec_internal(dolt_path(), "version")
+  ret <- run(dolt_path(), "version")
   out <- isTRUE(ret$status == 0)
   if (out) {
     stdout <- rawToChar(ret$stdout)

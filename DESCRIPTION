@@ -22,11 +22,11 @@ Imports:
     dbplyr,
     dplyr,
     methods,
+    processx,
     ps,
     RMariaDB,
     rscontract,
     rstudioapi,
-    sys,
     httpuv
 Suggests: 
     covr,

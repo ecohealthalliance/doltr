@@ -23,8 +23,7 @@ own database. Defaults to "doltdb".
 file with additional configuration options for the dolt sql server. See
 \url{https://docs.dolthub.com/interfaces/cli#dolt-sql-server} for options. -
 \code{DOLT_PATH} specifies the path to the dolt binary if running locally.
-Defaults to the one found in the system path. Running locally requires the
-\strong{sys} and \strong{ps} packages.
+Defaults to the one found in the system path.
 \item \code{DOLT_COLLECT} specifies whether dolt
 convenience functions returning data should return fully collected
 tibbles or lazy tibbles for further processing.

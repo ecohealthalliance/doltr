@@ -14,6 +14,8 @@
 #' @param password The login password.  Defaults to empty.
 #' @param host The IP of the host. Defaults to the local machine, `127.0.0.1`
 #' @param port The TCP port for connections. Defaults to 3306.
+#' @param autocommit Whether to autocommit changes in the _SQL_ sense. That is,
+#'   to flush pending changes to disk and update the working set.
 #' @param ... other arguments passed to [RMariaDB::MariaDB]
 #' @details Most methods fall back to those for [`RMariaDB`][RMariaDB::MariaDB].
 #' @export
@@ -28,8 +30,7 @@ dolt_remote <- function() {
 
 #' @export
 #' @noRd
-setClass("DoltDriver", contains = "MariaDBDriver",
-         slots = c(port = "integer"))
+setClass("DoltDriver", contains = "MariaDBDriver")
 
 #' @export
 #' @noRd
@@ -45,7 +46,8 @@ setClass("DoltResult", contains = "MariaDBResult")
 
 #' @export
 #' @noRd
-setClass("DoltConnection", contains = "MariaDBConnection")
+setClass("DoltConnection", contains = "MariaDBConnection",
+         slots = c(port = "integer"))
 
 #' @export
 #' @rdname dolt_remote
@@ -54,18 +56,20 @@ setMethod("dbConnect", "DoltDriver",
                    username = Sys.getenv("DOLT_USERNAME", "root"),
                    password = Sys.getenv("DOLT_PASSWORD", ""),
                    host = Sys.getenv("DOLT_HOST", "127.0.0.1"),
-                   port = Sys.getenv("DOLT_PORT", 3306L), ...) {
+                   port = Sys.getenv("DOLT_PORT", 3306L),
+                   autocommit = TRUE, ...) {
             conn <- dbConnect(RMariaDB::MariaDB(),
-                     dbname = dbname,
-                     username = username,
-                     password = password,
-                     port = port,
-                     host = host,
-                     ...)
-   attr(conn, "port") <- port
-   attr(conn, "class") <- structure("DoltConnection", package = "doltr")
-   conn
-})
+                              dbname = dbname,
+                              username = username,
+                              password = password,
+                              port = port,
+                              host = host,
+                              ...)
+            attr(conn, "port") <- port
+            attr(conn, "class") <- structure("DoltConnection", package = "doltr")
+            dbExecute(conn, paste0("SET @@autocommit = ", as.integer(autocommit)))
+            conn
+          })
 
 #' @export
 #' @noRd
@@ -73,11 +77,10 @@ setMethod("dbGetInfo", "DoltConnection", function(dbObj, ...) {
   minfo <- getMethod(dbGetInfo, "MariaDBConnection")(dbObj)
   minfo$port <- dbObj@port
   refs <- as.list(dbGetQuery(dbObj, paste0("select ",
-  "@@", minfo$dbname, "_head_ref AS head_ref, ",
-  "@@", minfo$dbname, "_head as head, ",
-  "@@", minfo$dbname, "_staged as staged, ",
-  "@@", minfo$dbname, "_working as working")))
-  refs$port <- as.integer(refs$port)
+                                           "@@", minfo$dbname, "_head_ref AS head_ref, ",
+                                           "@@", minfo$dbname, "_head as head, ",
+                                           "@@", minfo$dbname, "_staged as staged, ",
+                                           "@@", minfo$dbname, "_working as working")))
   status <- dbGetQuery(dbObj, "select * from dolt_status")
   c(minfo, refs, list(status = status))
 })
@@ -86,9 +89,9 @@ setMethod("dbGetInfo", "DoltConnection", function(dbObj, ...) {
 #' @importFrom cli cli_h1 cli_ul cli_li cli_end cli_alert_warning
 #' @noRd
 setMethod("show", "DoltConnection", function(object) {
-  info <- dbGetInfo(object)
-  cli_h1("<DoltConnection> {info$dbname}")
   if (dbIsValid(object)) {
+    info <- dbGetInfo(object)
+    cli_h1("<DoltConnection> {info$dbname}")
     l <- cli_ul()
     cli_li("Connected at: {info$username}@{info$host}:{info$port}")
     cli_li("HEAD: {info$head_ref} {info$head}")

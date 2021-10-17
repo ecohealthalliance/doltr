@@ -3,6 +3,11 @@
 #' @inheritParams dolt_remote
 #' @param find_port if TRUE, switch to a different port if `port` is used by
 #' another process
+#' @param find_server if TRUE, find a server process serving the same directory
+#'   rather than starting a new one. Note that other server options will be
+#'   ignored. This allows the server to be used across R sessions. Note that to
+#'   make best use of this you may want to turn off the "Quit child processes on
+#'   exit" option in RStudio project options.
 #' @param dir The dolt directory to serve
 #' @param multi_db Serve multiple databases? If `TRUE`, `dir` should be a
 #'   directory with multiple subdirectories that are dolt databases
@@ -11,9 +16,9 @@
 #' @param read_only should the database only allow read_only connections?
 #' @param log_level Defines the level of logging provided. Options are "trace",
 #'  debug", "info", "warning", "error", and "fatal" (default "info").
-#' @param log_out Where logging output should be directed.  If `TRUE` it is passed
-#'   to `std_out()`, if `FALSE` (default), it is suppressed.  Can also take
-#'   a filename, connection, or callback function.  See [sys::exec()].
+#' @param log_out Where logging output should be directed.  If `"|"` it is passed
+#'   to `std_out()`, if `NULL` (default), it is suppressed.  Can also take
+#'   a filename. See [processx::run()].
 #' @param timeout Defines the timeout, in seconds, used for connections
 #'   A value of `0` represents an infinite timeout (default `28800000`)
 #' @param query_parallelism Set the number of go routines spawned to handle each
@@ -23,8 +28,8 @@
 #' @param config_file The path to a YAML config file to set these and additional
 #'   server configuration values.  See options in the
 #'   [dolt documentation](https://docs.dolthub.com/interfaces/cli#dolt-sql-server).
-#' @importFrom sys exec_background
-#' @importFrom ps ps_handle
+#' @importFrom processx process
+#' @importFrom ps ps_status ps_environ ps_parent ps_handle
 #' @export
 #' @return A `dolt_server` object that is also a [ps::ps_handle()]
 dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
@@ -33,23 +38,35 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                         port = Sys.getenv("DOLT_PORT", 3306L),
                         host = Sys.getenv("DOLT_HOST", "127.0.0.1"),
                         find_port = TRUE,
+                        find_server = TRUE,
                         multi_db = FALSE,
                         autocommit = TRUE,
                         read_only = FALSE,
                         log_level = "info",
-                        log_out = FALSE,
+                        log_out = NULL,
                         timeout = 0,
                         query_parallelism = 2,
                         max_connections = 100,
                         config_file = Sys.getenv("DOLT_CONFIG_FILE", "")) {
 
   dir = normalizePath(dir)
-  if (find_port) port <- port_fallback(port)
 
   stopifnot(
     "No such directory" = dir.exists(dir),
     "Not a dolt directory" = dir.exists(file.path(dir, ".dolt"))
   )
+
+  if (find_server) {
+    dp <- dolt_server_find(dir = dir)
+    if (nrow(dp)) {
+      dp <- dp[order(!dp$is_doltr, !dp$lport == port, dp$created),]
+      p <- dp$ps_handle[[1]]
+      class(p) <- c("dolt_server", class(p))
+      return(p)
+    }
+  }
+
+  if (find_port) port <- port_fallback(port)
 
   args <- c("sql-server",
             paste0("--host=", host),
@@ -60,36 +77,45 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
             paste0("--loglevel=", log_level),
             paste0("--query-parallelism=", query_parallelism))
 
-  if (password != "") args <- c(paste0("--password=", password))
+  if (password != "") args <- c(args, paste0("--password=", password))
   if (read_only) args <- c(args, "--readonly")
   if (!autocommit) args <- c(args, "--no-auto-commit")
   if (config_file != "") args <- c(args, paste0("--config=", config_file))
   if (multi_db) args <- c(args, paste0("--multi-db-dir=", dir))
 
-  old_dir <- setwd(dir = dir)
-  on.exit(setwd(old_dir))
+  if (!is.null(log_out) && !log_out %in% c("", "|"))
+    log_out <- normalizePath(log_out, mustWork = FALSE)
 
-  pid <- exec_background(dolt_path(), args = args,
-                              std_out = log_out, std_err = log_out)
+  env_par <- ps_environ(ps_parent(ps_handle()))
+  proc <- process$new(dolt_path(), args = args, wd = dir,
+                      stdout = log_out, stderr = "2>&1",
+                      env = c(env_par, R_DOLT=1),
+                      supervise = FALSE, cleanup = FALSE, cleanup_tree = FALSE)
+  p <- proc$as_ps_handle()
+  rm(proc)
 
-  p <- ps_handle(as.integer(pid))
-
-  Sys.sleep(0.5)
-  stopifnot(ps::ps_status(p) == "running")
+  while(!isTRUE(port %in% ps_connections(p)$lport)) Sys.sleep(0.25)
+  stopifnot(ps_status(p) == "running")
   class(p) <- c("dolt_server", class(p))
   p
 }
 
-# TODO figure out how to format this
+dolt_server_port <- function(p) {
+  conns <- ps_connections(p)
+  port <- conns$lport[conns$state == "CONN_LISTEN" & !is.na(conns$state)]
+}
+
 #' @export
+#' @importFrom ps ps_pid ps_cwd ps_connections ps_is_running
 format.dolt_server <- function(p, ...) {
-  pid <- ps::ps_pid(p)
-  dir <-   ps::ps_cwd(p)
-  port <- ps::ps_connections(p)$lport
-  out <- paste0("dolt server", "\n",
-                "dir: ", dir, "\n",
-                "port: ", port, "\n",
-                "pid: ", pid)
+  pid <- ps_pid(p)
+  if (ps_is_running(p)) {
+    dir <-   ps_cwd(p)
+    port <- dolt_server_port(p)
+    out <- paste0("<dolt sql-server> PID=", pid, ", port=", port, ", dir=", dir)
+  } else {
+    out <- paste0("<dolt sql-server STOPPED> PID=", pid)
+  }
   out
 }
 
@@ -102,69 +128,61 @@ print.dolt_server <- function(p, ...) {
 #' Initiate a dolt database directory
 #'
 #' @param dir path to the directory. Will be created if it does not exist
+#' @importFrom processx run
 #' @export
 dolt_init <- function(dir = Sys.getenv("DOLT_DIR", "doltdb")) {
   if (!dir.exists(dir)) dir.create(dir)
-  withr::with_dir(dir, sys::exec_wait("dolt", "init"))
+  old <- setwd(dir = new)
+  on.exit(setwd(old))
+  run("dolt", "init")
 }
 
 #' @noRd
 setOldClass("dolt_server")
 
-#' Find local dolt server processes
-dolt_server_processes <- function() {
-  processes <- ps::ps() |>
-    dplyr::filter(name == "dolt", status == "running") |>
-    dplyr::filter(purrr::map_lgl(ps_handle, ~isTRUE(ps::ps_cmdline(.)[2] == "sql-server")))
-  processes
-}
-
-dolt_server_find <- function(dir = NULL, port = NULL) {
-  processes <- dolt_server_processes()
-  if (nrow(processes)) {
-    processes <- processes |>
-      dplyr::mutate(cwd = purrr::map_chr(ps_handle, ps::ps_cwd)) |>
-      dplyr::mutate(conns = purrr::map(ps_handle, ps::ps_connections)) |>
-      tidyr::unnest(conns)
-    if (!is.null(processes$state)) processes <- processes[processes$state == "CONN_LISTEN",]
-    if (!is.null(dir)) {
-      dir = normalizePath(dir, mustWork = FALSE)
-      processes <- dplyr::filter(processes, cwd %in% dir)
+#' @importFrom ps ps ps_connections ps_cwd ps_environ ps_cmdline
+dolt_server_find <- function(dir = NULL, port = NULL, doltr_only = FALSE) {
+  dp <- ps()
+  dp <- dp[dp$name == "dolt" & dp$status == "running",]
+  if (nrow(dp))
+    dp <- dp[vapply(dp$ps_handle, function(x) ps_cmdline(x)[2] == "sql-server", logical(1)),]
+  if (nrow(dp)) {
+    dp$wd = vapply(dp$ps_handle, ps_cwd, character(1))
+    dp$lport = vapply(dp$ps_handle, function(x) {
+      conns <- ps_connections(x)
+      conns <- conns[conns$state == "CONN_LISTEN" & !is.na(conns$state), ]
+      conns$lport},
+      integer(1))
+    dp$is_doltr <- vapply(dp$ps_handle, function(x) isTRUE(ps_environ(x)["R_DOLT"] == "1"), logical(1))
+    if (doltr_only) {
+      dp <- dp[dp$is_doltr, ]
     }
     if (!is.null(port)) {
-      port = as.integer(port)
-      processes <- dplyr::filter(processes, lport %in% port)
+      dp <- dp[dp$lport %in% port, ]
+    }
+    if (!is.null(dir)) {
+      dp <- dp[dp$wd %in% dir, ]
     }
   }
-  processes
+  dp
 }
 
-dolt_server_kill_all <- function(dir = NULL, port = NULL) {
-  processes <- dolt_server_find(dir, port)
-  purrr::walk(processes$ps_handle, ps::ps_kill)
+dolt_server_kill <- function(dir = NULL, port = NULL, doltr_only = FALSE, verbose  = TRUE) {
+  dp <- dolt_server_find(dir, port, doltr_only)
+  lapply(dp$ps_handle, dkill)
+  if (verbose) message(nrow(dp), " processes killed")
+  invisible(dp)
 }
 
-kill <- function(p = ps_handle) {
+#' @importFrom ps signals ps_terminate ps_kill
+dkill <- function(p = ps_handle) {
   if (is.null(ps::signals()$SIGTERM)) {
-    ps::ps_kill(p)
+    ps_terminate(p)
   } else {
-    ps::ps_terminate(p)
+    ps_kill(p)
   }
-  NULL
+  invisible(NULL)
 }
 
-# kill_softly <- function(p = ps_handle) {
-#   sigs <- ps::signals()
-#   if (!is.null(sigs$SIGTERM)) {
-#     out <- ps::ps_terminate(p)
-#     z <- 0
-#     while (z < 12 && ps::ps_is_running(p)) {
-#       Sys.sleep(0.25)
-#       z <- z + 1
-#     }
-#   }
-#   if (ps::ps_is_running(p)) out <- ps::ps_kill(p)
-#   out
-# }
 
 

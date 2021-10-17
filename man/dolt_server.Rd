@@ -11,11 +11,12 @@ dolt_server(
   port = Sys.getenv("DOLT_PORT", 3306L),
   host = Sys.getenv("DOLT_HOST", "127.0.0.1"),
   find_port = TRUE,
+  find_server = TRUE,
   multi_db = FALSE,
   autocommit = TRUE,
   read_only = FALSE,
   log_level = "info",
-  log_out = FALSE,
+  log_out = NULL,
   timeout = 0,
   query_parallelism = 2,
   max_connections = 100,
@@ -36,6 +37,12 @@ dolt_server(
 \item{find_port}{if TRUE, switch to a different port if \code{port} is used by
 another process}
 
+\item{find_server}{if TRUE, find a server process serving the same directory
+rather than starting a new one. Note that other server options will be
+ignored. This allows the server to be used across R sessions. Note that to
+make best use of this you may want to turn off the "Quit child processes on
+exit" option in RStudio project options.}
+
 \item{multi_db}{Serve multiple databases? If \code{TRUE}, \code{dir} should be a
 directory with multiple subdirectories that are dolt databases}
 
@@ -47,9 +54,9 @@ If \code{FALSE}, anything not manually committed will be lost.}
 \item{log_level}{Defines the level of logging provided. Options are "trace",
 debug", "info", "warning", "error", and "fatal" (default "info").}
 
-\item{log_out}{Where logging output should be directed.  If \code{TRUE} it is passed
-to \code{std_out()}, if \code{FALSE} (default), it is suppressed.  Can also take
-a filename, connection, or callback function.  See \code{\link[sys:exec]{sys::exec()}}.}
+\item{log_out}{Where logging output should be directed.  If \code{"|"} it is passed
+to \code{std_out()}, if \code{NULL} (default), it is suppressed.  Can also take
+a filename. See \code{\link[processx:run]{processx::run()}}.}
 
 \item{timeout}{Defines the timeout, in seconds, used for connections
 A value of \code{0} represents an infinite timeout (default \code{28800000})}

@@ -15,6 +15,8 @@ DBI::dbConnect(doltr::dolt_local(), ...)
   port = Sys.getenv("DOLT_PORT", 3306L),
   host = Sys.getenv("DOLT_HOST", "127.0.0.1"),
   find_port = TRUE,
+  find_server = TRUE,
+  autocommit = TRUE,
   server_args = list(),
   ...
 )
@@ -31,6 +33,9 @@ DBI::dbConnect(doltr::dolt_local(), ...)
 \item{port}{The TCP port for connections. Defaults to 3306.}
 
 \item{host}{The IP of the host. Defaults to the local machine, \verb{127.0.0.1}}
+
+\item{autocommit}{Whether to autocommit changes in the \emph{SQL} sense. That is,
+to flush pending changes to disk and update the working set.}
 
 \item{server_args}{a list of additional arguments to pass to \code{\link[=dolt_server]{dolt_server()}}}
 

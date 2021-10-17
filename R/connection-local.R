@@ -47,35 +47,39 @@ setClass("DoltLocalResult", contains = "DoltResult")
 #' @export
 #' @rdname dolt_local
 setMethod("dbConnect", "DoltLocalDriver",
-  function(drv,
-           dir = Sys.getenv("DOLT_DIR", "doltdb"),
-           username = Sys.getenv("DOLT_USERNAME", "root"),
-           password = Sys.getenv("DOLT_PASSWORD", ""),
-           port = Sys.getenv("DOLT_PORT", 3306L),
-           host = Sys.getenv("DOLT_HOST", "127.0.0.1"),
-           find_port = TRUE,
-           server_args = list(),
-           ...) {
+          function(drv,
+                   dir = Sys.getenv("DOLT_DIR", "doltdb"),
+                   username = Sys.getenv("DOLT_USERNAME", "root"),
+                   password = Sys.getenv("DOLT_PASSWORD", ""),
+                   port = Sys.getenv("DOLT_PORT", 3306L),
+                   host = Sys.getenv("DOLT_HOST", "127.0.0.1"),
+                   find_port = TRUE,
+                   find_server = TRUE,
+                   autocommit = TRUE,
+                   server_args = list(),
+                   ...) {
 
-    #browser()
-    dir = normalizePath(dir, mustWork = FALSE)
-    port <- if (find_port) port_fallback(port) else as.integer(port)
+            #browser()
+            dir = normalizePath(dir, mustWork = FALSE)
 
-    # Get the cached connection
-    if (!dir.exists(file.path(dir, ".dolt"))) dolt_init(dir)
+            if (!dir.exists(file.path(dir, ".dolt"))) dolt_init(dir)
 
-    srv <- do.call(dolt_server,
-                   c(list(dir = dir, username = username, password = password,
-                       port = port, host = host), server_args))
+            srv <- do.call(dolt_server,
+                           c(list(dir = dir, username = username, password = password,
+                                  port = port, host = host, find_port = find_port,
+                                  find_server = find_server), server_args))
 
-    conn <- dbConnect(dolt_remote(), dbname = basename(dir), username = username,
-                     password = password, host = host, port = port, ...)
+            port <- dolt_server_port(srv)
 
-    attr(conn, "dir") <- dir
-    attr(conn, "server") <- srv
-    class(conn) <- structure("DoltLocalConnection", package = "doltr")
-    return(conn)
-  })
+            conn <- dbConnect(dolt_remote(), dbname = basename(dir), username = username,
+                              password = password, host = host, port = port,
+                              autocommit = autocommit, ...)
+
+            attr(conn, "dir") <- dir
+            attr(conn, "server") <- srv
+            class(conn) <- structure("DoltLocalConnection", package = "doltr")
+            return(conn)
+          })
 
 #' @export
 #' @noRd
@@ -90,9 +94,9 @@ setMethod("dbGetInfo", "DoltLocalConnection", function(dbObj, ...) {
 #' @noRd
 #' @importFrom cli cli_h1 cli_ul cli_li cli_end cli_alert_warning
 setMethod("show", "DoltLocalConnection", function(object) {
+  if (dbIsValid(object)) {
   info <- dbGetInfo(object)
   cli_h1("<DoltLocalConnection> {info$dbname}")
-  if (dbIsValid(object)) {
     l <- cli_ul()
     cli_li("Serving {info$dir}, PID {info$server_pid}")
     cli_li("Connected at: {info$username}@{info$host}:{info$port}")
@@ -101,16 +105,40 @@ setMethod("show", "DoltLocalConnection", function(object) {
     cli_end(l)
     print(info$status) #TODO: pretty-print status info better, use line for working and staged,
   } else {
-    cli_alert_warning("DISCONNECTED")
+    cli_alert_warning("Invalid Connection")
   }
 })
 
 #' @export
 #' @noRd
+#' @importFrom ps ps_environ ps_handle ps_connections ps_is_running
+#' @importFrom DBI dbGetQuery
 setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
+
+  if (dbIsValid(conn) && ps_is_running(conn@server)) {
+    # On disconnection, kill the server only if it was started by doltr and no
+    # no other processes connect to it
+
+    is_doltr_server <- isTRUE(ps_environ(conn@server)["R_DOLT"] == "1")
+    procs <- ps()
+    procs <- procs[procs$status == "running" & procs$pid != ps_pid(ps_handle()),]
+    procs <- procs[vapply(procs$ps_handle, function(x) {
+      conns <- try(ps_connections(x), silent = TRUE)
+      out <- !inherits(conns, "try-error") && nrow(conns) && conn@port %in% conns$rport
+      out
+    }, logical(1)),]
+    other_sessions <- as.logical(nrow(procs))
+    other_conns_in_session <- sum(ps_connections(ps_handle())$rport == conn@port, na.rm = TRUE) > 1
+    other_sql_procs <- nrow(dbGetQuery(conn, "show processlist;")) > 1
+    kill_server <- is_doltr_server &&
+      !other_sessions && !other_conns_in_session && !other_sql_procs
+  } else {
+    kill_server <- FALSE
+  }
   getMethod(dbDisconnect, "MariaDBConnection")(conn)
-  if (inherits(conn@server, "ps_handle"))
-    try(kill(conn@server), silent = TRUE)
+
+  if (kill_server)
+    try(dkill(conn@server), silent = TRUE)
   invisible(TRUE)
 })
 

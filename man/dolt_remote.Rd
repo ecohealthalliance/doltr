@@ -14,6 +14,7 @@ DBI::dbConnect(doltr::dolt_remote(), ...)
   password = Sys.getenv("DOLT_PASSWORD", ""),
   host = Sys.getenv("DOLT_HOST", "127.0.0.1"),
   port = Sys.getenv("DOLT_PORT", 3306L),
+  autocommit = TRUE,
   ...
 )
 }
@@ -29,6 +30,9 @@ DBI::dbConnect(doltr::dolt_remote(), ...)
 \item{host}{The IP of the host. Defaults to the local machine, \verb{127.0.0.1}}
 
 \item{port}{The TCP port for connections. Defaults to 3306.}
+
+\item{autocommit}{Whether to autocommit changes in the \emph{SQL} sense. That is,
+to flush pending changes to disk and update the working set.}
 
 \item{...}{other arguments passed to \link[RMariaDB:dbConnect-MariaDBDriver-method]{RMariaDB::MariaDB}}
 }
