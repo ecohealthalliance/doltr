@@ -43,11 +43,12 @@ dolt_branches <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
   dolt_query("select * from dolt_branches", conn, collect, show_sql)
 }
 
+# TODO: have queries that modify the database update the pane
 #' @export
 #' @rdname dolt-info
 dolt_remotes <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
   collect <- .collect(collect); show_sql <- .show_sql(show_sql)
-  query <- "select * from dolt_remotes"
+  query <- "select name, url, cast(fetch_specs as char) as fetch_specs, cast(params as char) as parms from dolt_remotes"
   dolt_query(query, conn, collect, show_sql)
 }
 

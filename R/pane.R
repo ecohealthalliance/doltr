@@ -16,10 +16,11 @@ dolt_pane <- function(conn = doltr::dolt()) {
     conn_arg <- paste(deparse(substitute(conn)), collapse = "\n")
     observer$connectionOpened(
       connectionObject = conn,
-      type = paste0(conn@username, "@", conn@host, ":", conn@port),
+      type = "Dolt",
       host = paste0(conn@username, "@", conn@host, ":", conn@port),
-      displayName = tryCatch(conn@dir, error = function(e) conn@db),
-      connectCode = paste0("doltr::dolt_pane(", conn_arg, ")"),
+      displayName = if (inherits(conn, "DoltLocalConnection")) conn@dir else paste0(conn@db, " [", conn@host, ":", conn@port, "]"),
+      icon = ifile("dolt-db.png"),
+      connectCode = paste0("doltr::dolt_pane(", conn_arg, ")"),  #TODO: have this actually generate connection code based on whether it is a local or remote connection
       disconnect = function() DBI::dbDisconnect(conn),
       listObjectTypes = function() {
         list(
@@ -95,21 +96,21 @@ dolt_pane <- function(conn = doltr::dolt()) {
           icon = ifile("staged.png"),
           callback = function() {
             doltr::dolt_add(conn = conn)
-            update_dolt_pane(conn)
+            doltr::update_dolt_pane(conn)
           }
         ),
         Unstage = list(
           icon = ifile("unstaged.png"),
           callback = function() {
             doltr::dolt_reset(conn = conn)
-            update_dolt_pane(conn)
+            doltr::update_dolt_pane(conn)
           }
         ),
         Commit = list(
           icon = ifile("commit.png"),
           callback = function() {
             doltr::dolt_commit(conn = conn)
-            update_dolt_pane(conn)
+            doltr::update_dolt_pane(conn)
           }
         ),
         Pull = list(
@@ -135,10 +136,10 @@ ifile <- function(f) {
   system.file("img", f, package = "doltr")
 }
 
+#' @export
 update_dolt_pane <- function(conn = dolt()) {
    observer <- getOption("connectionObserver")
    if (!is.null(observer)) {
-     htype = paste0(conn@username, "@", conn@host, ":", conn@port)
-     observer$connectionUpdated(htype, htype, "")
+     observer$connectionUpdated("Dolt", paste0(conn@username, "@", conn@host, ":", conn@port), "")
    }
 }

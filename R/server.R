@@ -86,10 +86,9 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
   if (!is.null(log_out) && !log_out %in% c("", "|"))
     log_out <- normalizePath(log_out, mustWork = FALSE)
 
-  env_par <- ps_environ(ps_parent(ps_handle()))
   proc <- process$new(dolt_path(), args = args, wd = dir,
                       stdout = log_out, stderr = "2>&1",
-                      env = c(env_par, R_DOLT=1),
+                      env = c("current", R_DOLT=1),
                       supervise = FALSE, cleanup = FALSE, cleanup_tree = FALSE)
   p <- proc$as_ps_handle()
   rm(proc)

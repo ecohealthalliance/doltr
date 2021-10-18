@@ -65,6 +65,7 @@ setMethod("dbConnect", "DoltDriver",
                               port = port,
                               host = host,
                               ...)
+            attr(conn, "db") <- dbname
             attr(conn, "port") <- port
             attr(conn, "username") <- username
             attr(conn, "class") <- structure("DoltConnection", package = "doltr")
@@ -96,7 +97,6 @@ setMethod("show", "DoltConnection", function(object) {
     l <- cli_ul()
     cli_li("Connected at: {info$username}@{info$host}:{info$port}")
     cli_li("HEAD: {info$head_ref} {info$head}")
-    cli_li("Status:")
     cli_end(l)
     print(dolt_statusline(info$status))
   } else {

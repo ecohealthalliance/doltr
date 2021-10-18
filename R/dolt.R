@@ -23,7 +23,7 @@ dolt <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                  ...) {
 
   if (dir == "remote") {
-    envname <- paste0(username, "@", host, ":", port)
+    envname <- paste0(dbname, "|", username, "@", host, ":", port)
   } else {
     envname <- normalizePath(dir)
   }
@@ -34,7 +34,7 @@ dolt <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
     if (dbIsValid(conn)) {
       return(conn)
     } else {
-      dbDisconnect(conn)
+      suppressWarnings(dbDisconnect(conn))
     }
   }
 
