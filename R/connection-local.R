@@ -101,9 +101,8 @@ setMethod("show", "DoltLocalConnection", function(object) {
     cli_li("Serving {info$dir}, PID {info$server_pid}")
     cli_li("Connected at: {info$username}@{info$host}:{info$port}")
     cli_li("HEAD: {info$head_ref} {info$head}")
-    cli_li("Status:")
     cli_end(l)
-    print(info$status) #TODO: pretty-print status info better, use line for working and staged,
+    print(dolt_statusline(info$status))
   } else {
     cli_alert_warning("Invalid Connection")
   }

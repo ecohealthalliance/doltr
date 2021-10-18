@@ -6,6 +6,9 @@
 \usage{
 dolt_pane(conn = doltr::dolt())
 }
+\value{
+The connection object (invisibly)
+}
 \description{
 This function launches the RStudio "Connection" pane to interactively
 explore the database.

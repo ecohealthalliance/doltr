@@ -25,7 +25,6 @@ Imports:
     processx,
     ps,
     RMariaDB,
-    rscontract,
     rstudioapi,
     httpuv
 Suggests: 
@@ -50,4 +49,5 @@ Collate:
     'pane.R'
     'queries.R'
     'query.R'
+    'statusline.R'
     'utils.R'

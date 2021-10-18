@@ -47,7 +47,7 @@ setClass("DoltResult", contains = "MariaDBResult")
 #' @export
 #' @noRd
 setClass("DoltConnection", contains = "MariaDBConnection",
-         slots = c(port = "integer"))
+         slots = c(port = "integer", username = "character"))
 
 #' @export
 #' @rdname dolt_remote
@@ -66,6 +66,7 @@ setMethod("dbConnect", "DoltDriver",
                               host = host,
                               ...)
             attr(conn, "port") <- port
+            attr(conn, "username") <- username
             attr(conn, "class") <- structure("DoltConnection", package = "doltr")
             dbExecute(conn, paste0("SET @@autocommit = ", as.integer(autocommit)))
             conn
@@ -97,7 +98,7 @@ setMethod("show", "DoltConnection", function(object) {
     cli_li("HEAD: {info$head_ref} {info$head}")
     cli_li("Status:")
     cli_end(l)
-    print(info$status) #TODO: pretty-print status info better, use line for working and staged,
+    print(dolt_statusline(info$status))
   } else {
     cli_alert_warning("DISCONNECTED")
   }

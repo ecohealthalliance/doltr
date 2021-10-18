@@ -12,9 +12,9 @@
 
 .show_sql <- function(show_sql) {
   if (is.null(show_sql))
-    return(Sys.getboolenv("DOLT_SHOW_SQL", TRUE))
+    return(Sys.getboolenv("DOLT_SHOW_SQL", FALSE))
   else
-    return(show)
+    return(show_sql)
 }
 
 #' Get information about the dolt database
@@ -241,6 +241,17 @@ dolt_head_ref <- function(conn = dolt(), show_sql = NULL) {
   dbname <- dbGetInfo(conn)$dbname
   query <- paste0("select @@", dbname, "_head_ref")
   unname(dolt_query(query, conn, collect = TRUE, show_sql)[[1]])
+}
+
+#' @export
+#' @rdname dolt-refs
+dolt_head <- function(conn = dolt(), show_sql = NULL) {
+  ref <- dolt_head_ref(conn = conn, show_sql = show_sql)
+  if(grepl("^refs/heads/", ref))
+    out <- substr(ref, 12, nchar(ref))
+  else
+    out <- paste0("Detached: ", dolt_head_hash(conn, show_sql))
+  return(out)
 }
 
 #' @export
