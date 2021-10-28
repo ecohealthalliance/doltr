@@ -5,3 +5,4 @@
 doltdb
 docs
 .DS_Store
+.env
