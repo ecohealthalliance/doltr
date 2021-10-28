@@ -11,7 +11,14 @@ The connection object (invisibly)
 }
 \description{
 This function launches the RStudio "Connection" pane to interactively
-explore the database.
+explore the database.  The pane will show the database versioning state,
+tables stored in the database, and dolt system tables showing history.
+}
+\details{
+When running dolt interactively, the connection pane will automatically
+update in respone to most queries that modify the database state.  You
+can stop this behavior by setting the \code{DOLT_WATCH} environment variable
+to \code{0} or \code{false}.  See \link{config} for more configuration varuables.
 }
 \examples{
 if (!is.null(getOption("connectionObserver"))) dolt_pane()

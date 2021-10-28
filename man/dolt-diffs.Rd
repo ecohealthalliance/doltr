@@ -13,16 +13,6 @@ dolt_table_history(table, conn = dolt(), collect = NULL, show_sql = NULL)
 \item{table}{\link{character} the name of a table in the database}
 
 \item{to}{commit to compare to}
-
-\item{conn}{The dolt database to query}
-
-\item{collect}{Whether to return the full results (TRUE) or a an uncollected
-\code{\link[dplyr:tbl]{dplyr::tbl()}} to be further processed by dplyr pipelines before collecting.
-Can be set globally with the environment variable \code{\link[=dolt-config]{DOLT_COLLECT}}.}
-
-\item{show_sql}{Whether to print to the console the SQL statement executed.
-Useful in learning dolt SQL syntax.  Defaults to false. Can be set globally
-with the environment variable \code{\link[=dolt-config]{DOLT_SHOW_SQL}}.}
 }
 \description{
 Examine information about dolt tables and diffs
@@ -30,8 +20,6 @@ Examine information about dolt tables and diffs
 \seealso{
 Other dolt-sql-commands: 
 \code{\link{dolt_add}()},
-\code{\link{dolt_head_ref}()},
-\code{\link{dolt_push}()},
-\code{\link{dolt_status}()}
+\code{\link{dolt_push}()}
 }
 \concept{dolt-sql-commands}

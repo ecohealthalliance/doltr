@@ -1,5 +1,5 @@
 # Connect to a Dolt database
-conn <- doltr::dolt_pane(
+doltr::dolt_pane(
   doltr::dolt(
     dir = "${0:Directory (or 'remote')=doltdb}",
     dbname = "${1:Database Name=doltdb}",

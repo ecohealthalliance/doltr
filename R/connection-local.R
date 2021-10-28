@@ -84,7 +84,7 @@ setMethod("dbConnect", "DoltLocalDriver",
 #' @export
 #' @noRd
 setMethod("dbGetInfo", "DoltLocalConnection", function(dbObj, ...) {
-  info <- getMethod(dbGetInfo, "DoltConnection")(dbObj)
+  info <- getMethod(dbGetInfo, "DoltConnection")(dbObj, ...)
   info$dir <- dbObj@dir
   info$server_pid <- ps::ps_pid(dbObj@server)
   info
@@ -100,9 +100,10 @@ setMethod("show", "DoltLocalConnection", function(object) {
     l <- cli_ul()
     cli_li("Serving {info$dir}, PID {info$server_pid}")
     cli_li("Connected at: {info$username}@{info$host}:{info$port}")
-    cli_li("HEAD: {info$head_ref} {info$head}")
+    cli_li(format(info$state))
+    cli_li(format(info$last_commit))
+    cli_li(format(info$status))
     cli_end(l)
-    print(dolt_statusline(info$status))
   } else {
     cli_alert_warning("Invalid Connection")
   }
@@ -134,7 +135,7 @@ setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
   } else {
     kill_server <- FALSE
   }
-  getMethod(dbDisconnect, "MariaDBConnection")(conn)
+  getMethod(dbDisconnect, "DoltConnection")(conn)
 
   if (kill_server)
     try(dkill(conn@server), silent = TRUE)
@@ -145,7 +146,8 @@ setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
 #' @noRd
 #' @importFrom ps ps_is_running
 setMethod("dbIsValid", "DoltLocalConnection", function(dbObj, ...) {
-  valid <- getMethod(dbIsValid, "MariaDBConnection")(dbObj)
+  valid <- getMethod(dbIsValid, "MariaDBConnection")(dbObj) &&
+    ps_is_running(dbObj@server)
   if (!valid && inherits(dbObj@server, "ps_handle"))
     try(kill(dbObj@server), silent = TRUE)
   valid

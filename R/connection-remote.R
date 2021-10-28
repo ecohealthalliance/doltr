@@ -78,13 +78,10 @@ setMethod("dbConnect", "DoltDriver",
 setMethod("dbGetInfo", "DoltConnection", function(dbObj, ...) {
   minfo <- getMethod(dbGetInfo, "MariaDBConnection")(dbObj)
   minfo$port <- dbObj@port
-  refs <- as.list(dbGetQuery(dbObj, paste0("select ",
-                                           "@@", minfo$dbname, "_head_ref AS head_ref, ",
-                                           "@@", minfo$dbname, "_head as head, ",
-                                           "@@", minfo$dbname, "_staged as staged, ",
-                                           "@@", minfo$dbname, "_working as working")))
-  status <- dbGetQuery(dbObj, "select * from dolt_status")
-  c(minfo, refs, list(status = status))
+  last_commit <- dolt_last_commit()
+  state <- dolt_state(dbObj)
+  status <- dolt_status(dbObj)
+  c(minfo, list(last_commit = last_commit, state = state, status = status))
 })
 
 #' @export
@@ -96,11 +93,176 @@ setMethod("show", "DoltConnection", function(object) {
     cli_h1("<DoltConnection> {info$dbname}")
     l <- cli_ul()
     cli_li("Connected at: {info$username}@{info$host}:{info$port}")
-    cli_li("HEAD: {info$head_ref} {info$head}")
     cli_end(l)
-    print(dolt_statusline(info$status))
+    print(info$state)
+    print(info$last_commit)
+    print(info$status)
   } else {
     cli_alert_warning("DISCONNECTED")
   }
 })
 
+
+#' Dolt Data Types
+#'
+#' `dbDataType` fits more precise data types and returns a data type size attribute
+#' in case fields need to be recast in revision. `dolt_type_sizes`
+#' @param dbObj the database connection
+#' @param obj the data type (vector or data frame)
+#' @param min_varchar The minimum size `VARCHAR` types should be cast as
+#' @param max_varchar the maximum size `VARCHAR` types should be cast as. Larger
+#' text data will return types `TEXT`,`MEDIUMTEXT`, or `LONGTEXT`
+#' @return A character vector of classes, with attributes of the maximum size for
+#' text and blob classes
+#' @export
+#' @importFrom bit64 integer64 as.integer64 NA_integer64_
+#' @rdname types
+setMethod("dbDataType", "DoltConnection", function(dbObj, obj,
+                                                   min_varchar = Sys.getenv("DOLT_MINVARCAHR", 255L),
+                                                   max_varchar = Sys.getenv("DOLT_MAXVARCHAR", 16383L),
+                                                   ...) {
+  min_varchar = as.integer(min_varchar)
+  max_varchar = as.integer(max_varchar)
+  if (is.data.frame(obj)) {
+    typ_l <- lapply(obj, dolt_data_type,
+                    min_varchar = min_varchar, max_varchar = max_varchar)
+    typ <- unlist(typ_l)
+    max_size <- integer64(length(obj))
+    for(i in seq_along(max_size)) max_size[i] <- attr(typ_l[[i]], "max_size")
+    attr(typ, "max_size") <- max_size
+  } else {
+    typ <- dolt_data_type(obj,  min_varchar, max_varchar)
+  }
+
+  typ
+})
+
+#' @importFrom bit64 integer64 as.integer64 NA_integer64_
+dolt_data_type <- function(obj, min_varchar, max_varchar) {
+  if (is.factor(obj)) return(dolt_text_type(levels(obj), min_varchar, max_varchar))
+
+  if (inherits(obj, "POSIXct"))   return(structure("DATETIME", max_size = NA_integer64_))
+  if (inherits(obj, "Date"))      return(structure("DATE", max_size = NA_integer64_))
+  if (inherits(obj, "difftime"))  return(structure("TIME", max_size = NA_integer64_))
+  if (inherits(obj, "integer64")) return(structure("BIGINT", max_size = NA_integer64_))
+  if (inherits(obj, "blob")) dolt_blob_type(obj)
+
+
+  switch(typeof(obj),
+         logical = structure("BOOLEAN", max_size = NA_integer64_), # works better than BIT(1), https://stackoverflow.com/q/289727/946850
+         integer = structure("INTEGER", max_size = NA_integer64_),
+         double =  structure("DOUBLE", max_size = NA_integer64_),
+         character = dolt_text_type(obj, min_varchar, max_varchar),
+         list = dolt_blob_type(obj),
+         stop("Unsupported type", call. = FALSE)
+  )
+}
+
+#' @importFrom bit64 integer64 as.integer64 NA_integer64_
+dolt_text_type <- function(obj, min_varchar, max_varchar) {
+  nc <- max(nchar(enc2utf8(obj), type = "bytes"), 1, na.rm = TRUE)
+  if (nc <= min_varchar) {
+    return(structure(paste0("VARCHAR(", min_varchar, ")"), max_size = min_varchar))
+  } else if (nc > min_varchar & nc <= 16383L & nc < max_varchar) {
+    sz <- 2L^(floor(log2(nc)) + 1L) - 1
+    return(structure(paste0("VARCHAR(", sz, ")"), max_size = as.integer64(sz)))
+  } else if (nc > max_varchar && nc <= 16383L) {
+    return(structure("TEXT", max_size = as.integer64(16383L)))
+  } else if ((nc > 16383L || nc > max_varchar) && nc <= 4194303L) {
+    return(structure("MEDIUMTEXT", max_size = as.integer64(4194303L)))
+  } else if (nc > 4194303L && nc <= as.integer64('4294967295')) {
+    return(structure("LONGTEXT", max_size = as.integer64('4294967295')))
+  } else {
+    stop("Text data is greater than 4GB! No storage type fits.")
+  }
+}
+
+#' @importFrom blob as_blob
+#' @importFrom bit64 integer64 as.integer64 NA_integer64_
+dolt_blob_type <- function(obj) {
+  if (!all(vapply(obj, is.raw, logical(1)))) "Stop only lists of raw vectors (blobs) allowed"
+  nb <- max(vapply(obj, \(x) as.integer64(length(x)), integer64(1)), 1, na.rm = TRUE)
+  if (nb <=  65535) {
+    return(structure("BLOB", max_size = 65535))
+  } else if (nb > 65535L && nc <= 16777215) {
+    return(structure("MEDIUMBLOB", max_size = 16777215))
+  } else if (nb > 16777215 && nb <= 4294967295) {
+    return(structure("LONGBLOB", max_size = 4294967295))
+  } else if (nb > 4294967295) {
+    stop("Blob data is greater than 4GGB! No storage type fits")
+  }
+}
+
+#' @export
+#' @importFrom dplyr case_when
+#' @rdname types
+dolt_type_sizes <- function(types) {
+  case_when(
+    grepl("^VARCHAR", types) ~ numeric(regextract(types, "\\d+")),
+    gripl("TEXT", types) ~ 16383,
+    gripl("MEDIUMTEXT", types) ~ 4194303,
+    gripl("LONGTEXT", types) ~ 4294967295,
+    gripl("BLOB", types) ~ 65535,
+    gripl("MEDIUMBLOB", types) ~ 16777215,
+    gripl("LONGBLOB", types) ~ 4294967295,
+    TRUE ~ NA_real_)
+}
+
+#' A convenience function
+gripl <- function(pat, x) grepl(pat, x, ignore.case = TRUE, fixed = TRUE)
+
+#' Makes results DoltResults rather than MariaDBResults, needed for methods
+#' @importMethodsFrom RMariaDB dbSendQuery
+#' @export
+#' @noRd
+setMethod(
+  "dbSendQuery", c("DoltConnection", "character"),
+  function(conn, statement, params = NULL, ...) {
+    rs <- getMethod(dbSendQuery, c("MariaDBConnection", "character"))(
+      conn, statement, params, ...)
+    attr(rs, "class") <- structure("DoltResult", package = "doltr")
+    rs
+  }
+)
+
+#' Makes results DoltResults rather than MariaDBResults, needed for DoltResult
+#' @importMethodsFrom RMariaDB dbSendStatement
+#' @export
+#' @noRd
+setMethod(
+  "dbSendStatement", signature("DoltConnection", "character"),
+  function(conn, statement, params = NULL, ...) {
+    rs <- getMethod(dbSendStatement, c("MariaDBConnection", "character"))(
+      conn, statement, params, ...)
+    attr(rs, "class") <- structure("DoltResult", package = "doltr")
+    rs
+  }
+)
+
+#' Sets a hook in interactive mode to update watching processes (e.g. the R
+#' RStudio connection pane) when DB transactions finish
+#' @importMethodsFrom RMariaDB dbClearResult
+#' @export
+#' @noRd
+setMethod("dbClearResult", signature("DoltResult"),
+          function(res, ...) {
+            if (interactive() && Sys.getboolenv("DOLT_WATCH", TRUE)) {
+              on.exit(dolt_watch(res@conn))
+            }
+            getMethod(dbClearResult, "MariaDBResult", )(res, ...)
+          }
+)
+
+
+
+#' Clear out cached connections and watching panes when closing a connection
+#' @importMethodsFrom RMariaDB dbDisconnect
+#' @export
+#' @noRd
+setMethod("dbDisconnect", "DoltConnection", function(conn, ...) {
+  conn_name <- dolt_conn_name(conn)
+  getMethod(dbDisconnect, "MariaDBConnection")(conn)
+  suppressWarnings(rm(list = conn_name, envir = dolt_cache))
+  suppressWarnings(rm(list = conn_name, envir = dolt_states))
+  if (interactive()) close_dolt_pane(conn)
+})

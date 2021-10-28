@@ -43,16 +43,6 @@ dolt_fetch(
 \item{force}{whether to overwrite any conflicting history
 the current branch}
 
-\item{conn}{The dolt database to query}
-
-\item{collect}{Whether to return the full results (TRUE) or a an uncollected
-\code{\link[dplyr:tbl]{dplyr::tbl()}} to be further processed by dplyr pipelines before collecting.
-Can be set globally with the environment variable \code{\link[=dolt-config]{DOLT_COLLECT}}.}
-
-\item{show_sql}{Whether to print to the console the SQL statement executed.
-Useful in learning dolt SQL syntax.  Defaults to false. Can be set globally
-with the environment variable \code{\link[=dolt-config]{DOLT_SHOW_SQL}}.}
-
 \item{squash}{whether to merge changes to the working set without
 updating the commit history}
 }
@@ -62,8 +52,6 @@ Work with dolt repository remotes
 \seealso{
 Other dolt-sql-commands: 
 \code{\link{dolt_add}()},
-\code{\link{dolt_diffs}()},
-\code{\link{dolt_head_ref}()},
-\code{\link{dolt_status}()}
+\code{\link{dolt_diffs}()}
 }
 \concept{dolt-sql-commands}

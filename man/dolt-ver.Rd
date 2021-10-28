@@ -4,7 +4,6 @@
 \alias{dolt_add}
 \alias{dolt_commit}
 \alias{dolt_reset}
-\alias{dolt_checkout}
 \title{Add, commit, and reset tables in a dolt database}
 \usage{
 dolt_add(tables = NULL, conn = dolt(), collect = NULL, show_sql = NULL)
@@ -27,21 +26,9 @@ dolt_reset(
   collect = NULL,
   show_sql = NULL
 )
-
-dolt_checkout(ref, b = FALSE, conn = dolt(), collect = NULL, show_sql = NULL)
 }
 \arguments{
 \item{tables}{Which tables to be reset? Defaults to all tables if NULL.}
-
-\item{conn}{The dolt database to query}
-
-\item{collect}{Whether to return the full results (TRUE) or a an uncollected
-\code{\link[dplyr:tbl]{dplyr::tbl()}} to be further processed by dplyr pipelines before collecting.
-Can be set globally with the environment variable \code{\link[=dolt-config]{DOLT_COLLECT}}.}
-
-\item{show_sql}{Whether to print to the console the SQL statement executed.
-Useful in learning dolt SQL syntax.  Defaults to false. Can be set globally
-with the environment variable \code{\link[=dolt-config]{DOLT_SHOW_SQL}}.}
 
 \item{all}{stage all tables before comitting?}
 
@@ -50,10 +37,6 @@ will be prompted. Otherwise will error if empty.}
 
 \item{hard}{Reset working and staged tables? If FALSE (default), a "soft"
 reset, of only staged tables, will be performed}
-
-\item{b}{whether to create a new branch}
-
-\item{branch}{the branch to check out}
 }
 \description{
 Add, commit, and reset tables in a dolt database
@@ -61,8 +44,6 @@ Add, commit, and reset tables in a dolt database
 \seealso{
 Other dolt-sql-commands: 
 \code{\link{dolt_diffs}()},
-\code{\link{dolt_head_ref}()},
-\code{\link{dolt_push}()},
-\code{\link{dolt_status}()}
+\code{\link{dolt_push}()}
 }
 \concept{dolt-sql-commands}

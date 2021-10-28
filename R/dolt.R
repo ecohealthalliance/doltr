@@ -23,9 +23,10 @@ dolt <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                  ...) {
 
   if (dir == "remote") {
+    if (is.null(dbname)) stop("A `dbname` is required for remote connections")
     envname <- paste0(dbname, "|", username, "@", host, ":", port)
   } else {
-    envname <- normalizePath(dir)
+    envname <- normalizePath(dir, mustWork = FALSE)
   }
 
   conn = mget(envname, dolt_cache, ifnotfound = NA)[[1]]
@@ -46,27 +47,40 @@ dolt <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                       password = password, host = host, port = port, ...)
   }
 
-  if (cache_connection) assign(envname, conn, envir = dolt_cache)
+  if (cache_connection) {
+    assign(envname, conn, envir = dolt_cache)
+  }
 
   conn
 }
 
+dolt_cache <- new.env()
+dolt_states <- new.env()
+dolt_status_cache <- new.env()
+reg.finalizer(
+  dolt_cache,
+  function(env) eapply(
+    env,
+    function(x) if (inherits(x, "DBIConnection")) dbDisconnect(x),
+    all.names = TRUE),
+  onexit = TRUE
+)
 
+dolt_watch <- function(conn = dolt()) {
+  conn_name <- dolt_conn_name(conn)
+  old_state <- mget(conn_name, dolt_states, ifnotfound = NA)[[1]]
+  new_state <- dolt_state(conn)
+  if(!identical(old_state, new_state)) {
+    update_dolt_pane(conn)
+    assign(conn_name, new_state, envir = dolt_states)
+  }
+  NULL
+}
 
-  dolt_cache <- new.env()
-  reg.finalizer(
-    dolt_cache,
-    function(env) eapply(env, dbDisconnect, all.names = TRUE),
-    onexit = TRUE
-    )
-
-# # If the connection doesn't have a server, try to find one
-# if (!server_running && find_server) {
-#   running_servers <- dolt_server_find(dir = dir)
-#   if (nrow(running_servers)) {
-#     srv <- running_servers$ps_handle[[1]]
-#     port <- running_servers$lport[[1]]
-#     class(srv) <- c("dolt_server", class(srv))
-#     server_running <- TRUE
-#   }
-# }
+dolt_conn_name <- function(conn = dolt()) {
+  if (inherits(conn, "DoltLocalConnection")) {
+    return(conn@dir)
+  } else {
+    return(paste0(conn@db, "|", conn@username, "@", conn@host, ":", conn@port))
+  }
+}

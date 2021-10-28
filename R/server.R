@@ -131,7 +131,7 @@ print.dolt_server <- function(p, ...) {
 #' @export
 dolt_init <- function(dir = Sys.getenv("DOLT_DIR", "doltdb")) {
   if (!dir.exists(dir)) dir.create(dir)
-  old <- setwd(dir = new)
+  old <- setwd(dir = dir)
   on.exit(setwd(old))
   run("dolt", "init")
 }

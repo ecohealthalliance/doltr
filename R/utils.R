@@ -19,7 +19,7 @@ Sys.getboolenv <- function (x, default = FALSE, stop_on_failure = FALSE)
     if (is.na(r)) {
       if (isTRUE(stop_on_failure)) {
         stop(paste("Environment variable", x, "is set to",
-                    "a value not interpretable as boolean."))
+                   "a value not interpretable as boolean."))
       }
       else {
         r <- default
@@ -53,3 +53,9 @@ view2 <- function(x, ...) {
   if (Sys.getenv("RSTUDIO") == "1") View(x, ...) else utils::View(x)
 }
 
+regextract <- function(x, pat, ignore.case = FALSE, perl = TRUE, fixed = FALSE) {
+  regmatches(
+    x,
+    regexpr(pat, x, ignore.case = ignore.case, perl = perl, fixed = fixed)
+  )
+}
