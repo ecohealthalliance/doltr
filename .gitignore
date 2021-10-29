@@ -6,3 +6,4 @@ doltdb
 docs
 .DS_Store
 .env
+tests/testthat/doltdb

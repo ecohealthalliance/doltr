@@ -149,7 +149,7 @@ setMethod("dbIsValid", "DoltLocalConnection", function(dbObj, ...) {
   valid <- getMethod(dbIsValid, "MariaDBConnection")(dbObj) &&
     ps_is_running(dbObj@server)
   if (!valid && inherits(dbObj@server, "ps_handle"))
-    try(kill(dbObj@server), silent = TRUE)
+    try(dkill(dbObj@server), silent = TRUE)
   valid
 })
 

@@ -106,7 +106,7 @@ dolt_server_port <- function(p) {
 
 #' @export
 #' @importFrom ps ps_pid ps_cwd ps_connections ps_is_running
-format.dolt_server <- function(p, ...) {
+format.dolt_server <- function(x, ...) {
   pid <- ps_pid(p)
   if (ps_is_running(p)) {
     dir <-   ps_cwd(p)
@@ -119,7 +119,7 @@ format.dolt_server <- function(p, ...) {
 }
 
 #' @export
-print.dolt_server <- function(p, ...) {
+print.dolt_server <- function(x, ...) {
   cat(format(p))
   invisible(p)
 }

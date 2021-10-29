@@ -41,15 +41,15 @@ dolt_state <- function(conn = dolt()) {
 
 #' @export
 #' @noRd
-format.dolt_state <- function(state) {
-  using_hash <- regextract(state$using, "(?<=/)(\\w+)$")
-  if (state$dbname == state$using  && !length(using_hash)) {
-    branch <- regextract(state$head_ref, "(\\w+)$")
+format.dolt_state <- function(x, ...) {
+  using_hash <- regextract(x$using, "(?<=/)(\\w+)$")
+  if (x$dbname == x$using  && !length(using_hash)) {
+    branch <- regextract(x$head_ref, "(\\w+)$")
     out <- paste0("On branch ", branch)
-  } else if (length(using_hash) && using_hash == state$head && state$head_ref == "") {
+  } else if (length(using_hash) && using_hash == x$head && x$head_ref == "") {
     out <- paste0("Using fixed read-only database at ", using_hash, ".")
-  } else if (length(using_hash) && state$head_ref != "") {
-    branch <- regextract(state$head_ref, "(\\w+)$")
+  } else if (length(using_hash) && x$head_ref != "") {
+    branch <- regextract(x$head_ref, "(\\w+)$")
     out <- paste0("Using fixed read-only database at ", using_hash, ", but branch head '", branch, "' checked out")
   } else {
     out <- paste0("Indeterminate state! Examine dolt_state() object. \n", paste0(names(state), ": ", unlist(state), collapse = "\n"))
@@ -59,8 +59,8 @@ format.dolt_state <- function(state) {
 
 #' @export
 #' @noRd
-print.dolt_state <- function(state) {
-  cat(format(state))
+print.dolt_state <- function(x, ...) {
+  cat(format(x))
 }
 
 
@@ -76,11 +76,11 @@ dolt_status <- function(conn = dolt()) {
 #' @export
 #' @importFrom dplyr mutate group_by summarize recode arrange pull %>%
 #' @noRd
-format.dolt_status <- function(status_table) {
-  if (!nrow(status_table))
+format.dolt_status <- function(x, ...) {
+  if (!nrow(x))
     out <- "Working database clean"
   else {
-    out <- status_table %>%
+    out <- x %>%
       mutate(status = recode(status, `new table`="new", `new doc`="new"),
              staged =  c("Working", "Staged")[staged + 1]) %>%
       group_by(staged, status) %>%
@@ -97,8 +97,8 @@ format.dolt_status <- function(status_table) {
 #' @export
 #' @importFrom cli col_green col_yellow col_red cat_line
 #' @noRd
-print.dolt_status <- function(status) {
-  out <- format(status)
+print.dolt_status <- function(x, ...) {
+  out <- format(x)
   if (out == "Working database clean")  {
     cat_line(col_green(out))
   } else {
@@ -120,15 +120,15 @@ dolt_last_commit <- function(conn = dolt()) {
 
 #' @export
 #' @noRd
-format.dolt_commit <- function(commit) {
-  if (nchar(commit$message) > 50)
-    commit$message <- paste0(substr(commit$message, 1, 50), "...")
-  ago <- paste(format(round(Sys.time() - commit$date)), "ago")
-  paste0("Last commit by ", commit$committer, " ", ago, ": ", commit$message)
+format.dolt_commit <- function(x, ...) {
+  if (nchar(x$message) > 50)
+    x$message <- paste0(substr(x$message, 1, 50), "...")
+  ago <- paste(format(round(Sys.time() - x$date)), "ago")
+  paste0("Last commit by ", x$committer, " ", ago, ": ", x$message)
 }
 
 #' @export
 #' @noRd
-print.dolt_commit <- function(commit) {
-  cat(format(commit))
+print.dolt_commit <- function(x, ...) {
+  cat(format(x))
 }

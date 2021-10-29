@@ -184,7 +184,7 @@ dolt_blob_type <- function(obj) {
   nb <- max(vapply(obj, \(x) as.integer64(length(x)), integer64(1)), 1, na.rm = TRUE)
   if (nb <=  65535) {
     return(structure("BLOB", max_size = 65535))
-  } else if (nb > 65535L && nc <= 16777215) {
+  } else if (nb > 65535L && nb <= 16777215) {
     return(structure("MEDIUMBLOB", max_size = 16777215))
   } else if (nb > 16777215 && nb <= 4294967295) {
     return(structure("LONGBLOB", max_size = 4294967295))
@@ -208,8 +208,6 @@ dolt_type_sizes <- function(types) {
     TRUE ~ NA_real_)
 }
 
-#' A convenience function
-gripl <- function(pat, x) grepl(pat, x, ignore.case = TRUE, fixed = TRUE)
 
 #' Makes results DoltResults rather than MariaDBResults, needed for methods
 #' @importMethodsFrom RMariaDB dbSendQuery

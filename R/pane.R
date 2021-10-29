@@ -15,7 +15,6 @@
 #' @return The connection object (invisibly)
 #' @examples
 #' if (!is.null(getOption("connectionObserver"))) dolt_pane()
-#' @importFrom rscontract rscontract_spec rscontract_open rscontract_ide
 dolt_pane <- function(conn = doltr::dolt()) {
   observer <- getOption("connectionObserver")
   if (!is.null(observer) && interactive() && dbIsValid(conn)) {
@@ -89,7 +88,7 @@ dolt_pane <- function(conn = doltr::dolt()) {
       actions = list(
         SQL = list(
           icon = ifile("rstudio/edit-sql.png"),
-          callback = doltr:::sql_action
+          callback = sql_action
         ),
         Stage = list(
           icon = ifile("rstudio/staged.png"),

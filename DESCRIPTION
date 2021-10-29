@@ -52,5 +52,6 @@ Collate:
     'pane.R'
     'queries.R'
     'query.R'
+    'read-table.R'
     'state.R'
     'utils.R'

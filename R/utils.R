@@ -47,15 +47,44 @@ port_fallback <- function(port, ...) {
   }
 }
 
+#' Convenience if.null binomial function
+#' @noRd
 `%||%` <- function(x, y) if (is.null(x)) return(y) else return(x)
 
+
+
+#' Use the RStudio viewer programatically
+#' @noRd
+get_rsiew <- function() {
+  if (Sys.getenv("RSTUDIO") == "1") {
+    return(as.environment("tools:rstudio")[[".rs.viewHook"]])
+  } else {
+    return(NULL)
+  }
+}
 view2 <- function(x, ...) {
-  if (Sys.getenv("RSTUDIO") == "1") View(x, ...) else utils::View(x)
+   vfn <- get_rsiew()
+   if (is.null(vfn)) {
+     utils::View(x)
+   } else {
+     vfn(x,x,...)
+   }
 }
 
+#' Base version of stri_extract
+#' @noRd
 regextract <- function(x, pat, ignore.case = FALSE, perl = TRUE, fixed = FALSE) {
   regmatches(
     x,
     regexpr(pat, x, ignore.case = ignore.case, perl = perl, fixed = fixed)
   )
+}
+
+#' A convenience function
+#' @noRd
+gripl <- function(pat, x) grepl(pat, x, ignore.case = TRUE, fixed = TRUE)
+
+
+stopc <- function (...) {
+  stop(..., call. = FALSE, domain = NA)
 }

@@ -22,16 +22,16 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
+          #- {os: macOS-latest,   r: 'release'}
 
           #- {os: windows-latest, r: 'release'}
           # Use 3.6 to trigger usage of RTools35
           #- {os: windows-latest, r: '3.6'}
 
           # Use older ubuntu to maximise backward compatibility
-          - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
+          #- {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-18.04,   r: 'release'}
-          - {os: ubuntu-18.04,   r: 'oldrel-1'}
+          #- {os: ubuntu-18.04,   r: 'oldrel-1'}
           #- {os: ubuntu-18.04,   r: 'oldrel-2'}
           #- {os: ubuntu-18.04,   r: 'oldrel-3'}
           #- {os: ubuntu-18.04,   r: 'oldrel-4'}
@@ -42,32 +42,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - uses: r-lib/actions/setup-pandoc@v1
-
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
+          cache-version: 2
           extra-packages: rcmdcheck
-
       - name: Install Dolt
         run: |
           sudo bash -c 'curl -L https://github.com/dolthub/dolt/releases/latest/download/install.sh | bash'
           dolt config --global --add user.email pd@enko.com
           dolt config --global --add user.name "P.D. En'ko"
-
       - uses: r-lib/actions/check-r-package@v1
-
       - name: Show testthat output
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
-
       - name: Upload check results
         if: failure()
         uses: actions/upload-artifact@main

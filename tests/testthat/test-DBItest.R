@@ -3,7 +3,7 @@ if (Sys.getenv("GITHUB_ACTIONS") == "true" ||
 
   options(testthat.progress.max_fails = Inf)
 
-  DBItest::make_context(
+  ctx <- DBItest::make_context(
     dolt_local(),
     tweaks = DBItest::tweaks(constructor_name = "dolt_local",
                              constructor_relax_args = TRUE,
@@ -18,16 +18,27 @@ if (Sys.getenv("GITHUB_ACTIONS") == "true" ||
       # bad tests
       "list_objects_features",
       "append_roundtrip_timestamp",
-      "roundtrip_timestamp"
+      "roundtrip_timestamp",
+      # From test_sql(): dolt tables do not allow spaces
+      "read_table_name",
+      "create_table_name",
+      "list_tables_quote",
+      "exists_table_name",
+      "remove_table_name",
+      "list_objects_quote",
+      "write_table_name",
+      "append_table_name",
+      NULL
     )
   )
-  DBItest::test_getting_started()
-  DBItest::test_connection()
-  DBItest::test_driver()
-  DBItest::test_result()
-  DBItest::test_sql()
-  DBItest::test_meta()
-  DBItest::test_transaction()
-  DBItest::test_compliance()
+  DBItest::test_getting_started(ctx = ctx)
+  DBItest::test_connection(ctx = ctx)
+  DBItest::test_driver(ctx = ctx)
+  #DBItest::test_result(ctx = ctx)
+  DBItest::test_sql(ctx  = ctx)
+  #DBItest::test_meta(ctx = ctx)
+  #DBItest::test_transaction(ctx = ctx)
+  #DBItest::test_compliance(ctx = ctx)
   #DBItest::test_stress()
+
 }
