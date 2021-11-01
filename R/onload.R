@@ -1,3 +1,5 @@
+#' Check for installation on startup
+#' @noRd
 .onLoad <- function(libname, pkgname) {
   if (!is_dolt_installed()) packageStartupMessage(paste0(
     "No dolt binary found. Install dolt from ",

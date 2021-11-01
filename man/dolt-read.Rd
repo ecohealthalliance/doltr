@@ -21,7 +21,7 @@
 
 \S4method{dbListObjects}{DoltConnection}(conn, prefix = NULL, as_of = NULL, ...)
 
-\S4method{dbExistsTable}{DoltConnection,character}(conn, name, ...)
+\S4method{dbExistsTable}{DoltConnection,character}(conn, name, as_of = NULL, ...)
 }
 \arguments{
 \item{conn}{a \linkS4class{DoltConnection} object, produced by
@@ -59,7 +59,7 @@ names for \code{dbListTables()} and \code{dbListObjects()}, and a logical result
 \description{
 These methods are extensions of standard DBI functions such as \link[DBI:dbReadTable]{DBI::dbReadTable}.
 They differ in that they can take an \code{as_of} argument, reading historical data
-from the data base that was written as of a certain date or commit hash, or
+from the database that was written as of a certain date or commit hash, or
 from a different branch.
 }
 \seealso{

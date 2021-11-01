@@ -49,6 +49,7 @@ Collate:
     'dolt.R'
     'doltr-package.R'
     'install.R'
+    'onload.R'
     'pane.R'
     'queries.R'
     'query.R'

@@ -4,7 +4,7 @@
 \alias{is_dolt_installed}
 \alias{dolt_version}
 \alias{dolt_path}
-\title{Find and check for the presence of a dolt binary.}
+\title{Find and check for the presence of a dolt binary}
 \usage{
 is_dolt_installed()
 
@@ -13,5 +13,5 @@ dolt_version()
 dolt_path()
 }
 \description{
-Find and check for the presence of a dolt binary.
+Find and check for the presence of a dolt binary
 }
