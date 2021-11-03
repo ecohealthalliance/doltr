@@ -115,7 +115,6 @@ setMethod("show", "DoltConnection", function(object) {
 #' @return A character vector of classes, with attributes of the maximum size for
 #' text and blob classes
 #' @export
-#' @importFrom bit64 integer64 as.integer64 NA_integer64_
 #' @rdname types
 setMethod("dbDataType", "DoltConnection", function(dbObj, obj,
                                                    min_varchar = Sys.getenv("DOLT_MINVARCAHR", 255L),
@@ -127,7 +126,7 @@ setMethod("dbDataType", "DoltConnection", function(dbObj, obj,
     typ_l <- lapply(obj, dolt_data_type,
                     min_varchar = min_varchar, max_varchar = max_varchar)
     typ <- unlist(typ_l)
-    max_size <- integer64(length(obj))
+    max_size <- length(obj)
     for(i in seq_along(max_size)) max_size[i] <- attr(typ_l[[i]], "max_size")
     attr(typ, "max_size") <- max_size
   } else {
@@ -137,51 +136,48 @@ setMethod("dbDataType", "DoltConnection", function(dbObj, obj,
   typ
 })
 
-#' @importFrom bit64 integer64 as.integer64 NA_integer64_
 dolt_data_type <- function(obj, min_varchar, max_varchar) {
   if (is.factor(obj)) return(dolt_text_type(levels(obj), min_varchar, max_varchar))
 
-  if (inherits(obj, "POSIXct"))   return(structure("DATETIME", max_size = NA_integer64_))
-  if (inherits(obj, "Date"))      return(structure("DATE", max_size = NA_integer64_))
-  if (inherits(obj, "difftime"))  return(structure("TIME", max_size = NA_integer64_))
-  if (inherits(obj, "integer64")) return(structure("BIGINT", max_size = NA_integer64_))
+  if (inherits(obj, "POSIXct"))   return(structure("DATETIME", max_size = NA_real_))
+  if (inherits(obj, "Date"))      return(structure("DATE", max_size = NA_real_))
+  if (inherits(obj, "difftime"))  return(structure("TIME", max_size = NA_real_))
+  if (inherits(obj, "integer64")) return(structure("BIGINT", max_size = NA_real_))
   if (inherits(obj, "blob")) dolt_blob_type(obj)
 
 
   switch(typeof(obj),
-         logical = structure("BOOLEAN", max_size = NA_integer64_), # works better than BIT(1), https://stackoverflow.com/q/289727/946850
-         integer = structure("INTEGER", max_size = NA_integer64_),
-         double =  structure("DOUBLE", max_size = NA_integer64_),
+         logical = structure("BOOLEAN", max_size = NA_real_), # works better than BIT(1), https://stackoverflow.com/q/289727/946850
+         integer = structure("INT", max_size = NA_real_),
+         double =  structure("DOUBLE", max_size = NA_real_),
          character = dolt_text_type(obj, min_varchar, max_varchar),
          list = dolt_blob_type(obj),
          stop("Unsupported type", call. = FALSE)
   )
 }
 
-#' @importFrom bit64 integer64 as.integer64 NA_integer64_
 dolt_text_type <- function(obj, min_varchar, max_varchar) {
   nc <- max(nchar(enc2utf8(obj), type = "bytes"), 1, na.rm = TRUE)
   if (nc <= min_varchar) {
     return(structure(paste0("VARCHAR(", min_varchar, ")"), max_size = min_varchar))
-  } else if (nc > min_varchar & nc <= 16383L & nc < max_varchar) {
-    sz <- 2L^(floor(log2(nc)) + 1L) - 1
-    return(structure(paste0("VARCHAR(", sz, ")"), max_size = as.integer64(sz)))
-  } else if (nc > max_varchar && nc <= 16383L) {
-    return(structure("TEXT", max_size = as.integer64(16383L)))
-  } else if ((nc > 16383L || nc > max_varchar) && nc <= 4194303L) {
-    return(structure("MEDIUMTEXT", max_size = as.integer64(4194303L)))
-  } else if (nc > 4194303L && nc <= as.integer64('4294967295')) {
-    return(structure("LONGTEXT", max_size = as.integer64('4294967295')))
+  } else if (nc > min_varchar & nc <= 16383 & nc < max_varchar) {
+    sz <- 2^(floor(log2(nc)) + 1) - 1
+    return(structure(paste0("VARCHAR(", sz, ")"), max_size = sz))
+  } else if (nc > max_varchar && nc <= 16383) {
+    return(structure("TEXT", max_size = 16383))
+  } else if ((nc > 16383 || nc > max_varchar) && nc <= 4194303) {
+    return(structure("MEDIUMTEXT", max_size = 4194303))
+  } else if (nc > 4194303 && nc <= 4294967295) {
+    return(structure("LONGTEXT", max_size = 4294967295))
   } else {
     stop("Text data is greater than 4GB! No storage type fits.")
   }
 }
 
 #' @importFrom blob as_blob
-#' @importFrom bit64 integer64 as.integer64 NA_integer64_
 dolt_blob_type <- function(obj) {
   if (!all(vapply(obj, is.raw, logical(1)))) "Stop only lists of raw vectors (blobs) allowed"
-  nb <- max(vapply(obj, \(x) as.integer64(length(x)), integer64(1)), 1, na.rm = TRUE)
+  nb <- max(vapply(obj, \(x) length(x), 1), 1, na.rm = TRUE)
   if (nb <=  65535) {
     return(structure("BLOB", max_size = 65535))
   } else if (nb > 65535L && nb <= 16777215) {
