@@ -82,7 +82,7 @@ regextract <- function(x, pat, ignore.case = FALSE, perl = TRUE, fixed = FALSE) 
 
 #' A convenience function
 #' @noRd
-gripl <- function(pat, x) grepl(pat, x, ignore.case = TRUE, fixed = TRUE)
+gripl <- function(pat, x) grepl(pat, x, ignore.case = TRUE, fixed = FALSE)
 
 
 stopc <- function (...) {
