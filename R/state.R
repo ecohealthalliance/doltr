@@ -43,16 +43,16 @@ dolt_state <- function(conn = dolt()) {
 #' @noRd
 format.dolt_state <- function(x, ...) {
   using_hash <- regextract(x$using, "(?<=/)(\\w+)$")
-  if (x$dbname == x$using  && !length(using_hash)) {
+  if (x$dbname == x$using  && is.na(using_hash)) {
     branch <- regextract(x$head_ref, "(\\w+)$")
     out <- paste0("On branch ", branch)
-  } else if (length(using_hash) && using_hash == x$head && x$head_ref == "") {
+  } else if (!is.na(using_hash) && using_hash == x$head && x$head_ref == "") {
     out <- paste0("Using fixed read-only database at ", using_hash, ".")
-  } else if (length(using_hash) && x$head_ref != "") {
+  } else if (!is.na(using_hash) && x$head_ref != "") {
     branch <- regextract(x$head_ref, "(\\w+)$")
     out <- paste0("Using fixed read-only database at ", using_hash, ", but branch head '", branch, "' checked out")
   } else {
-    out <- paste0("Indeterminate state! Examine dolt_state() object. \n", paste0(names(state), ": ", unlist(state), collapse = "\n"))
+    out <- paste0("Indeterminate state! Examine dolt_state() object. \n", paste0(names(x), ": ", unlist(x), collapse = "\n"))
   }
   out
 }
