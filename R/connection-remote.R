@@ -148,7 +148,7 @@ dolt_data_type <- function(obj, min_varchar, max_varchar) {
 
 
   switch(typeof(obj),
-         logical = structure("BOOLEAN", max_size = NA_real_), # works better than BIT(1), https://stackoverflow.com/q/289727/946850
+         logical = structure("TINYINT", max_size = NA_real_), # works better than BIT(1), https://stackoverflow.com/q/289727/946850
          integer = structure("INT", max_size = NA_real_),
          double =  structure("DOUBLE", max_size = NA_real_),
          character = dolt_text_type(obj, min_varchar, max_varchar),
