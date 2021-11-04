@@ -128,6 +128,7 @@ setMethod("dbDataType", "DoltConnection", function(dbObj, obj,
     typ <- unlist(typ_l)
     max_size <- numeric(length(obj))
     for(i in seq_along(max_size)) max_size[i] <- attr(typ_l[[i]], "max_size")
+    if (is.null(typ)) typ <- character(0)
     attr(typ, "max_size") <- max_size
   } else {
     typ <- dolt_data_type(obj,  min_varchar, max_varchar)
