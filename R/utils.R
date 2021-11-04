@@ -74,10 +74,10 @@ view2 <- function(x, ...) {
 #' Base version of stri_extract
 #' @noRd
 regextract <- function(x, pat, ignore.case = FALSE, perl = TRUE, fixed = FALSE) {
-  regmatches(
-    x,
-    regexpr(pat, x, ignore.case = ignore.case, perl = perl, fixed = fixed)
-  )
+  match <- regexpr(pat, x, ignore.case = ignore.case, perl = perl, fixed = fixed)
+  out <- rep(NA_character_, length(x))
+  out[match != -1] <- regmatches(x, match)
+  out
 }
 
 #' A convenience function

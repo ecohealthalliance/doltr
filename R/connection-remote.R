@@ -194,7 +194,7 @@ dolt_blob_type <- function(obj) {
 #' @rdname types
 dolt_type_sizes <- function(types) {
   case_when(
-    grepl("^VARCHAR", types) ~ numeric(regextract(types, "\\d+")),
+    grepl("^VARCHAR", types) ~ as.numeric(regextract(types, "\\d+")),
     gripl("TEXT", types) ~ 16383,
     gripl("MEDIUMTEXT", types) ~ 4194303,
     gripl("LONGTEXT", types) ~ 4294967295,
