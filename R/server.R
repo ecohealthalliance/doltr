@@ -107,10 +107,10 @@ dolt_server_port <- function(p) {
 #' @export
 #' @importFrom ps ps_pid ps_cwd ps_connections ps_is_running
 format.dolt_server <- function(x, ...) {
-  pid <- ps_pid(p)
-  if (ps_is_running(p)) {
-    dir <-   ps_cwd(p)
-    port <- dolt_server_port(p)
+  pid <- ps_pid(x)
+  if (ps_is_running(x)) {
+    dir <-   ps_cwd(x)
+    port <- dolt_server_port(x)
     out <- paste0("<dolt sql-server> PID=", pid, ", port=", port, ", dir=", dir)
   } else {
     out <- paste0("<dolt sql-server STOPPED> PID=", pid)
@@ -120,8 +120,8 @@ format.dolt_server <- function(x, ...) {
 
 #' @export
 print.dolt_server <- function(x, ...) {
-  cat(format(p))
-  invisible(p)
+  cat(format(x))
+  invisible(x)
 }
 
 #' Initiate a dolt database directory
