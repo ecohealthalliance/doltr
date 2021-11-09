@@ -6,6 +6,10 @@
 \usage{
 dolt_pane(conn = doltr::dolt())
 }
+\arguments{
+\item{conn}{a dolt connection. If a path is provided instead, a connection
+will be created to the path using \code{\link[=dolt]{dolt()}}.}
+}
 \value{
 The connection object (invisibly)
 }

@@ -1,5 +1,6 @@
 # TODO: Break this into smaller functions
-
+# TODO: Allow this and dolt() to be called with a single-string connection
+# of form `dbname|user@host`. Automatically get creds?
 #' Open a Dolt connection pane in RStudio
 #'
 #' This function launches the RStudio "Connection" pane to interactively
@@ -13,9 +14,13 @@
 #'
 #' @export
 #' @return The connection object (invisibly)
+#' @param conn a dolt connection. If a path is provided instead, a connection
+#' will be created to the path using [dolt()].
 #' @examples
 #' if (!is.null(getOption("connectionObserver"))) dolt_pane()
 dolt_pane <- function(conn = doltr::dolt()) {
+  if (!inherits(conn, "DBIConnection") && is.character(conn) && length(conn) == 1)
+    conn <- doltr::dolt(conn)
   observer <- getOption("connectionObserver")
   if (!is.null(observer) && interactive() && dbIsValid(conn)) {
     conn_name <- dolt_conn_name(conn)
