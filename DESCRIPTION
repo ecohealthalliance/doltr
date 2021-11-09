@@ -31,17 +31,20 @@ Imports:
     httpuv,
     jsonlite
 Suggests: 
+    knitr,
     covr,
     DBItest,
     lintr,
     spelling,
-    testthat
+    testthat,
+    rmarkdown
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Collate: 
+    'clone.R'
     'config-vars.R'
     'server.R'
     'connection-remote.R'
@@ -57,3 +60,4 @@ Collate:
     'read-table.R'
     'state.R'
     'utils.R'
+VignetteBuilder: knitr

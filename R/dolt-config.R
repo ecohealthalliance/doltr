@@ -7,6 +7,7 @@
 #' @export
 #' @importFrom jsonlite fromJSON
 #' @name dolt_config
+#' @seealso dolt-vars
 dolt_config_get <- function(params = NULL, global = TRUE,
                             local_dir = Sys.getenv("DOLT_DIR")) {
 

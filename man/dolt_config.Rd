@@ -25,3 +25,6 @@ and \code{user.creds}}
 \description{
 Get and set Dolt configuration variables
 }
+\seealso{
+dolt-vars
+}

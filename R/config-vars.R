@@ -29,5 +29,6 @@
 #'
 #' @rdname dolt-vars
 #' @name dolt-vars
+#' @seealso dolt-config
 #' @aliases dolt_vars env_vars
 NULL

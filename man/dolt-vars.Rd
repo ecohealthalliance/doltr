@@ -36,3 +36,6 @@ to disable this behavior.
 data is stored (\verb{~/.dolt} by default).
 }
 }
+\seealso{
+dolt-config
+}
