@@ -20,6 +20,7 @@
 #'    tibbles or lazy tibbles for further processing.
 #' - `DOLT_SHOW_SQL` will print the SQL statements executed when running dolt
 #'    convenience functions. Useful for understanding how dolt SQL commands work.
+#'    Set it to 1 or `true` to enable this behavior.
 #' - `DOLT_WATCH` determines whether the RStudio Connection pane automatically
 #'    updates in response to changes in the database.  Set it to 0 or `false`
 #'    to disable this behavior.
