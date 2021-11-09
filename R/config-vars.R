@@ -1,4 +1,4 @@
-#' Configuration options
+#' Configuration variable options
 #'
 #' The doltr package's behavior can be modified by setting these environment
 #' variables:
@@ -24,8 +24,10 @@
 #' - `DOLT_WATCH` determines whether the RStudio Connection pane automatically
 #'    updates in response to changes in the database.  Set it to 0 or `false`
 #'    to disable this behavior.
+#' - `DOLT_ROOT_DIR` the directory where Dolt global configuation and credential
+#'    data is stored (`~/.dolt` by default).
 #'
-#' @rdname dolt-config
-#' @name dolt-config
-#' @aliases dolt_config config
+#' @rdname dolt-vars
+#' @name dolt-vars
+#' @aliases dolt_vars env_vars
 NULL

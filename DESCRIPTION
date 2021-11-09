@@ -28,7 +28,8 @@ Imports:
     RMariaDB,
     rstudioapi,
     utils,
-    httpuv
+    httpuv,
+    jsonlite
 Suggests: 
     covr,
     DBItest,
@@ -41,10 +42,11 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Collate: 
-    'config.R'
+    'config-vars.R'
     'server.R'
     'connection-remote.R'
     'connection-local.R'
+    'dolt-config.R'
     'dolt.R'
     'doltr-package.R'
     'install.R'
