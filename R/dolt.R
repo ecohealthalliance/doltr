@@ -79,7 +79,7 @@ dolt_watch <- function(conn = dolt()) {
 
 dolt_conn_name <- function(conn = dolt()) {
   if (inherits(conn, "DoltLocalConnection")) {
-    return(conn@dir)
+    return(normalizePath(conn@dir, mustWork = FALSE))
   } else {
     return(paste0(conn@db, "|", conn@username, "@", conn@host, ":", conn@port))
   }
