@@ -31,7 +31,7 @@ dolt_branches <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
 #' @rdname dolt-info
 dolt_remotes <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
   collect <- .collect(collect); show_sql <- .show_sql(show_sql)
-  query <- "select name, url, cast(fetch_specs as char) as fetch_specs, cast(params as char) as parms from dolt_remotes"
+  query <- "select name, url, cast(fetch_specs as char) as fetch_specs, cast(params as char) as params from dolt_remotes"
   dolt_query(query, conn, collect, show_sql)
 }
 
