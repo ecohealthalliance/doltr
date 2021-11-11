@@ -63,12 +63,12 @@ get_rsiew <- function() {
   }
 }
 view2 <- function(x, ...) {
-   vfn <- get_rsiew()
-   if (is.null(vfn)) {
-     utils::View(x)
-   } else {
-     vfn(x,x,...)
-   }
+  vfn <- get_rsiew()
+  if (is.null(vfn)) {
+    utils::View(x)
+  } else {
+    vfn(x,x,...)
+  }
 }
 
 #' Base version of stri_extract
@@ -85,6 +85,28 @@ regextract <- function(x, pat, ignore.case = FALSE, perl = TRUE, fixed = FALSE) 
 gripl <- function(pat, x) grepl(pat, x, ignore.case = TRUE, fixed = FALSE)
 
 
+## Stuff from RMariaDB
 stopc <- function (...) {
   stop(..., call. = FALSE, domain = NA)
+}
+
+compatRowNames <- function(row.names) {
+  if (is.null(row.names)) {
+    row.names <- FALSE
+  }
+  row.names
+}
+
+
+factor_to_string <- function (value, warn = FALSE) {
+  is_factor <- vlapply(value, is.factor)
+  if (warn && any(is_factor)) {
+    warning("Factors converted to character", call. = FALSE)
+  }
+  value[is_factor] <- lapply(value[is_factor], as.character)
+  value
+}
+
+vlapply <- function(X, FUN, ..., USE.NAMES = TRUE) {
+  vapply(X = X, FUN = FUN, FUN.VALUE = logical(1L), ..., USE.NAMES = USE.NAMES)
 }

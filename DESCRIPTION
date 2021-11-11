@@ -29,7 +29,8 @@ Imports:
     rstudioapi,
     utils,
     httpuv,
-    jsonlite
+    jsonlite,
+    dbx
 Suggests: 
     knitr,
     covr,
