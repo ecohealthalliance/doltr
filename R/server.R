@@ -94,7 +94,7 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
   rm(proc)
 
   while(!isTRUE(port %in% ps_connections(p)$lport)) Sys.sleep(0.25)
-  stopifnot(ps_status(p) %in% c("running", "sleeping"))
+  stopifnot(ps_is_running(p))
   class(p) <- c("dolt_server", class(p))
   p
 }
