@@ -12,6 +12,9 @@ dolt_status(conn = dolt())
 
 dolt_last_commit(conn = dolt())
 }
+\arguments{
+\item{conn}{the database connection}
+}
 \value{
 A data frame of class "dolt_status" and \link[tibble:tbl_df-class]{tibble::tbl_df}.  It
 pretty-prints as an abbreviated summary of status.

@@ -8,6 +8,7 @@
 #'   If `"remote"` a [dolt_remote()] connection will be made and no server will
 #'   be started.
 #' @inheritParams dolt_local
+#' @param dbname for remote connections, the database name
 #' @param cache_connection Should we preserve a cache of the connection? allows
 #' faster load times and prevents connection from being garbage-collected.
 #' @param ... further arguments passed to [dolt_server()] or [MariaDB()]

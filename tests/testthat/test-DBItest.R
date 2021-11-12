@@ -1,5 +1,5 @@
-if (Sys.getenv("GITHUB_ACTIONS") == "true" ||
-    (identical(Sys.getenv("NOT_CRAN"), "true"))) {
+if ((Sys.getenv("GITHUB_ACTIONS") == "true" || Sys.getenv("NOT_CRAN") != "") &&
+    is_dolt_installed()) {
 
   options(testthat.progress.max_fails = Inf)
 
@@ -35,10 +35,11 @@ if (Sys.getenv("GITHUB_ACTIONS") == "true" ||
   DBItest::test_connection(ctx = ctx)
   DBItest::test_driver(ctx = ctx)
   #DBItest::test_result(ctx = ctx)
-  DBItest::test_sql(ctx  = ctx)
+  #DBItest::test_sql(ctx  = ctx)
   #DBItest::test_meta(ctx = ctx)
   #DBItest::test_transaction(ctx = ctx)
   #DBItest::test_compliance(ctx = ctx)
   #DBItest::test_stress()
 
+  unlink("doltdb")
 }

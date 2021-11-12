@@ -1,7 +1,7 @@
-#' @include connection-remote.R
+#' @include dolt-connection.R
 NULL
 
-#' Read and write MariaDB tables.
+#' Reading from a Dolt database.
 #'
 #' These methods are extensions of standard DBI functions such as [DBI::dbReadTable].
 #' They differ in that they can take an `as_of` argument, reading historical data
@@ -14,7 +14,7 @@ NULL
 #' @return A data.frame in the case of `dbReadTable()`; a character vector of
 #' names for `dbListTables()` and `dbListObjects()`, and a logical result for
 #' `dbExistsTable()`.
-#' @param conn a [DoltConnection-class] object, produced by
+#' @param conn a [dolt connection][dolt_remote()] object, produced by
 #'   [DBI::dbConnect()] or [dolt()]
 #' @param name a character string specifying a table name.
 #' @param check.names If `TRUE`, the default, column names will be

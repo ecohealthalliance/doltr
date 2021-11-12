@@ -25,6 +25,7 @@ dolt_query_quiet <- function(conn = dolt(), query) {
 #' @return A data frame of class "dolt_status" and [tibble::tbl_df].  It
 #' pretty-prints as an abbreviated summary of status.
 #' @importMethodsFrom RMariaDB dbSendQuery dbClearResult
+#' @param conn the database connection
 #' @export
 #' @rdname dolt-state
 dolt_state <- function(conn = dolt()) {
@@ -75,20 +76,21 @@ dolt_status <- function(conn = dolt()) {
 
 #' @export
 #' @importFrom dplyr mutate group_by summarize recode arrange pull %>%
+#' @importFrom rlang .data
 #' @noRd
 format.dolt_status <- function(x, ...) {
   if (!nrow(x))
     out <- "Working database clean"
   else {
     out <- x %>%
-      mutate(status = recode(status, `new table`="new", `new doc`="new"),
-             staged =  c("Working", "Staged")[staged + 1]) %>%
-      group_by(staged, status) %>%
-      summarize(changed = paste0(paste(table_name, collapse = ", "), " (", status[1], ")")) %>%
-      group_by(staged) %>%
-      summarize(changed = paste0(staged[1], ": ", paste(changed, collapse = ", "))) %>%
-      arrange(staged) %>%
-      pull(changed, name = staged) %>%
+      mutate(status = recode(.data$status, `new table`="new", `new doc`="new"),
+             staged =  c("Working", "Staged")[.data$staged + 1]) %>%
+      group_by(.data$staged, .data$status) %>%
+      summarize(changed = paste0(paste(.data$table_name, collapse = ", "), " (", .data$status[1], ")")) %>%
+      group_by(.data$staged) %>%
+      summarize(changed = paste0(.data$staged[1], ": ", paste(.data$changed, collapse = ", "))) %>%
+      arrange(.data$staged) %>%
+      pull(.data$changed, name = .data$staged) %>%
       paste(collapse = "\n")
   }
   out

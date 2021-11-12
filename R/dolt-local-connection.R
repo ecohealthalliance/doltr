@@ -1,47 +1,57 @@
 #' @export
 #' @title Connect to a local dolt database directory
 #' @description `dolt_local()` creates a `DoltLocalDriver`, which can generate
-#' a `DoltLocalConnection`.  Unlike [dolt_remote()] and `DoltDriver`, this version
-#' takes a directory name for an on-disk dolt database, starts and manages a
-#'  [dolt SQL server][dolt_server()] in the background serving that directory,
-#'  connects to it and returns the connection. Parameters govern both the server
-#'  and connection
+#' a `DoltLocalConnection`.  Unlike [dolt_remote()] and `DoltDriver`, _local_
+#' connections are for dolt databases stored in directories on-disk, and take
+#' a directory name as an argument. The local connection type starts and manages
+#' a [dolt SQL server][dolt_server()] in the background serving that directory,
+#' connects to it and returns the connection. Parameters govern both the server
+#' and connection
+#'
+#' Local dolt connection objects contain additional slots including the
+#' database path on-disk and an external pointer to the server process, and
+#' these are returned via `dbGetInfo` and displayed in the connection print
+#' method. The `dbDisconnect` method kills the background server if no other
+#' processes are connected to it.
 #'
 #' Multi-user or other, more complicated networking set-ups should
 #' use [dolt_server()] and [dolt_remote()] directly.
-#' @usage DBI::dbConnect(doltr::dolt_local(), ...)
 #' @param drv an object of class `DoltLocalDriver`, created by `dolt_local()`.
 #' @param dir The dolt directory to serve and connect to
 #' @inheritParams dolt_remote
+#' @param find_port whether to find an open port if the default is used by another
+#'   process
+#' @param find_server whether to look for another server process serving the same
+#'   directory before creating a new one
 #' @param server_args a list of additional arguments to pass to [dolt_server()]
 #' @param ... additional arguments to pass to [`RMariaDB`][RMariaDB::MariaDB]
 #' @family connections
-#' @include connection-remote.R server.R
+#' @include dolt-connection.R server.R
 dolt_local <- function() {
   new("DoltLocalDriver")
 }
 
 #' @export
-#' @noRd
+#' @rdname dolt_local
 setClass("DoltLocalDriver", contains = "DoltDriver")
 
 #' @export
-#' @noRd
+#' @rdname dolt_local
 setMethod("dbUnloadDriver", "DoltLocalDriver", function(drv, ...) { TRUE })
 
 #' @export
-#' @noRd
+#' @rdname dolt_local
 setMethod("show", "DoltLocalDriver", function(object) {
   cat("<DoltLocalDriver>\n")
 })
 
 #' @export
-#' @noRd
+#' @rdname dolt_local
 setClass("DoltLocalConnection", contains = "DoltConnection",
          slots = c(dir = "character", server = "dolt_server"))
 
 #' @export
-#' @noRd
+#' @rdname dolt_local
 setClass("DoltLocalResult", contains = "DoltResult")
 
 #' @export
@@ -82,7 +92,8 @@ setMethod("dbConnect", "DoltLocalDriver",
           })
 
 #' @export
-#' @noRd
+#' @rdname dolt_local
+#' @param dbObj the database connection
 setMethod("dbGetInfo", "DoltLocalConnection", function(dbObj, ...) {
   info <- getMethod(dbGetInfo, "DoltConnection")(dbObj, ...)
   info$dir <- dbObj@dir
@@ -91,7 +102,7 @@ setMethod("dbGetInfo", "DoltLocalConnection", function(dbObj, ...) {
 })
 
 #' @export
-#' @noRd
+#' @rdname dolt_local
 #' @importFrom cli cli_h1 cli_ul cli_li cli_end cli_alert_warning
 setMethod("show", "DoltLocalConnection", function(object) {
   if (dbIsValid(object)) {
@@ -110,9 +121,10 @@ setMethod("show", "DoltLocalConnection", function(object) {
 })
 
 #' @export
-#' @noRd
+#' @rdname dolt_local
 #' @importFrom ps ps_environ ps_handle ps_connections ps_is_running
 #' @importFrom DBI dbGetQuery
+#' @param conn the database connection
 setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
 
   if (dbIsValid(conn) && ps_is_running(conn@server)) {
@@ -143,8 +155,8 @@ setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
 })
 
 #' @export
-#' @noRd
 #' @importFrom ps ps_is_running
+#' @rdname dolt_local
 setMethod("dbIsValid", "DoltLocalConnection", function(dbObj, ...) {
   valid <- getMethod(dbIsValid, "MariaDBConnection")(dbObj) &&
     ps_is_running(dbObj@server)

@@ -17,18 +17,22 @@
 #'    Defaults to the one found in the system path.
 #' - `DOLT_COLLECT` specifies whether dolt
 #'    convenience functions returning data should return fully collected
-#'    tibbles or lazy tibbles for further processing.
-#' - `DOLT_SHOW_SQL` will print the SQL statements executed when running dolt
-#'    convenience functions. Useful for understanding how dolt SQL commands work.
-#'    Set it to 1 or `true` to enable this behavior.
+#'    tibbles or lazy tibbles for further processing. Set it to 0 or `false`
+#'    to disable, potentially for when large databases with long histories yield
+#'    very large responses to commands like `dolt_log()` or `dolt_diffs()`.
+#' - `DOLT_VERBOSE` will print the SQL or command-line statements executed when
+#'    running functions that wrap database or system calls. Useful for
+#'    understanding how dolt commands work. Set to 1 or `true` to enable this
+#'    behavior.
 #' - `DOLT_WATCH` determines whether the RStudio Connection pane automatically
 #'    updates in response to changes in the database.  Set it to 0 or `false`
 #'    to disable this behavior.
-#' - `DOLT_ROOT_DIR` the directory where Dolt global configuation and credential
-#'    data is stored (`~/.dolt` by default).
+#' - `DOLT_ROOT_DIR` the directory where Dolt global configuration and credential
+#'    data is stored (`~/.dolt` by default). Note this can also be set in your
+#'    shell to configure command-line dolt.
 #'
 #' @rdname dolt-vars
 #' @name dolt-vars
 #' @seealso dolt-config
-#' @aliases dolt_vars env_vars
+#' @aliases dolt_vars env_vars environment_variables
 NULL

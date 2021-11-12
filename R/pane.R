@@ -8,17 +8,18 @@
 #' tables stored in the database, and dolt system tables showing history.
 #'
 #' When running dolt interactively, the connection pane will automatically
-#' update in respone to most queries that modify the database state.  You
+#' update in response to most queries that modify the database state.  You
 #' can stop this behavior by setting the `DOLT_WATCH` environment variable
-#' to `0` or `false`.  See [config] for more configuration varuables.
+#' to `0` or `false`.  See [dolt_vars] for more configuration variables
 #'
 #' @export
 #' @return The connection object (invisibly)
 #' @param conn a dolt connection. If a path is provided instead, a connection
 #' will be created to the path using [dolt()].
-#' @examples
-#' if (!is.null(getOption("connectionObserver"))) dolt_pane()
-dolt_pane <- function(conn = doltr::dolt()) {
+#' @examplesIf (!is.null(getOption("connectionObserver"))) && interactive()
+#' dolt_cl
+#'  dolt_pane()
+dolt_pane <- function(conn = dolt()) {
   if (!inherits(conn, "DBIConnection") && is.character(conn) && length(conn) == 1)
     conn <- doltr::dolt(conn)
   observer <- getOption("connectionObserver")
@@ -98,22 +99,22 @@ dolt_pane <- function(conn = doltr::dolt()) {
         Stage = list(
           icon = ifile("rstudio/staged.png"),
           callback = function() {
-            doltr::dolt_add(conn = conn)
-            doltr::update_dolt_pane(conn)
+            dolt_add(conn = conn)
+            update_dolt_pane(conn)
           }
         ),
         Unstage = list(
           icon = ifile("rstudio/unstaged.png"),
           callback = function() {
-            doltr::dolt_reset(conn = conn)
-            doltr::update_dolt_pane(conn)
+            dolt_reset(conn = conn)
+            update_dolt_pane(conn)
           }
         ),
         Commit = list(
           icon = ifile("rstudio/commit.png"),
           callback = function() {
-            doltr::dolt_commit(conn = conn)
-            doltr::update_dolt_pane(conn)
+            dolt_commit(conn = conn)
+            update_dolt_pane(conn)
           }
         ),
         Pull = list(
@@ -140,6 +141,7 @@ ifile <- function(f) {
 }
 
 #' @export
+#' @rdname dolt_pane
 update_dolt_pane <- function(conn = dolt()) {
   observer <- getOption("connectionObserver")
   if (!is.null(observer)) {
@@ -151,12 +153,17 @@ update_dolt_pane <- function(conn = dolt()) {
   }
 }
 
+#' @export
+#' @rdname dolt_pane
 close_dolt_pane <- function(conn = dolt()) {
   observer <- getOption("connectionObserver")
   if (!is.null(observer)) {
     observer$connectionClosed("Dolt", dolt_conn_name(conn))
   }
 }
+
+# Needed for using tidyselect's `where()` below
+utils::globalVariables("where")
 
 
 #' @importFrom dplyr mutate across if_else

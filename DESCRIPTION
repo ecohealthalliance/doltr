@@ -1,64 +1,72 @@
 Package: doltr
 Title: A client for the dolt database
 Version: 0.0.0.9000
-Authors@R: 
-    c(person(given = "Noam",
-           family = "Ross",
-           role = c("aut", "cre"),
-           email = "noam.ross@gmail.com",
+Authors@R: c(
+    person("Noam", "Ross", , "noam.ross@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2136-0000")),
-      person("EcoHealth Alliance", role = c("cph"))
-          )
+    person("EcoHealth Alliance", role = "cph")
+  )
 Description: Creates a DBI-compliant interface to dolt databases
-    (<https://www.dolthub.com>). Also manages local dolt server processes, 
+    (<https://www.dolthub.com>). Also manages local dolt server processes,
     provides convenience functions for dolt versioning, and an RStudio
     connection pane interface.
 License: AGPL (>= 3)
-URL: https://ecohealthalliance.github.io/doltr, https://github.com/ecohealthalliance/doltr
+URL: https://ecohealthalliance.github.io/doltr,
+    https://github.com/ecohealthalliance/doltr
 BugReports: https://github.com/ecohealthalliance/doltr/issues
 Imports: 
     blob,
     cli,
     DBI,
     dbplyr,
+    dbx,
     dplyr,
+    httpuv,
+    jsonlite,
     methods,
     processx,
     ps,
+    rlang,
     RMariaDB,
     rstudioapi,
-    utils,
-    httpuv,
-    jsonlite,
-    dbx
+    utils
 Suggests: 
-    knitr,
     covr,
     DBItest,
+    knitr,
     lintr,
+    rmarkdown,
     spelling,
-    testthat,
-    rmarkdown
+    testthat
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+SystemRequirements: dolt
 Collate: 
-    'clone.R'
-    'config-vars.R'
-    'server.R'
-    'connection-remote.R'
-    'connection-local.R'
     'dolt-config.R'
+    'dolt-connection.R'
+    'dolt-diffs.R'
+    'dolt-info.R'
+    'server.R'
+    'dolt-local-connection.R'
+    'dolt-methods.R'
+    'dolt-nav.R'
+    'dolt-remote.R'
+    'dolt-stage-commit.R'
+    'dolt-tables.R'
+    'dolt-types.R'
+    'dolt-vars.R'
     'dolt.R'
     'doltr-package.R'
     'install.R'
     'onload.R'
     'pane.R'
-    'queries.R'
     'query.R'
     'read-table.R'
     'state.R'
     'utils.R'
-VignetteBuilder: knitr
+    'write-table.R'

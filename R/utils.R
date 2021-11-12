@@ -110,3 +110,14 @@ factor_to_string <- function (value, warn = FALSE) {
 vlapply <- function(X, FUN, ..., USE.NAMES = TRUE) {
   vapply(X = X, FUN = FUN, FUN.VALUE = logical(1L), ..., USE.NAMES = USE.NAMES)
 }
+
+vcapply <- function(X, FUN, ..., USE.NAMES = TRUE) {
+  vapply(X = X, FUN = FUN, FUN.VALUE = character(1L), ..., USE.NAMES = USE.NAMES)
+}
+
+as_table <- function(schema, table) {
+  args <- c(schema = schema, table = table)
+  # Also omits NA args
+  args <- args[!is.na(args) & args != ""]
+  do.call(Id, as.list(args))
+}

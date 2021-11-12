@@ -4,6 +4,8 @@
 ^\.github$
 ^_pkgdown\.yml$
 ^docs$
+^dolt$
+^nycflights$
 ^pkgdown$
 ^codecov\.yml$
 ^CODE_OF_CONDUCT\.md$

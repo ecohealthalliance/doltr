@@ -20,6 +20,8 @@ dolt(
 If \code{"remote"} a \code{\link[=dolt_remote]{dolt_remote()}} connection will be made and no server will
 be started.}
 
+\item{dbname}{for remote connections, the database name}
+
 \item{username}{The username. Defaults to "root"}
 
 \item{password}{The login password.  Defaults to empty.}

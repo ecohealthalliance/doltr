@@ -6,7 +6,7 @@
 \alias{dbListTables,DoltConnection-method}
 \alias{dbListObjects,DoltConnection-method}
 \alias{dbExistsTable,DoltConnection,character-method}
-\title{Read and write MariaDB tables.}
+\title{Reading from a Dolt database.}
 \usage{
 \S4method{dbReadTable}{DoltConnection,character}(
   conn,
@@ -24,7 +24,7 @@
 \S4method{dbExistsTable}{DoltConnection,character}(conn, name, as_of = NULL, ...)
 }
 \arguments{
-\item{conn}{a \linkS4class{DoltConnection} object, produced by
+\item{conn}{a \link[=dolt_remote]{dolt connection} object, produced by
 \code{\link[DBI:dbConnect]{DBI::dbConnect()}} or \code{\link[=dolt]{dolt()}}}
 
 \item{name}{a character string specifying a table name.}

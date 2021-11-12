@@ -2,9 +2,15 @@
 % Please edit documentation in R/pane.R
 \name{dolt_pane}
 \alias{dolt_pane}
+\alias{update_dolt_pane}
+\alias{close_dolt_pane}
 \title{Open a Dolt connection pane in RStudio}
 \usage{
-dolt_pane(conn = doltr::dolt())
+dolt_pane(conn = dolt())
+
+update_dolt_pane(conn = dolt())
+
+close_dolt_pane(conn = dolt())
 }
 \arguments{
 \item{conn}{a dolt connection. If a path is provided instead, a connection
@@ -20,10 +26,13 @@ tables stored in the database, and dolt system tables showing history.
 }
 \details{
 When running dolt interactively, the connection pane will automatically
-update in respone to most queries that modify the database state.  You
+update in response to most queries that modify the database state.  You
 can stop this behavior by setting the \code{DOLT_WATCH} environment variable
-to \code{0} or \code{false}.  See \link{config} for more configuration varuables.
+to \code{0} or \code{false}.  See \link{dolt_vars} for more configuration variables
 }
 \examples{
-if (!is.null(getOption("connectionObserver"))) dolt_pane()
+\dontshow{if ((!is.null(getOption("connectionObserver"))) && interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+dolt_cl
+ dolt_pane()
+\dontshow{\}) # examplesIf}
 }
