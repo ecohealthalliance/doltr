@@ -25,8 +25,9 @@ dolt_config_set <- function(params, global = TRUE,
   vars <- dolt_config_get(global = global, local_dir = local_dir)
   vars[names(params)] <- params
   vars <- vars[order(names(vars))]
-  write_json(dolt_config_file(global, local_dir),
-             vars, auto_unbox = TRUE)
+  write_json(vars,
+             dolt_config_file(global, local_dir),
+             auto_unbox = TRUE)
   invisible(vars)
 }
 
