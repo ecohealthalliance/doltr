@@ -61,6 +61,7 @@ dolt_fetch <- function(remote = NULL, ref = FALSE, force = FALSE,
 #' @param remote_url the remote URL to clone
 #' @param new_dir the directory to clone into
 #' @param branch the branch to clone. If NULL, clones all branches
+#' @export
 dolt_clone <- function(remote_url, remote = "origin",
                        new_dir = basename(remote), branch = NULL) {
 
