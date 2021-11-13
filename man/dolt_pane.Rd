@@ -30,9 +30,3 @@ update in response to most queries that modify the database state.  You
 can stop this behavior by setting the \code{DOLT_WATCH} environment variable
 to \code{0} or \code{false}.  See \link{dolt_vars} for more configuration variables
 }
-\examples{
-\dontshow{if ((!is.null(getOption("connectionObserver"))) && interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-dolt_cl
- dolt_pane()
-\dontshow{\}) # examplesIf}
-}

@@ -16,9 +16,6 @@
 #' @return The connection object (invisibly)
 #' @param conn a dolt connection. If a path is provided instead, a connection
 #' will be created to the path using [dolt()].
-#' @examplesIf (!is.null(getOption("connectionObserver"))) && interactive()
-#' dolt_cl
-#'  dolt_pane()
 dolt_pane <- function(conn = dolt()) {
   if (!inherits(conn, "DBIConnection") && is.character(conn) && length(conn) == 1)
     conn <- doltr::dolt(conn)

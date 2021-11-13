@@ -37,7 +37,7 @@ dolt_fetch(
 dolt_clone(
   remote_url,
   remote = "origin",
-  new_dir = basename(remote),
+  new_dir = basename(remote_url),
   branch = NULL
 )
 }
