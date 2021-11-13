@@ -23,7 +23,8 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
-          extra-packages: r-lib/pkgdown
+          cache-version: 2
+          extra-packages: pkgdown
           needs: website
 
       - name: Install Dolt
