@@ -1,5 +1,5 @@
 
-# doltr <a href='https://ecohealthalliance.github.io/doltr'><img src='man/figures/logo.svg' align="right" height="139" style="margin:10px;" /></a>
+# doltr <a href='https://ecohealthalliance.github.io/doltr'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/ecohealthalliance/doltr/workflows/R-CMD-check/badge.svg)](https://github.com/ecohealthalliance/doltr/actions)
@@ -43,3 +43,7 @@ See help files and [dolt documentation](https://docs.dolthub.com/interfaces/sql)
 ## Code of Conduct
   
 Please note that the dolt project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+
+
+[![Created at EcoHealth
+Alliance](https://raw.githubusercontent.com/ecohealthalliance/doltr/master/vignettes/figures/eha-footer.png)](https://www.ecohealthalliance.org/)
