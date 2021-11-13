@@ -2,7 +2,7 @@ Package: doltr
 Title: A client for the dolt database
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Noam", "Ross", , "noam.ross@gmail.com", role = c("aut", "cre"),
+    person("Noam", "Ross", , "ross@ecohealthalliance.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2136-0000")),
     person("EcoHealth Alliance", role = "cph")
   )
