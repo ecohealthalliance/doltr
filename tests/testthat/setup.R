@@ -1,5 +1,6 @@
 # Run before any test
 dolt()
+dbDisconnect(dolt())
 # Run after all tests
 withr::defer({
  dbDisconnect(dolt())
