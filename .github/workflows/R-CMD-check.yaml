@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          #- {os: macOS-latest,   r: 'release'}
+          - {os: macOS-latest,   r: 'release'}
 
           #- {os: windows-latest, r: 'release'}
           # Use 3.6 to trigger usage of RTools35
@@ -69,5 +69,6 @@ jobs:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
       - name: Test coverage
+        if: success() && matrix.os == 'ubuntu-18.04'
         run: covr::codecov()
         shell: Rscript {0}
