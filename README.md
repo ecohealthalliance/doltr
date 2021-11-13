@@ -1,5 +1,5 @@
 
-# doltr
+# doltr <a href='https://ecohealthalliance.github.io/doltr'><img src='man/figures/logo.svg' align="right" height="139" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/ecohealthalliance/doltr/workflows/R-CMD-check/badge.svg)](https://github.com/ecohealthalliance/doltr/actions)
