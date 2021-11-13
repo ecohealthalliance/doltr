@@ -144,7 +144,9 @@ dolt_server_find <- function(dir = NULL, port = NULL, doltr_only = FALSE) {
   dp <- ps()
   dp <- dp[dp$name == "dolt" & dp$status == "running",]
   if (nrow(dp))
-    dp <- dp[vapply(dp$ps_handle, function(x) ps_cmdline(x)[2] == "sql-server", logical(1)),]
+    dp <- dp[vapply(dp$ps_handle, function(x) {
+      isTRUE(try(ps_cmdline(x)[2],  silent = TRUE) == "sql-server")
+             }, logical(1)),]
   if (nrow(dp)) {
     dp$wd = vapply(dp$ps_handle, ps_cwd, character(1))
     dp$lport = vapply(dp$ps_handle, function(x) {
@@ -152,7 +154,9 @@ dolt_server_find <- function(dir = NULL, port = NULL, doltr_only = FALSE) {
       conns <- conns[conns$state == "CONN_LISTEN" & !is.na(conns$state), ]
       conns$lport},
       integer(1))
-    dp$is_doltr <- vapply(dp$ps_handle, function(x) isTRUE(ps_environ(x)["R_DOLT"] == "1"), logical(1))
+    dp$is_doltr <- vapply(dp$ps_handle,
+                          function(x) isTRUE(ps_environ(x)["R_DOLT"] == "1"),
+                          logical(1))
     if (doltr_only) {
       dp <- dp[dp$is_doltr, ]
     }

@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Noam Ross \email{noam.ross@gmail.com} (\href{https://orcid.org/0000-0002-2136-0000}{ORCID})
+\strong{Maintainer}: Noam Ross \email{ross@ecohealthalliance.org} (\href{https://orcid.org/0000-0002-2136-0000}{ORCID})
 
 Other contributors:
 \itemize{

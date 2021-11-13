@@ -1,6 +1,7 @@
 if ((Sys.getenv("GITHUB_ACTIONS") == "true" || Sys.getenv("NOT_CRAN") != "") &&
     is_dolt_installed()) {
 
+  withr::local_envvar(c("DOLT_DIR" = dolt_test_dir))
   options(testthat.progress.max_fails = Inf)
 
   ctx <- DBItest::make_context(
@@ -42,5 +43,4 @@ if ((Sys.getenv("GITHUB_ACTIONS") == "true" || Sys.getenv("NOT_CRAN") != "") &&
   #DBItest::test_compliance(ctx = ctx)
   #DBItest::test_stress()
 
-  unlink("doltdb")
 }
