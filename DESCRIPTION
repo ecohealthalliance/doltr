@@ -28,6 +28,7 @@ Imports:
     ps,
     rlang,
     RMariaDB,
+    R.utils,
     rstudioapi,
     utils
 Suggests: 
@@ -47,6 +48,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 SystemRequirements: dolt
 Collate: 
+    'cli.R'
     'dolt-config.R'
     'dolt-connection.R'
     'dolt-diffs.R'

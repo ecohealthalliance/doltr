@@ -6,6 +6,8 @@
 \alias{doltr-package}
 \title{doltr: A client for the dolt database}
 \description{
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+
 Creates a DBI-compliant interface to dolt databases (<https://www.dolthub.com>). Also manages local dolt server processes, provides convenience functions for dolt versioning, and an RStudio connection pane interface.
 }
 \seealso{

@@ -124,17 +124,6 @@ print.dolt_server <- function(x, ...) {
   invisible(x)
 }
 
-#' Initiate a dolt database directory
-#'
-#' @param dir path to the directory. Will be created if it does not exist
-#' @importFrom processx run
-#' @export
-dolt_init <- function(dir = Sys.getenv("DOLT_DIR", "doltdb")) {
-  if (!dir.exists(dir)) dir.create(dir)
-  old <- setwd(dir = dir)
-  on.exit(setwd(old))
-  run("dolt", "init")
-}
 
 #' @noRd
 setOldClass("dolt_server")

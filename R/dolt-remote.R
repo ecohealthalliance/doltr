@@ -14,7 +14,7 @@ dolt_push <- function(remote = NULL, ref = NULL, set_upstream = FALSE,
                       force = FALSE, conn = dolt(), collect = NULL,
                       show_sql = NULL) {
   collect <- .collect(collect); show_sql <- .show_sql(show_sql)
-  args <- ""
+  args <- character(0)
   if (!is.null (remote)) args <- c(args, sql_quote(remote, "'"))
   if (!is.null (ref)) args <- c(args, sql_quote(ref, "'"))
   if (set_upstream) args <- c("'--set-upstream'", args)
