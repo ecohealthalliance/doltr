@@ -25,19 +25,43 @@
     <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-config.html</loc>
   </url>
   <url>
+    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-connection.html</loc>
+  </url>
+  <url>
     <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-diffs.html</loc>
   </url>
   <url>
     <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-info.html</loc>
   </url>
   <url>
-    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-refs.html</loc>
+    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-methods.html</loc>
+  </url>
+  <url>
+    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-nav.html</loc>
+  </url>
+  <url>
+    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-read.html</loc>
   </url>
   <url>
     <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-remote.html</loc>
   </url>
   <url>
-    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-ver.html</loc>
+    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-stage-commit.html</loc>
+  </url>
+  <url>
+    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-state.html</loc>
+  </url>
+  <url>
+    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-tables.html</loc>
+  </url>
+  <url>
+    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-types.html</loc>
+  </url>
+  <url>
+    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-vars.html</loc>
+  </url>
+  <url>
+    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt-write.html</loc>
   </url>
   <url>
     <loc>https://ecohealthalliance.github.io/doltr/reference/dolt.html</loc>
@@ -52,13 +76,7 @@
     <loc>https://ecohealthalliance.github.io/doltr/reference/dolt_pane.html</loc>
   </url>
   <url>
-    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt_remote.html</loc>
-  </url>
-  <url>
     <loc>https://ecohealthalliance.github.io/doltr/reference/dolt_server.html</loc>
-  </url>
-  <url>
-    <loc>https://ecohealthalliance.github.io/doltr/reference/dolt_server_processes.html</loc>
   </url>
   <url>
     <loc>https://ecohealthalliance.github.io/doltr/reference/doltr-package.html</loc>
