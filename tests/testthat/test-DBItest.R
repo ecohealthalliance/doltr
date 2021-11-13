@@ -33,6 +33,7 @@ if ((Sys.getenv("GITHUB_ACTIONS") == "true" || Sys.getenv("NOT_CRAN") != "") &&
       NULL
     )
   )
+  DBItest:::spec_connection_get_info$get_info_connection(dolt())
   DBItest::test_getting_started(ctx = ctx)
   DBItest::test_connection(ctx = ctx)
   DBItest::test_driver(ctx = ctx)
