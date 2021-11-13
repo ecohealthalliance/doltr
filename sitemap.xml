@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ecohealthalliance.github.io/doltr/404.html</loc>
-  </url>
-  <url>
-    <loc>https://ecohealthalliance.github.io/doltr/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://ecohealthalliance.github.io/doltr/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://ecohealthalliance.github.io/doltr/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://ecohealthalliance.github.io/doltr/authors.html</loc>
-  </url>
-  <url>
     <loc>https://ecohealthalliance.github.io/doltr/index.html</loc>
   </url>
   <url>
@@ -80,8 +65,5 @@
   </url>
   <url>
     <loc>https://ecohealthalliance.github.io/doltr/reference/doltr-package.html</loc>
-  </url>
-  <url>
-    <loc>https://ecohealthalliance.github.io/doltr/reference/index.html</loc>
   </url>
 </urlset>
