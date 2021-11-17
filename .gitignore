@@ -8,3 +8,4 @@ docs
 .env
 tests/testthat/doltdb
 inst/doc
+dolt

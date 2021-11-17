@@ -5,15 +5,13 @@
 \title{Export data from a dolt database}
 \usage{
 dolt_dump(
-  dir = Sys.getenv("DOLT_DIR", "doltdb"),
   format = c("sql", "csv", "json"),
   out = NULL,
-  overwrite = FALSE
+  overwrite = FALSE,
+  dir = Sys.getenv("DOLT_DIR", "doltdb")
 )
 }
 \arguments{
-\item{dir}{path to the directory. Will be created if it does not exist}
-
 \item{format}{the export data format. One of \code{"sql"}, \code{"csv"}, or \code{"json"}}
 
 \item{out}{the location on-disk for export. In the case of \code{"sql"}, format,
@@ -21,6 +19,8 @@ a single file path (default \code{doltdump.sql}), otherwise a directory for all
 tables to be dumped as separate files (default "doltdump")}
 
 \item{overwrite}{whether to overwrite existing files/directories.}
+
+\item{dir}{path to dolt database on-disk}
 }
 \value{
 the path(s) of exported files

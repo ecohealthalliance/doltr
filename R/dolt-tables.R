@@ -14,7 +14,6 @@
 #' @rdname dolt-tables
 dolt_branches <- function(conn = dolt(), collect = NULL, show_sql = NULL) {
   collect <- .collect(collect); show_sql <- .show_sql(show_sql)
-  query <- query
   dolt_query("select * from dolt_branches", conn, collect, show_sql)
 }
 
