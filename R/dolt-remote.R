@@ -1,6 +1,7 @@
 #' Work with dolt repository remotes
 #'
 #' @param remote the name of the remote. "origin" is used by default
+#' @param remote_branch the name of the branch when setting upstream branch. The current local branch is used by default
 #' @param ref the branch reference
 #' @param set_upstream whether to set the remote branch reference to track
 #' @param force whether to overwrite any conflicting history

@@ -69,6 +69,8 @@ updating the commit history}
 \item{new_dir}{the directory to clone into}
 
 \item{branch}{the branch to clone. If NULL, clones all branches}
+
+\item{remote_branch}{the name of the branch when setting upstream branch. The current local branch is used by default}
 }
 \description{
 Work with dolt repository remotes

@@ -44,7 +44,7 @@ working on and what you could contribute to.
 -   **dolt** itself is rapidly developing and **doltr** will need to track
     it to keep up with changes.
 
--   In general, the goal is for the a
+-   In general, the goal is for a
     [**DBI**-compliant](https://cran.r-project.org/web/packages/DBI/vignettes/spec.html)
     interface that wraps
     [**RMariaDB**](https://github.com/r-dbi/RMariaDB) with some enhanced
