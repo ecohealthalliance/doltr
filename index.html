@@ -29,6 +29,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -41,25 +43,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">doltr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ecohealthalliance/doltr/">
+  <a href="https://github.com/ecohealthalliance/doltr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -77,34 +73,34 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="doltr-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#doltr-" class="anchor"></a>doltr <a href="https://ecohealthalliance.github.io/doltr"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<div class="section level1">
+<div class="page-header"><h1 id="doltr-">doltr <a href="https://ecohealthalliance.github.io/doltr"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<a class="anchor" aria-label="anchor" href="#doltr-"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>doltr is a client for <a href="https://www.dolthub.com">dolt</a>, an SQL database with git-like versioning. It is a work in progress, not fully documented, and the API isn’t fully baked yet.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You will need dolt installed on your machine. Get it <a href="https://docs.dolthub.com/getting-started/installation">here</a>.</p>
+<p>doltr is a client for <a href="https://www.dolthub.com" class="external-link">dolt</a>, an SQL database with git-like versioning. It is a work in progress, not fully documented, and the API isn’t fully baked yet.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You will need dolt installed on your machine. Get it <a href="https://docs.dolthub.com/getting-started/installation" class="external-link">here</a>.</p>
 <p>Install the R package with</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"ecohealthalliance/doltr"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ecohealthalliance/doltr"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div id="usage" class="section level1">
-<h1 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h1>
-<p>The package provides two DBI-compliant drivers to connect to a dolt database. <code><a href="reference/dolt_remote.html">dolt_remote()</a></code> connects to a dolt server via TCP. <code><a href="reference/dolt_local.html">dolt_local()</a></code> connects to a local database directory. (Behind the scenes <code><a href="reference/dolt_local.html">dolt_local()</a></code> launches and manages a background server process, which can also be done manually with <code><a href="reference/dolt_server.html">dolt_server()</a></code>).</p>
+<div class="section level1">
+<h1 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h1>
+<p>The package provides two DBI-compliant drivers to connect to a dolt database. <code><a href="reference/dolt-connection.html">dolt_remote()</a></code> connects to a dolt server via TCP. <code><a href="reference/dolt_local.html">dolt_local()</a></code> connects to a local database directory. (Behind the scenes <code><a href="reference/dolt_local.html">dolt_local()</a></code> launches and manages a background server process, which can also be done manually with <code><a href="reference/dolt_server.html">dolt_server()</a></code>).</p>
 <p><code><a href="reference/dolt.html">dolt()</a></code> serves a connection that is cached during the R session and connects via default parameters than can be defined via environment variables. (See <code>?config</code>).</p>
 <p><code><a href="reference/dolt_pane.html">dolt_pane()</a></code> Provides an RStudio connection pane showing the database.</p>
-<p>A variety of <code>dolt_*</code> functions provide database information and versioning capability. See help files and <a href="https://docs.dolthub.com/interfaces/sql">dolt documentation</a>.</p>
-<div id="code-of-conduct" class="section level2">
-<h2 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
-<p>Please note that the dolt project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
-<p><a href="https://www.ecohealthalliance.org/"><img src="https://raw.githubusercontent.com/ecohealthalliance/doltr/master/vignettes/figures/eha-footer.png" alt="Created at EcoHealth Alliance"></a></p>
+<p>A variety of <code>dolt_*</code> functions provide database information and versioning capability. See help files and <a href="https://docs.dolthub.com/interfaces/sql" class="external-link">dolt documentation</a>.</p>
+<div class="section level2">
+<h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+</h2>
+<p>Please note that the dolt project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p><a href="https://www.ecohealthalliance.org/" class="external-link"><img src="https://raw.githubusercontent.com/ecohealthalliance/doltr/master/articles/figures/eha-footer.png" alt="Created at EcoHealth Alliance"></a></p>
 </div>
 </div>
 
@@ -112,56 +108,67 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/ecohealthalliance/doltr/">https://​github.com/​ecohealthalliance/​doltr/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/ecohealthalliance/doltr/issues">https://​github.com/​ecohealthalliance/​doltr/​issues</a>
-</li>
+<li><a href="https://github.com/ecohealthalliance/doltr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/ecohealthalliance/doltr/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small>AGPL (&gt;= 3)</small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>
-<a href="https://www.noamross.net/">Noam Ross</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-2136-0000" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing doltr</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/ecohealthalliance/doltr/actions"><img src="https://github.com/ecohealthalliance/doltr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://www.repostatus.org/#wip"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public."></a></li>
-<li><a href="https://www.gnu.org/licenses/agpl-3.0.en.html"><img src="https://img.shields.io/badge/License-AGPLv3-blue.svg" alt="License: MIT"></a></li>
-<li><a href="https://codecov.io/gh/ecohealthalliance/doltr?branch=main"><img src="https://codecov.io/gh/ecohealthalliance/doltr/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li>
+<a href="https://www.noamross.net/" class="external-link">Noam Ross</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-2136-0000" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/ecohealthalliance/doltr/actions" class="external-link"><img src="https://github.com/ecohealthalliance/doltr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://www.repostatus.org/#wip" class="external-link"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public."></a></li>
+<li><a href="https://www.gnu.org/licenses/agpl-3.0.en.html" class="external-link"><img src="https://img.shields.io/badge/License-AGPLv3-blue.svg" alt="License: MIT"></a></li>
+<li><a href="https://codecov.io/gh/ecohealthalliance/doltr?branch=main" class="external-link"><img src="https://codecov.io/gh/ecohealthalliance/doltr/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://www.noamross.net/">Noam Ross</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://www.noamross.net/" class="external-link">Noam Ross</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -169,6 +176,8 @@
 
   
 
+
+  
 
   </body>
 </html>
