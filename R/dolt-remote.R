@@ -1,6 +1,7 @@
 #' Work with dolt repository remotes
 #'
 #' @param remote the name of the remote. "origin" is used by default
+#' @param remote_branch the name of the remote branch to use with set_upstream. Current local branch is used by default
 #' @param ref the branch reference
 #' @param set_upstream whether to set the remote branch reference to track
 #' @param force whether to overwrite any conflicting history
@@ -10,14 +11,17 @@
 #' @rdname dolt-remote
 #' @family dolt-sql-commands
 #' @importFrom dbplyr sql_quote
-dolt_push <- function(remote = NULL, ref = NULL, set_upstream = FALSE,
-                      force = FALSE, conn = dolt(), collect = NULL,
-                      show_sql = NULL) {
+dolt_push <- function(remote = NULL, remote_branch = NULL, ref = NULL,
+                      set_upstream = FALSE, force = FALSE, conn = dolt(),
+                      collect = NULL, show_sql = NULL) {
   collect <- .collect(collect); show_sql <- .show_sql(show_sql)
   args <- character(0)
+  if (set_upstream & is.null (remote)) remote = "origin"
+  if (set_upstream & is.null (remote_branch)) remote_branch = sub(".*/", "", dolt_state()$head_ref)
   if (!is.null (remote)) args <- c(args, sql_quote(remote, "'"))
+  if (!is.null (remote_branch)) args <- c(args, sql_quote(remote_branch, "'"))
   if (!is.null (ref)) args <- c(args, sql_quote(ref, "'"))
-  if (set_upstream) args <- c("'--set-upstream'", args)
+  if (set_upstream) args <- c("'--set-upstream' ", args)
   if (force) args <- c(args, "'--force'")
   query <- paste0("select dolt_push(", paste0(args, collapse = ", "), ")")
   dolt_query(query, conn, collect, show_sql)
