@@ -9,6 +9,7 @@
 \usage{
 dolt_push(
   remote = NULL,
+  remote_branch = NULL,
   ref = NULL,
   set_upstream = FALSE,
   force = FALSE,
@@ -43,6 +44,8 @@ dolt_clone(
 }
 \arguments{
 \item{remote}{the name of the remote. "origin" is used by default}
+
+\item{remote_branch}{the name of the remote branch to use with set_upstream. Current local branch is used by default}
 
 \item{ref}{the branch reference}
 

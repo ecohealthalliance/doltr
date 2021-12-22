@@ -1,6 +1,7 @@
 #' Work with dolt repository remotes
 #'
 #' @param remote the name of the remote. "origin" is used by default
+#' @param remote_branch the name of the remote branch to use with set_upstream. Current local branch is used by default
 #' @param ref the branch reference
 #' @param set_upstream whether to set the remote branch reference to track
 #' @param force whether to overwrite any conflicting history
@@ -10,8 +11,8 @@
 #' @rdname dolt-remote
 #' @family dolt-sql-commands
 #' @importFrom dbplyr sql_quote
-dolt_push <- function(remote = NULL, remote_branch = NULL, ref = NULL, 
-                      set_upstream = FALSE, force = FALSE, conn = dolt(), 
+dolt_push <- function(remote = NULL, remote_branch = NULL, ref = NULL,
+                      set_upstream = FALSE, force = FALSE, conn = dolt(),
                       collect = NULL, show_sql = NULL) {
   collect <- .collect(collect); show_sql <- .show_sql(show_sql)
   args <- character(0)
