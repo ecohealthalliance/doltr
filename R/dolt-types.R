@@ -80,7 +80,7 @@ dolt_text_type <- function(obj, min_varchar, max_varchar) {
 #' @importFrom blob as_blob
 dolt_blob_type <- function(obj) {
   if (!all(vapply(obj, is.raw, logical(1)))) "Stop only lists of raw vectors (blobs) allowed"
-  nb <- max(vapply(obj, \(x) length(x), 1), 1, na.rm = TRUE)
+  nb <- max(vapply(obj, length, 1), 1, na.rm = TRUE)
   if (nb <=  65535) {
     return(structure("BLOB", max_size = 65535))
   } else if (nb > 65535L && nb <= 16777215) {
