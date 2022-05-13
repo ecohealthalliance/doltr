@@ -121,3 +121,8 @@ as_table <- function(schema, table) {
   args <- args[!is.na(args) & args != ""]
   do.call(Id, as.list(args))
 }
+
+compact <- function(x) {
+  is_empty <- vapply(x, function(x) length(x) == 0, logical(1))
+  x[!is_empty]
+}
