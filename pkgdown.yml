@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 2.0.2
+pkgdown: 2.0.3
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-03-16T13:47Z
+last_built: 2022-05-13T19:02Z
 urls:
   reference: https://ecohealthalliance.github.io/doltr/reference
   article: https://ecohealthalliance.github.io/doltr/articles
