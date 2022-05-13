@@ -9,3 +9,4 @@ docs
 tests/testthat/doltdb
 inst/doc
 dolt
+.sqlhistory
