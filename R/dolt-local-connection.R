@@ -159,6 +159,7 @@ setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
 #' @rdname dolt_local
 setMethod("dbIsValid", "DoltLocalConnection", function(dbObj, ...) {
   valid <- getMethod(dbIsValid, "MariaDBConnection")(dbObj) &&
+    class(try(dbGetQuery(dbObj, "SELECT 1"), silent = TRUE)) != "try-error" &&
     ps_is_running(dbObj@server)
   if (!valid && inherits(dbObj@server, "ps_handle"))
     try(dkill(dbObj@server), silent = TRUE)
