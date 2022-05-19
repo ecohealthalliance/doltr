@@ -115,11 +115,10 @@ For a project you might set <code>DOLT_DIR</code> in a project-level <code>.Renv
 <code class="sourceCode R"><span class="fu"><a href="../reference/dolt.html">dolt</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">&lt;DoltLocalConnection&gt; nycflights</span> <span style="color: #00BBBB;">────────────────────────────────────────────</span></span>
-<span class="co">#&gt; • Serving /home/runner/work/doltr/doltr/vignettes/nycflights, PID 14635</span>
+<span class="co">#&gt; • Serving /home/runner/work/doltr/doltr/vignettes/nycflights, PID 14662</span>
 <span class="co">#&gt; • Connected at: root@127.0.0.1:3306</span>
 <span class="co">#&gt; • On branch main</span>
-<span class="co">#&gt; • Last commit by noamross 6 days ago: Updating airlines with changes from</span>
-<span class="co">#&gt; spreadsheet ed...</span>
+<span class="co">#&gt; • Last commit by noamross 2 hours ago: Update README</span>
 <span class="co">#&gt; • Working database clean</span></code></pre></div>
 <p>You can use <code><a href="../reference/dolt.html">dolt()</a></code> with <a href="https://dbi.r-dbi.org" class="external-link">DBI</a> or <a href="https://dbplyr.tidyverse.org/" class="external-link">dbplyr</a> functions to read from or write to the database:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -131,19 +130,19 @@ For a project you might set <code>DOLT_DIR</code> in a project-level <code>.Renv
 <span class="co">#&gt; [1] "airlines" "airports" "flights"  "planes"   "weather"</span>
 <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">dbReadTable</a></span><span class="op">(</span><span class="fu"><a href="../reference/dolt.html">dolt</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"airlines"</span><span class="op">)</span>
 <span class="co">#&gt;                                                carrier                   name</span>
-<span class="co">#&gt; 1                                                   B6        JetBlue Airways</span>
-<span class="co">#&gt; 2                                                   B6        JetBlue Airways</span>
-<span class="co">#&gt; 3                                                   B6        JetBlue Airways</span>
-<span class="co">#&gt; 4                                                   B6        JetBlue Airways</span>
-<span class="co">#&gt; 5  virus that MVP Safe Mode VC WeChat freemium DPI zip     we https in runway</span>
-<span class="co">#&gt; 6                                                   9E      Endeavor Air Inc.</span>
-<span class="co">#&gt; 7                                                   9E      Endeavor Air Inc.</span>
-<span class="co">#&gt; 8                                                   9E      Endeavor Air Inc.</span>
-<span class="co">#&gt; 9                                                   9E      Endeavor Air Inc.</span>
-<span class="co">#&gt; 10                                                  MQ              Envoy Air</span>
-<span class="co">#&gt; 11                                                  MQ              Envoy Air</span>
-<span class="co">#&gt; 12                                                  MQ              Envoy Air</span>
-<span class="co">#&gt; 13                                                  MQ              Envoy Air</span>
+<span class="co">#&gt; 1                                                   9E      Endeavor Air Inc.</span>
+<span class="co">#&gt; 2                                                   9E      Endeavor Air Inc.</span>
+<span class="co">#&gt; 3                                                   9E      Endeavor Air Inc.</span>
+<span class="co">#&gt; 4                                                   9E      Endeavor Air Inc.</span>
+<span class="co">#&gt; 5                                                   MQ              Envoy Air</span>
+<span class="co">#&gt; 6                                                   MQ              Envoy Air</span>
+<span class="co">#&gt; 7                                                   MQ              Envoy Air</span>
+<span class="co">#&gt; 8                                                   MQ              Envoy Air</span>
+<span class="co">#&gt; 9                                                   B6        JetBlue Airways</span>
+<span class="co">#&gt; 10                                                  B6        JetBlue Airways</span>
+<span class="co">#&gt; 11                                                  B6        JetBlue Airways</span>
+<span class="co">#&gt; 12                                                  B6        JetBlue Airways</span>
+<span class="co">#&gt; 13 virus that MVP Safe Mode VC WeChat freemium DPI zip     we https in runway</span>
 <span class="co">#&gt; 14                                                  WN Southwest Airlines Co.</span>
 <span class="co">#&gt; 15                                                  WN Southwest Airlines Co.</span>
 <span class="co">#&gt; 16                                                  WN Southwest Airlines Co.</span>
@@ -169,9 +168,9 @@ For a project you might set <code>DOLT_DIR</code> in a project-level <code>.Renv
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">2</span>013     2     9     <span style="text-decoration: underline;">1</span>754           <span style="text-decoration: underline;">1</span>750         4     <span style="text-decoration: underline;">1</span>913           <span style="text-decoration: underline;">1</span>920</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  <span style="text-decoration: underline;">2</span>013     2    11      605            610        -<span style="color: #BB0000;">5</span>      729            735</span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  <span style="text-decoration: underline;">2</span>013     2    23      827            830        -<span style="color: #BB0000;">3</span>      954            955</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  <span style="text-decoration: underline;">2</span>013     2    11      835            830         5      956            950</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  <span style="text-decoration: underline;">2</span>013     2    26      825            830        -<span style="color: #BB0000;">5</span>      949           <span style="text-decoration: underline;">1</span>005</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span>  <span style="text-decoration: underline;">2</span>013     2    21     <span style="text-decoration: underline;">1</span>157           <span style="text-decoration: underline;">1</span>200        -<span style="color: #BB0000;">3</span>     <span style="text-decoration: underline;">1</span>328           <span style="text-decoration: underline;">1</span>320</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  <span style="text-decoration: underline;">2</span>013     2     6     <span style="text-decoration: underline;">1</span>946           <span style="text-decoration: underline;">1</span>940         6     <span style="text-decoration: underline;">2</span>100           <span style="text-decoration: underline;">2</span>100</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  <span style="text-decoration: underline;">2</span>013     2     9       <span style="color: #BB0000;">NA</span>            850        <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>           <span style="text-decoration: underline;">1</span>025</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span>  <span style="text-decoration: underline;">2</span>013     2    13     <span style="text-decoration: underline;">1</span>549           <span style="text-decoration: underline;">1</span>550        -<span style="color: #BB0000;">1</span>     <span style="text-decoration: underline;">1</span>710           <span style="text-decoration: underline;">1</span>710</span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 11 more variables: arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;,</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dbl&gt;</span></span></code></pre></div>
@@ -182,11 +181,10 @@ For a project you might set <code>DOLT_DIR</code> in a project-level <code>.Renv
 <code class="sourceCode R"><span class="fu"><a href="../reference/dolt.html">dolt</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">&lt;DoltLocalConnection&gt; nycflights</span> <span style="color: #00BBBB;">────────────────────────────────────────────</span></span>
-<span class="co">#&gt; • Serving /home/runner/work/doltr/doltr/vignettes/nycflights, PID 14635</span>
+<span class="co">#&gt; • Serving /home/runner/work/doltr/doltr/vignettes/nycflights, PID 14662</span>
 <span class="co">#&gt; • Connected at: root@127.0.0.1:3306</span>
 <span class="co">#&gt; • On branch main</span>
-<span class="co">#&gt; • Last commit by noamross 6 days ago: Updating airlines with changes from</span>
-<span class="co">#&gt; spreadsheet ed...</span>
+<span class="co">#&gt; • Last commit by noamross 2 hours ago: Update README</span>
 <span class="co">#&gt; • Working: mtcars (new)</span></code></pre></div>
 <p>The summary no longer says “Working database clean” but shows that the <em>working state</em> of the database now includes a new table called <code>mtcars</code>. As with a new file in a git repository, we can <em>stage</em> this table for comitting, with <code><a href="../reference/dolt-stage-commit.html">dolt_add()</a></code>. Rather than printing the whole database summary, we can get just the last bullet with <code><a href="../reference/dolt-state.html">dolt_status()</a></code></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -212,20 +210,21 @@ For a project you might set <code>DOLT_DIR</code> in a project-level <code>.Renv
 <p>You can view the commit history of the database with <code><a href="../reference/dolt-tables.html">dolt_log()</a></code>, which collects the Dolt system table <code>dolt_log</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/dolt-tables.html">dolt_log</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 5</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 5</span></span>
 <span class="co">#&gt;    commit_hash                      committer  email date                message</span>
 <span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> d6uak1j0m5sm2365cm0fqjdmrkq1ek21 P.D. En'ko pd@e… 2022-05-19 <span style="color: #949494;">18:47:25</span> <span style="color: #949494;">"</span>Add m…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 88kolt95duve79hm59s4kvsntrak03dn noamross   ross… 2022-05-13 <span style="color: #949494;">17:44:37</span> <span style="color: #949494;">"</span>Updat…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 766q8e7hfe08qn46h1ksuidr5363gq9s noamross   ross… 2022-05-13 <span style="color: #949494;">17:31:43</span> <span style="color: #949494;">"</span>Remov…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> d51247codqq86uccqo375punlnofkgp6 noamross   ross… 2022-04-05 <span style="color: #949494;">00:51:04</span> <span style="color: #949494;">"</span>test3<span style="color: #949494;">"</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> k4kdaldectieuudbnh09p0qgbp3rjr3j noamross   ross… 2022-04-05 <span style="color: #949494;">00:44:32</span> <span style="color: #949494;">"</span>taggi…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> arpqa7d7hb33fjvc21k7b0fkfu4b1pfg noamross   ross… 2022-04-05 <span style="color: #949494;">00:33:52</span> <span style="color: #949494;">"</span>Updat…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 1qrt92dpemtnmvvhc2v2s7dl0pd5g1t4 noamross   ross… 2022-04-05 <span style="color: #949494;">00:12:29</span> <span style="color: #949494;">"</span>Updat…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 9l309ujv7i1hks67lklnds6j5e8q8vrm noamross   ross… 2021-11-14 <span style="color: #949494;">17:52:38</span> <span style="color: #949494;">"</span>Add m…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 0ofs6si34lge6e4ke9pjr9nudajsn3fn noamross   ross… 2021-11-13 <span style="color: #949494;">17:52:00</span> <span style="color: #949494;">"</span>\"add…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> iauk9n1in8508djitue1869stutn04ke noamross   noam… 2021-11-09 <span style="color: #949494;">16:14:29</span> <span style="color: #949494;">"</span>Add n…</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">11</span> raa6u0g1bk1pi1p200f6pq7tpoobn6cl noamross   noam… 2021-11-09 <span style="color: #949494;">16:13:05</span> <span style="color: #949494;">"</span>Initi…</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> dhdlfbdqin235i3hostit72rqrlv6av0 P.D. En'ko pd@e… 2022-05-19 <span style="color: #949494;">22:16:28</span> <span style="color: #949494;">"</span>Add m…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 42m1pf2kjnf5j6fs9nopucm5mdkol3q8 noamross   ross… 2022-05-19 <span style="color: #949494;">20:40:24</span> <span style="color: #949494;">"</span>Updat…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 88kolt95duve79hm59s4kvsntrak03dn noamross   ross… 2022-05-13 <span style="color: #949494;">17:44:37</span> <span style="color: #949494;">"</span>Updat…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 766q8e7hfe08qn46h1ksuidr5363gq9s noamross   ross… 2022-05-13 <span style="color: #949494;">17:31:43</span> <span style="color: #949494;">"</span>Remov…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> d51247codqq86uccqo375punlnofkgp6 noamross   ross… 2022-04-05 <span style="color: #949494;">00:51:04</span> <span style="color: #949494;">"</span>test3<span style="color: #949494;">"</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> k4kdaldectieuudbnh09p0qgbp3rjr3j noamross   ross… 2022-04-05 <span style="color: #949494;">00:44:32</span> <span style="color: #949494;">"</span>taggi…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> arpqa7d7hb33fjvc21k7b0fkfu4b1pfg noamross   ross… 2022-04-05 <span style="color: #949494;">00:33:52</span> <span style="color: #949494;">"</span>Updat…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 1qrt92dpemtnmvvhc2v2s7dl0pd5g1t4 noamross   ross… 2022-04-05 <span style="color: #949494;">00:12:29</span> <span style="color: #949494;">"</span>Updat…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 9l309ujv7i1hks67lklnds6j5e8q8vrm noamross   ross… 2021-11-14 <span style="color: #949494;">17:52:38</span> <span style="color: #949494;">"</span>Add m…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0ofs6si34lge6e4ke9pjr9nudajsn3fn noamross   ross… 2021-11-13 <span style="color: #949494;">17:52:00</span> <span style="color: #949494;">"</span>\"add…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">11</span> iauk9n1in8508djitue1869stutn04ke noamross   noam… 2021-11-09 <span style="color: #949494;">16:14:29</span> <span style="color: #949494;">"</span>Add n…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">12</span> raa6u0g1bk1pi1p200f6pq7tpoobn6cl noamross   noam… 2021-11-09 <span style="color: #949494;">16:13:05</span> <span style="color: #949494;">"</span>Initi…</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="section"></h2>
