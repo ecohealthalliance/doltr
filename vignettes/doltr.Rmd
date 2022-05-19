@@ -1,0 +1,182 @@
+---
+title: "Getting Started with Doltr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with Doltr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`{doltr}` is a package to interface with [Dolt](https://www.dolthub.com), an
+SQL database with git-like versioning.
+
+# Installation
+
+You will need the **dolt** command-line utility installed on your computer to use `{doltr}`.  Installation instructions
+for Linux, macOS, and Windows can be found [here](https://docs.dolthub.com/getting-started/installation).
+
+Install the R package with 
+
+``` r
+remotes::install_github("ecohealthalliance/doltr")
+```
+
+# Usage
+
+`{doltr}` package provides two [DBI-compliant drivers](https://github.com/r-dbi/DBI#dbi)
+to connect to a dolt database `dolt_remote()` connects to a dolt server via TCP,
+and is a thin wrapper around the [RMariaDB](https://rmariadb.r-dbi.org/) package
+because Dolt shares a communication protocol with MySQL and MariaDB.
+`dolt_local()` connects to a Dolt database directory locally on-disk. Behind the
+scenes `dolt_local()` launches and manages a background server process, which
+can also be done manually with `dolt_server()`. Both can be used to connect to
+a database as you would with other DBI packages:
+
+
+```
+library(doltr)
+remote_conn <- DBI::dbConnect(dolt_remote(), dname = "dbname", username = "user", ...)
+```
+
+```
+local_conn <- DBI::dbConnect(dolt_local(), dir = "/path/to/my/dolt/db/directory")
+```
+
+Since Dolt has git-like versioning concepts, `{doltr}`'s API design includes
+both components drawn from `{DBI}` and also from git interfaces like `{gert}`
+and `{git2r}` (as well as Dolt's [command-line interface](https://docs.dolthub.com/interfaces/cli)).
+
+
+`{doltr}` has the concept of a "default database" for a project. When
+working with git (or `{git2r}` or `{gert}`), commands apply to the current
+working directory by default. Similarly, with `{doltr}`, many commands use
+the default database.  The default database is set with the environment
+directory `DOLT_DIR`, which is `doltdb` by default.  
+For a project you might set `DOLT_DIR` in a project-level `.Renviron` or 
+[`.env` file](https://cran.r-project.org/web/packages/dotenv/)
+
+To explore `{doltr}`'s capabilities, let's pull an existing database. `dolt_clone()`,
+like `git clone` clones a database to a local directory, using [`DoltHub`](https://www.dolthub.com/discover)
+as the default remote source (though [dolt Database remotes can be hosted elsewhere](https://www.dolthub.com/discover)).
+We'll clone [`doltr/nycflights`](https://www.dolthub.com/repositories/doltr/nycflights), which contains a subset of
+the data from the [{`nycflights13`} package](https://nycflights13.tidyverse.org/).
+
+```{r cleanfirst, include = FALSE}
+if (dir.exists("nycflights")) unlink("nycflights", force = TRUE, recursive = TRUE)
+```
+
+```{r clone-flights}
+library(doltr)
+dolt_clone("doltr/nycflights")
+```
+
+This creates an `nycflights` directory. Let's set it as our default database for
+this session:
+
+```{r setenv}
+Sys.setenv(DOLT_DIR="nycflights")
+```
+
+You can use the `dolt()` function to connect to the database. `dolt()` is a
+shortcut for `dbConnect(dolt_local/dolt_remote(), ...)`.  It also caches the database
+connection, so it can be called repeatedly in place of a connection variable.
+`dolt()` is also the default argument for a database connection in many functions.
+
+Running `dolt()` prints a summary of the database state:
+
+```{r doltcmd}
+dolt()
+```
+
+You can use `dolt()` with `{DBI}` or `{dbplyr}` functions to read from or write
+to the database:
+
+```{r pkgs, message=FALSE}
+library(DBI)
+library(dbplyr)
+library(dplyr)
+```
+
+```{r dbi}
+dbListTables(dolt())
+dbReadTable(dolt(), "airlines")
+```
+
+```{r dbplyr}
+tbl(dolt(), "flights") %>% 
+  filter(origin == "EWR", dest == "MDW") %>%
+  head() %>% 
+  collect()
+```
+
+```{r writetbl}
+dbWriteTable(dolt(), "mtcars", mtcars)
+```
+
+With the last command, we changed the database by adding a table.  This is
+reflected in the change to the database working state when we print `dolt()`
+
+```{r state}
+dolt()
+```
+
+The summary no longer says "Working database clean" but shows that the _working state_
+of the database now includes a new table called `mtcars`.  As with a new file in
+a git repository, we can _stage_ this table for comitting, with `dolt_add()`.
+Rather than printing the whole database summary, we can get just the last
+bullet with `dolt_status()`
+
+```{r}
+dolt_add("mtcars")
+dolt_status()
+```
+
+`dolt_status()` pretty-prints but actually yields a table of working or stages
+changes to the database:
+
+```{r}
+as.data.frame(dolt_status())
+```
+
+With the table staged, we can commit it to the database and provide a message:
+
+```{r}
+dolt_commit(message = "Add mtcars table")
+dolt_status()
+dolt_last_commit()
+```
+
+# Exploring Dolt history
+
+You can view the commit history of the database with `dolt_log()`, which collects
+the Dolt system table `dolt_log`:
+
+```{r}
+dolt_log()
+```
+
+# 
+
+## The Connection Pane
+
+For RStudio users, `{doltr}` provides a [connection pane](https://db.rstudio.com/tooling/connections/) with which you can explore the database.
+
+
+```{r, eval=FALSE}
+dolt_pane()
+```
+
+`{doltr}`'s connection pane shows information about the versioning state of your
+database in addition to your tables, the Dolt system tables and the database
+information schema.  
+
+
+
+[![Created by EcoHealth Alliance](figures/eha-footer.png)](https://www.ecohealthalliance.org/)
