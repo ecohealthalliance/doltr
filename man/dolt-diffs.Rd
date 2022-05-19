@@ -5,7 +5,7 @@
 \alias{dolt_table_history}
 \title{Examine information about dolt tables and diffs}
 \usage{
-dolt_diffs(table, to, conn = dolt(), collect = NULL, show_sql = NULL)
+dolt_diffs(table, to, from, conn = dolt(), collect = NULL, show_sql = NULL)
 
 dolt_table_history(table, conn = dolt(), collect = NULL, show_sql = NULL)
 }
@@ -13,6 +13,8 @@ dolt_table_history(table, conn = dolt(), collect = NULL, show_sql = NULL)
 \item{table}{\link{character} the name of a table in the database}
 
 \item{to}{commit to compare to}
+
+\item{from}{commit to compare from}
 
 \item{conn}{the database connection}
 
