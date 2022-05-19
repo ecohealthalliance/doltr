@@ -5,14 +5,15 @@
 \title{Export data from a dolt database}
 \usage{
 dolt_dump(
-  format = c("sql", "csv", "json"),
+  format = c("sql", "csv", "json", "parquet"),
   out = NULL,
   overwrite = FALSE,
   dir = Sys.getenv("DOLT_DIR", "doltdb")
 )
 }
 \arguments{
-\item{format}{the export data format. One of \code{"sql"}, \code{"csv"}, or \code{"json"}}
+\item{format}{the export data format. One of \code{"sql"}, \code{"csv"}, \code{"json"}, or
+\code{"parquet"}}
 
 \item{out}{the location on-disk for export. In the case of \code{"sql"}, format,
 a single file path (default \code{doltdump.sql}), otherwise a directory for all

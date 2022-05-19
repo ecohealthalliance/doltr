@@ -40,7 +40,8 @@ dolt_init <- function(dir = Sys.getenv("DOLT_DIR", "doltdb")) {
 
 #' Export data from a dolt database
 #' @param dir path to dolt database on-disk
-#' @param format the export data format. One of `"sql"`, `"csv"`, or `"json"`
+#' @param format the export data format. One of `"sql"`, `"csv"`, `"json"`, or
+#'   `"parquet"`
 #' @param out the location on-disk for export. In the case of `"sql"`, format,
 #'   a single file path (default `doltdump.sql`), otherwise a directory for all
 #'   tables to be dumped as separate files (default "doltdump")
@@ -49,7 +50,7 @@ dolt_init <- function(dir = Sys.getenv("DOLT_DIR", "doltdb")) {
 #' @importFrom R.utils getAbsolutePath
 #' @return the path(s) of exported files
 #' @export
-dolt_dump <- function(format = c("sql", "csv", "json"),
+dolt_dump <- function(format = c("sql", "csv", "json", "parquet"),
                       out = NULL,
                       overwrite = FALSE,
                       dir = Sys.getenv("DOLT_DIR", "doltdb")) {
