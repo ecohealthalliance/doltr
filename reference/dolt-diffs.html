@@ -53,7 +53,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dolt_diffs</span><span class="op">(</span><span class="va">table</span>, <span class="va">to</span>, conn <span class="op">=</span> <span class="fu"><a href="dolt.html">dolt</a></span><span class="op">(</span><span class="op">)</span>, collect <span class="op">=</span> <span class="cn">NULL</span>, show_sql <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">dolt_diffs</span><span class="op">(</span><span class="va">table</span>, <span class="va">to</span>, <span class="va">from</span>, conn <span class="op">=</span> <span class="fu"><a href="dolt.html">dolt</a></span><span class="op">(</span><span class="op">)</span>, collect <span class="op">=</span> <span class="cn">NULL</span>, show_sql <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 
 <span class="fu">dolt_table_history</span><span class="op">(</span><span class="va">table</span>, conn <span class="op">=</span> <span class="fu"><a href="dolt.html">dolt</a></span><span class="op">(</span><span class="op">)</span>, collect <span class="op">=</span> <span class="cn">NULL</span>, show_sql <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
@@ -64,6 +64,8 @@
 <dd><p><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> the name of a table in the database</p></dd>
 <dt>to</dt>
 <dd><p>commit to compare to</p></dd>
+<dt>from</dt>
+<dd><p>commit to compare from</p></dd>
 <dt>conn</dt>
 <dd><p>the database connection</p></dd>
 <dt>collect</dt>

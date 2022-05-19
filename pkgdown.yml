@@ -3,7 +3,7 @@ pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   doltr: doltr.html
-last_built: 2022-05-19T13:26Z
+last_built: 2022-05-19T18:47Z
 urls:
   reference: https://ecohealthalliance.github.io/doltr/reference
   article: https://ecohealthalliance.github.io/doltr/articles
