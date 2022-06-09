@@ -60,6 +60,7 @@ query_as_of <- function(query, as_of) {
     error = function(e) paste("'", as_of, "'")
   )
   query <- paste0(query, " AS OF ", as_of)
+  query
 }
 
 #' @export
