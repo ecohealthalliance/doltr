@@ -20,7 +20,7 @@
 #'   to `std_out()`, if `NULL` (default), it is suppressed.  Can also take
 #'   a filename. See [processx::run()].
 #' @param timeout Defines the timeout, in seconds, used for connections
-#'   A value of `0` represents an infinite timeout (default `28800000`)
+#'   (default `28800000`)
 #' @param query_parallelism Set the number of go routines spawned to handle each
 #'   query (default `2`)
 #' @param max_connections Set the number of connections handled by the server
@@ -44,7 +44,7 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                         read_only = FALSE,
                         log_level = "info",
                         log_out = NULL,
-                        timeout = 0,
+                        timeout = 28800000,
                         query_parallelism = 2,
                         max_connections = 100,
                         config_file = Sys.getenv("DOLT_CONFIG_FILE", "")) {
@@ -175,6 +175,11 @@ dkill <- function(p = ps_handle) {
   }
   invisible(NULL)
 }
-
-
+#
+# is_dolt_server_valid <- function(srv) {
+#   dbConnect(dolt_remote(), dbname = basename(ps_cwd(srv)), username = username,
+#             password = password, host = host, port = ps_connections(srv)$lport,
+#             autocommit = autocommit, ...)
+# }
+#
 
