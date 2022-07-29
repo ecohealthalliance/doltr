@@ -93,6 +93,7 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
 
   Sys.sleep(0.25) # Added delay between process creation and fetching
   p <- proc$as_ps_handle()
+  print(p)
   rm(proc)
 
   while(!isTRUE(port %in% ps_connections(p)$lport)) Sys.sleep(0.25)
