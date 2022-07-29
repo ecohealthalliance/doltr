@@ -91,8 +91,23 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                       env = c("current", R_DOLT=1),
                       supervise = FALSE, cleanup = FALSE, cleanup_tree = FALSE)
 
-  Sys.sleep(0.25) # Added delay between process creation and fetching
-  p <- proc$as_ps_handle()
+  p_set = F
+  p_start = Sys.time()
+  while(!p_set) {
+    p <- tryCatch({
+      p_set = T
+      proc$as_ps_handle()
+    }, error=function(cond) {
+      p_set = F
+      return(NA)
+    })
+
+    if(Sys.time() - p_start > lubridate::minutes(5)) {
+      p_set = T
+      error("proc$as_ps_handle() never returned process id")
+    }
+    Sys.sleep(0.25)
+  }
   print(p)
   rm(proc)
 
