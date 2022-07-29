@@ -90,6 +90,8 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                       stdout = log_out, stderr = "2>&1",
                       env = c("current", R_DOLT=1),
                       supervise = FALSE, cleanup = FALSE, cleanup_tree = FALSE)
+
+  Sys.sleep(0.25) # Added delay between process creation and fetching
   p <- proc$as_ps_handle()
   rm(proc)
 
@@ -108,6 +110,7 @@ dolt_server_port <- function(p) {
 #' @importFrom ps ps_pid ps_cwd ps_connections ps_is_running
 format.dolt_server <- function(x, ...) {
   pid <- ps_pid(x)
+  Sys.sleep()
   if (ps_is_running(x)) {
     dir <-   ps_cwd(x)
     port <- dolt_server_port(x)
