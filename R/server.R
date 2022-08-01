@@ -75,8 +75,6 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
             paste0("--timeout=", timeout),
             paste0("--max-connections=", max_connections),
             paste0("--loglevel=", log_level),
-            "--net_write_timeout=1800",
-            "--net_read_timeout=1800",
             paste0("--query-parallelism=", query_parallelism))
 
   if (password != "") args <- c(args, paste0("--password=", password))
