@@ -149,7 +149,7 @@ setOldClass("dolt_server")
 #' @importFrom ps ps ps_connections ps_cwd ps_environ ps_cmdline
 dolt_server_find <- function(dir = NULL, port = NULL, doltr_only = FALSE) {
   dp <- ps()
-  dp <- dp[dp$name == "dolt" & dp$status == "running",]
+  dp <- dp[dp$name == "dolt" & (dp$status == "running" | dp$status == "sleeping"),]
   if (nrow(dp))
     dp <- dp[vapply(dp$ps_handle, function(x) {
       isTRUE(try(ps_cmdline(x)[2],  silent = TRUE) == "sql-server")
