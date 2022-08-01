@@ -43,7 +43,7 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                         autocommit = TRUE,
                         read_only = FALSE,
                         log_level = "info",
-                        log_out = NULL,
+                        log_out = "proc.log",
                         timeout = 28800000,
                         query_parallelism = 2,
                         max_connections = 100,
@@ -90,7 +90,6 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                       stdout = log_out, stderr = "2>&1",
                       env = c("current", R_DOLT=1),
                       supervise = FALSE, cleanup = FALSE, cleanup_tree = FALSE)
-  p <- proc$as_ps_handle()
   rm(proc)
 
   while(!isTRUE(port %in% ps_connections(p)$lport)) Sys.sleep(0.25)
@@ -131,7 +130,7 @@ setOldClass("dolt_server")
 #' @importFrom ps ps ps_connections ps_cwd ps_environ ps_cmdline
 dolt_server_find <- function(dir = NULL, port = NULL, doltr_only = FALSE) {
   dp <- ps()
-  dp <- dp[dp$name == "dolt" & dp$status == "running",]
+  dp <- dp[dp$name == "dolt" & (dp$status == "running" | dp$status == "sleeping"),]
   if (nrow(dp))
     dp <- dp[vapply(dp$ps_handle, function(x) {
       isTRUE(try(ps_cmdline(x)[2],  silent = TRUE) == "sql-server")
@@ -163,6 +162,9 @@ dolt_server_kill <- function(dir = NULL, port = NULL, doltr_only = FALSE, verbos
   dp <- dolt_server_find(dir, port, doltr_only)
   lapply(dp$ps_handle, dkill)
   if (verbose) message(nrow(dp), " processes killed")
+
+  # dolt now uses a lock file which needs to be cleaned up after process killed
+  # This might be a little complicated with multi_db = T
   invisible(dp)
 }
 
@@ -173,8 +175,10 @@ dkill <- function(p = ps_handle) {
   } else {
     ps_kill(p)
   }
+
   invisible(NULL)
 }
+
 #
 # is_dolt_server_valid <- function(srv) {
 #   dbConnect(dolt_remote(), dbname = basename(ps_cwd(srv)), username = username,
