@@ -17,7 +17,7 @@ dolt_server(
   read_only = FALSE,
   log_level = "info",
   log_out = NULL,
-  timeout = 0,
+  timeout = 28800000,
   query_parallelism = 2,
   max_connections = 100,
   config_file = Sys.getenv("DOLT_CONFIG_FILE", "")
@@ -59,7 +59,7 @@ to \code{std_out()}, if \code{NULL} (default), it is suppressed.  Can also take
 a filename. See \code{\link[processx:run]{processx::run()}}.}
 
 \item{timeout}{Defines the timeout, in seconds, used for connections
-A value of \code{0} represents an infinite timeout (default \code{28800000})}
+(default \code{28800000})}
 
 \item{query_parallelism}{Set the number of go routines spawned to handle each
 query (default \code{2})}

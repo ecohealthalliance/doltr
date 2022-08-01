@@ -20,7 +20,7 @@
 #'   to `std_out()`, if `NULL` (default), it is suppressed.  Can also take
 #'   a filename. See [processx::run()].
 #' @param timeout Defines the timeout, in seconds, used for connections
-#'   A value of `0` represents an infinite timeout (default `28800000`)
+#'   (default `28800000`)
 #' @param query_parallelism Set the number of go routines spawned to handle each
 #'   query (default `2`)
 #' @param max_connections Set the number of connections handled by the server
