@@ -90,6 +90,8 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                       stdout = log_out, stderr = "2>&1",
                       env = c("current", R_DOLT=1),
                       supervise = FALSE, cleanup = FALSE, cleanup_tree = FALSE)
+
+  p <- proc$as_ps_handle()
   rm(proc)
 
   while(!isTRUE(port %in% ps_connections(p)$lport)) Sys.sleep(0.25)
