@@ -44,7 +44,7 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
                         read_only = FALSE,
                         log_level = "info",
                         log_out = NULL,
-                        timeout = 0,
+                        timeout = 28800000,
                         query_parallelism = 2,
                         max_connections = 100,
                         config_file = Sys.getenv("DOLT_CONFIG_FILE", "")) {
@@ -75,6 +75,8 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
             paste0("--timeout=", timeout),
             paste0("--max-connections=", max_connections),
             paste0("--loglevel=", log_level),
+            "--net_write_timeout=1800",
+            "--net_read_timeout=1800",
             paste0("--query-parallelism=", query_parallelism))
 
   if (password != "") args <- c(args, paste0("--password=", password))
@@ -87,7 +89,7 @@ dolt_server <- function(dir = Sys.getenv("DOLT_DIR", "doltdb"),
     log_out <- normalizePath(log_out, mustWork = FALSE)
 
   proc <- process$new(dolt_path(), args = args, wd = dir,
-                      stdout = log_out, stderr = "2>&1",
+                      stdout = "proc.out", stderr = "proc.err",
                       env = c("current", R_DOLT=1),
                       supervise = FALSE, cleanup = FALSE, cleanup_tree = FALSE)
 
@@ -126,7 +128,6 @@ dolt_server_port <- function(p) {
 #' @importFrom ps ps_pid ps_cwd ps_connections ps_is_running
 format.dolt_server <- function(x, ...) {
   pid <- ps_pid(x)
-  Sys.sleep()
   if (ps_is_running(x)) {
     dir <-   ps_cwd(x)
     port <- dolt_server_port(x)
