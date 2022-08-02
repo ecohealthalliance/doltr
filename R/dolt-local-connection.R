@@ -136,7 +136,7 @@ setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
     procs <- procs[procs$status == "running" & procs$pid != ps_pid(ps_handle()),]
     procs <- procs[vapply(procs$ps_handle, function(x) {
       conns <- try(ps_connections(x), silent = TRUE)
-      out <- !inherits(conns, "try-error") && nrow(conns) && conn@port %in% conns$rport
+      out <- !inherits(conns, "try-error") && nrow(conns) && conn@port %in% conns$lport
       out
     }, logical(1)),]
     other_sessions <- as.logical(nrow(procs))
@@ -149,9 +149,9 @@ setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
   }
   getMethod(dbDisconnect, "DoltConnection")(conn)
 
-  if (kill_server)
-    try(dkill(conn@server), silent = TRUE)
-  invisible(TRUE)
+  if (kill_server) {
+    try(dkill(conn@server), silent = T)
+  }
 })
 
 #' @export

@@ -172,10 +172,16 @@ dolt_server_kill <- function(dir = NULL, port = NULL, doltr_only = FALSE, verbos
 
 #' @importFrom ps signals ps_terminate ps_kill
 dkill <- function(p = ps_handle) {
+  # We should prefer SIGTERM over SIGKILL when possible
+  # is.null(ps::signals()$SIGTERM)) asks if SIGTERM
+  # is NOT available.
   if (is.null(ps::signals()$SIGTERM)) {
-    ps_terminate(p)
-  } else {
+    # If SIGTERM signal is NOT available kill the
+    # process and clean up the lock file manually.
     ps_kill(p)
+    unlink(paste0(ps::ps_cwd(p), "/.dolt/sql-server.lock"))
+  } else {
+    ps_terminate(p) # sql-server.lock is cleaned up automatically
   }
 
   invisible(NULL)
