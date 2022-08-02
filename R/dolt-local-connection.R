@@ -151,6 +151,7 @@ setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
 
   if (kill_server)
     try(dkill(conn@server), silent = TRUE)
+    unlink(paste0(conn@dir, "/.dolt/sql-server.lock"))
   invisible(TRUE)
 })
 
