@@ -162,7 +162,7 @@ dolt_server_find <- function(dir = NULL, port = NULL, doltr_only = FALSE) {
 
 dolt_server_kill <- function(dir = NULL, port = NULL, doltr_only = FALSE, verbose  = TRUE) {
   dp <- dolt_server_find(dir, port, doltr_only)
-  lapply(dp$ps_handle, dkill)
+  lapply(dp$ps_handle, dkill, dir = dir)
   if (verbose) message(nrow(dp), " processes killed")
 
   # dolt now uses a lock file which needs to be cleaned up after process killed
@@ -171,11 +171,21 @@ dolt_server_kill <- function(dir = NULL, port = NULL, doltr_only = FALSE, verbos
 }
 
 #' @importFrom ps signals ps_terminate ps_kill
-dkill <- function(p = ps_handle) {
+dkill <- function(p = ps_handle, dir = NULL) {
+  # We should prefer SIGTERM over SIGKILL when possible
+  # is.null(ps::signals()$SIGTERM)) asks if SIGTERM
+  # is NOT available.
   if (is.null(ps::signals()$SIGTERM)) {
-    ps_terminate(p)
-  } else {
+    if(is.null(dir)) {
+      warning("In dkill(): ps_kill() requires connection dir to clean up sql-server.lock. Process not killed")
+      return(NULL)
+    }
+    # If SIGTERM signal is NOT available kill the
+    # process and clean up the lock file manually.
     ps_kill(p)
+    unlink(paste0(dir, "/.dolt/sql-server.lock"))
+  } else {
+    ps_terminate(p) # sql-server.lock is cleaned up automatically
   }
 
   invisible(NULL)
