@@ -152,7 +152,7 @@ setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
   if (kill_server) {
     try(dkill(conn@server), silent = T)
   }
-}
+})
 
 #' @export
 #' @importFrom ps ps_is_running

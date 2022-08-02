@@ -179,7 +179,7 @@ dkill <- function(p = ps_handle) {
     # If SIGTERM signal is NOT available kill the
     # process and clean up the lock file manually.
     ps_kill(p)
-    unlink(paste0(ps::cwd(p), "/.dolt/sql-server.lock"))
+    unlink(paste0(ps::ps_cwd(p), "/.dolt/sql-server.lock"))
   } else {
     ps_terminate(p) # sql-server.lock is cleaned up automatically
   }
