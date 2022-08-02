@@ -150,7 +150,7 @@ setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
   getMethod(dbDisconnect, "DoltConnection")(conn)
 
   if (kill_server) {
-    try(dkill(conn@server, dir = conn@dir), silent = T)
+    try(dkill(conn@server), silent = T)
   }
 }
 
@@ -162,7 +162,7 @@ setMethod("dbIsValid", "DoltLocalConnection", function(dbObj, ...) {
     class(try(dbGetQuery(dbObj, "SELECT 1"), silent = TRUE)) != "try-error" &&
     ps_is_running(dbObj@server)
   if (!valid && inherits(dbObj@server, "ps_handle"))
-    try(dkill(dbObj@server, dbObj@dir), silent = TRUE)
+    try(dkill(dbObj@server), silent = TRUE)
   valid
 })
 
