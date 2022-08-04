@@ -57,7 +57,7 @@ setMethod("dbReadTable", c("DoltConnection", "character"),
 query_as_of <- function(query, as_of) {
   as_of <- tryCatch(
     paste0("TIMESTAMP('", as.character(as.POSIXct(as_of)), "')"),
-    error = function(e) paste("'", as_of, "'")
+    error = function(e) paste0("'", as_of, "'")
   )
   query <- paste0(query, " AS OF ", as_of)
   query
