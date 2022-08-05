@@ -129,11 +129,11 @@ setMethod("dbDisconnect", "DoltLocalConnection", function(conn, ...) {
 
   if (dbIsValid(conn) && ps_is_running(conn@server)) {
     # On disconnection, kill the server only if it was started by doltr and no
-    # no other processes connect to it
+    # no other processes connect to it.
 
     is_doltr_server <- isTRUE(ps_environ(conn@server)["R_DOLT"] == "1")
     procs <- ps()
-    procs <- procs[procs$status == "running" & procs$pid != ps_pid(ps_handle()),]
+    procs <- procs[(procs$status == "running" | procs$status == "sleeping") & procs$pid != ps_pid(ps_handle()),]
     procs <- procs[vapply(procs$ps_handle, function(x) {
       conns <- try(ps_connections(x), silent = TRUE)
       out <- !inherits(conns, "try-error") && nrow(conns) && conn@port %in% conns$lport

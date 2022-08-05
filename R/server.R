@@ -181,7 +181,8 @@ dkill <- function(p = ps_handle) {
     ps_kill(p)
     unlink(paste0(ps::ps_cwd(p), "/.dolt/sql-server.lock"))
   } else {
-    ps_terminate(p) # sql-server.lock is cleaned up automatically
+    ps_terminate(p) # sql-server.lock should be cleaned up automatically. Just in case though...
+    unlink(paste0(ps::ps_cwd(p), "/.dolt/sql-server.lock"))
   }
 
   invisible(NULL)

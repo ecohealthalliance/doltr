@@ -126,3 +126,9 @@ compact <- function(x) {
   is_empty <- vapply(x, function(x) length(x) == 0, logical(1))
   x[!is_empty]
 }
+
+get_table_type <- function(conn = NULL, name = NULL) {
+  if(is.null(conn) | is.null(name)) return(NULL)
+  out <- RMariaDB::dbGetQuery(conn, "select * from information_schema.tables")
+  out |> filter(TABLE_NAME == name) |> pull(TABLE_TYPE)
+}

@@ -40,8 +40,17 @@ setMethod("dbReadTable", c("DoltConnection", "character"),
             }
 
             name <- dbQuoteIdentifier(conn, name)
+
+            if (!is.null(as_of)) {
+              table_type <- get_table_type(conn, name)
+              if(table_type == "VIEW") {
+                name <- query_hash_qualified(name, as_of)
+              } else if (table_type == "BASE TABLE") {
+                name <- query_as_of(name, as_of)
+              }
+            }
+
             query <- paste("SELECT * FROM ", name)
-            if (!is.null(as_of)) query <- query_as_of(query, as_of)
 
             out <- dbGetQuery(conn, query,
                               row.names = row.names)
@@ -54,13 +63,19 @@ setMethod("dbReadTable", c("DoltConnection", "character"),
           }
 )
 
-query_as_of <- function(query, as_of) {
+query_as_of <- function(name, as_of) {
   as_of <- tryCatch(
     paste0("TIMESTAMP('", as.character(as.POSIXct(as_of)), "')"),
     error = function(e) paste0("'", as_of, "'")
   )
-  query <- paste0(query, " AS OF ", as_of)
-  query
+  name <- paste0(name, " AS OF ", as_of)
+  name
+}
+
+query_hash_qualified <- function(conn, name, as_of) {
+  dbname <- dbGetQuery(conn, "select DATABASE()")[[1]]
+  name <- paste0("`", dbname, "/", as_of, "`.", name)
+  name
 }
 
 #' @export
