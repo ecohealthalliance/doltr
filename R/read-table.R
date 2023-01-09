@@ -40,8 +40,20 @@ setMethod("dbReadTable", c("DoltConnection", "character"),
             }
 
             name <- dbQuoteIdentifier(conn, name)
+
+            if (!is.null(as_of)) {
+              table_type <- dbListTableType(conn, name, as_of)
+              if(!length(table_type)) warning("table does not exist at as_of commit")
+              if(length(table_type) > 0) {
+                if(table_type == "VIEW") {
+                  name <- query_hash_qualified(name, as_of)
+                } else if (table_type == "BASE TABLE") {
+                  name <- query_as_of(name, as_of)
+                }
+              }
+            }
+
             query <- paste("SELECT * FROM ", name)
-            if (!is.null(as_of)) query <- query_as_of(query, as_of)
 
             out <- dbGetQuery(conn, query,
                               row.names = row.names)
@@ -54,27 +66,36 @@ setMethod("dbReadTable", c("DoltConnection", "character"),
           }
 )
 
-query_as_of <- function(query, as_of) {
+query_as_of <- function(name, as_of) {
   as_of <- tryCatch(
     paste0("TIMESTAMP('", as.character(as.POSIXct(as_of)), "')"),
-    error = function(e) paste("'", as_of, "'")
+    error = function(e) paste0("'", as_of, "'")
   )
-  query <- paste0(query, " AS OF ", as_of)
-  query
+  name <- paste0(name, " AS OF ", as_of)
+  name
+}
+
+query_hash_qualified <- function(conn, name, as_of) {
+  dbname <- dbGetQuery(conn, "select DATABASE()")[[1]]
+  name <- paste0("`", dbname, "/", as_of, "`.", name)
+  name
 }
 
 #' @export
 #' @rdname dolt-read
 setMethod("dbListTables", "DoltConnection", function(conn, as_of = NULL, ...) {
-  # DATABASE(): https://stackoverflow.com/a/8096574/946850
-  query <- paste0("SELECT table_name FROM INFORMATION_SCHEMA.tables\n",
-                  "WHERE table_schema = DATABASE()")
-  if (!is.null(as_of)) query <- query_as_of(query, as_of)
-
-  dbGetQuery(conn, query)[[1]]
-
+  query <- 'show full tables'
+  if(!is.null(as_of)) query <- paste0(query, " as of '", as_of, "'")
+  out <- RMariaDB::dbGetQuery(conn, query)
+  out[[1]]
 })
 
+dbGetTableType <- function(conn, name, as_of = NULL) {
+  query <- 'show full tables'
+  if(!is.null(as_of)) query <- paste0(query, " as of '", as_of, "'")
+  out <- RMariaDB::dbGetQuery(conn, query)
+  out[out[,1] == name, 2]
+}
 
 #' @export
 #' @inheritParams DBI::dbListObjects
