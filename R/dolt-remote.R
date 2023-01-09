@@ -24,7 +24,7 @@ dolt_push <- function(remote = NULL, remote_branch = NULL, ref = NULL,
   if (set_upstream) args <- c("'--set-upstream' ", args)
   if (force) args <- c(args, "'--force'")
   query <- paste0("call dolt_push(", paste0(args, collapse = ", "), ")")
-  dolt_query(query, conn, collect, show_sql)
+  dolt_query(query, conn, collect, show_sql, execute = T)
   invisible(dolt_state())
 }
 
