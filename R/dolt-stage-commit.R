@@ -9,7 +9,7 @@ dolt_add <- function(tables = NULL, conn = dolt(), collect = NULL, show_sql = NU
     tables <- "'--all'"
   else
     tables <- paste0("'", tables, "'", collapse = ", ")
-  query <- paste0("select dolt_add(", tables, ")");
+  query <- paste0("call dolt_add(", tables, ")");
   dolt_query(query, conn, collect, show_sql)
   invisible(dolt_status())
 }
@@ -44,7 +44,7 @@ dolt_commit <- function(all = TRUE, message = NULL, author = NULL, date = NULL,
   if (!is.null(author)) args <- c(args, "'--author'", paste0("'", author, "'"))
   if (!is.null(date)) args <- c(args, "'--date'", paste0("'", date, "'"))
   if (allow_empty) args <- c(args, "'--allow-empty'")
-  query <- paste0("select dolt_commit(", paste0(args, collapse = ", "), ")");
+  query <- paste0("call dolt_commit(", paste0(args, collapse = ", "), ")");
   dolt_query(query, conn, collect, show_sql)
   invisible(dolt_state())
 }

@@ -17,7 +17,7 @@ dolt_checkout <- function(branch, b = FALSE, start_point = NULL,
   branch = sql_quote(branch, "'")
   if (b) branch <- paste0(sql_quote("-b", "'"), ", ", branch)
   if (!is.null(start_point)) branch <- paste0(branch, ", ", start_point)
-  query <- paste0("select dolt_checkout(", branch, ")")
+  query <- paste0("call dolt_checkout(", branch, ")")
   dolt_query(query, conn, collect, show_sql)
   invisible(dolt_state())
 }
