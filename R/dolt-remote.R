@@ -24,7 +24,7 @@ dolt_push <- function(remote = NULL, remote_branch = NULL, ref = NULL,
   if (set_upstream) args <- c("'--set-upstream' ", args)
   if (force) args <- c(args, "'--force'")
   query <- paste0("call dolt_push(", paste0(args, collapse = ", "), ")")
-  dolt_query(query, conn, collect, show_sql, execute = T)
+  dolt_call(query, conn, show_sql)
   invisible(dolt_state())
 }
 
@@ -40,7 +40,7 @@ dolt_pull <- function(remote = NULL, squash = FALSE, conn = dolt(),
   if (!is.null(remote)) args <- c(args, sql_quote(remote, "'"))
   if (squash) args <- c(args, "'--squash'")
   query <- paste0("call dolt_pull(", paste0(args, collapse = ", "), ")")
-  dolt_query(query, conn, collect, show_sql)
+  dolt_call(query, conn, show_sql)
   invisible(dolt_state())
 }
 
@@ -55,7 +55,7 @@ dolt_fetch <- function(remote = NULL, ref = FALSE, force = FALSE,
   if (!is.null(ref)) args <- c(args, sql_quote(remote, "'"))
   if (force) args <- c(args, "'--force'")
   query <- paste0("call dolt_fetch(", paste0(args, collapse = ", "), ")")
-  dolt_query(query, conn, collect, show_sql)
+  dolt_call(query, conn, show_sql)
   invisible(dolt_state())
 }
 

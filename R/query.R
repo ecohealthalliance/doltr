@@ -1,19 +1,13 @@
 #' @importFrom dplyr tbl collect sql
 dolt_query <- function(query, conn = dolt(),
                        collect = Sys.getboolenv("DOLT_COLLECT", TRUE),
-                       show_sql = Sys.getboolenv("DOLT_VERBOSE", FALSE),
-                       execute = F) {
+                       show_sql = Sys.getboolenv("DOLT_VERBOSE", FALSE)) {
   query <- sql(query)
   if (show_sql) message(query)
-  if(!execute) {
-    result <- tbl(conn, query)
-    if (collect) result <- collect(result)
-  } else {
-    result <- RMariaDB::dbExecute(conn, query)
-  }
+  result <- tbl(conn, query)
+  if (collect) result <- collect(result)
   result
 }
-
 
 .collect <- function(collect) {
   if (is.null(collect))
@@ -28,3 +22,13 @@ dolt_query <- function(query, conn = dolt(),
   else
     return(show_sql)
 }
+
+dolt_call <- function(query, conn = dolt(),
+                    show_sql = Sys.getboolenv("DOLT_VERBOSE", FALSE)) {
+
+  query <- sql(query)
+  if (show_sql) message(query)
+  result <- RMariaDB::dbExecute(conn, query)
+  result
+}
+
