@@ -7,10 +7,10 @@ dolt_query <- function(query, conn = dolt(),
   if (show_sql) message(query)
   if(!execute) {
     result <- tbl(conn, query)
+    if (collect) result <- collect(result)
   } else {
     result <- RMariaDB::dbExecute(conn, query)
   }
-  if (collect) result <- collect(result)
   result
 }
 
