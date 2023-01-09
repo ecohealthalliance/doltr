@@ -1,10 +1,15 @@
 #' @importFrom dplyr tbl collect sql
 dolt_query <- function(query, conn = dolt(),
                        collect = Sys.getboolenv("DOLT_COLLECT", TRUE),
-                       show_sql = Sys.getboolenv("DOLT_VERBOSE", FALSE)) {
+                       show_sql = Sys.getboolenv("DOLT_VERBOSE", FALSE),
+                       execute = F) {
   query <- sql(query)
   if (show_sql) message(query)
-  result <- tbl(conn, query)
+  if(!execute) {
+    result <- tbl(conn, query)
+  } else {
+    result <- RMariaDB::dbExecute(conn, query)
+  }
   if (collect) result <- collect(result)
   result
 }

@@ -62,7 +62,7 @@ dolt_reset <- function(hard = FALSE, tables = NULL, conn = dolt(),
   args <- c()
   if (!is.null(tables)) args <- paste0(sql_quote(tables, "'"), collapse = ", ")
   if (hard) args <- c(sql_quote("--hard", "'"), args)
-  query <- paste0("select dolt_reset(", paste(args, collapse = ", ", ")"))
+  query <- paste0("call dolt_reset(", paste(args, collapse = ", ", ")"))
   dolt_query(query, conn, collect, show_sql)
   invisible(dolt_state())
 }
