@@ -9,8 +9,8 @@ dolt_add <- function(tables = NULL, conn = dolt(), collect = NULL, show_sql = NU
     tables <- "'--all'"
   else
     tables <- paste0("'", tables, "'", collapse = ", ")
-  query <- paste0("select dolt_add(", tables, ")");
-  dolt_query(query, conn, collect, show_sql)
+  query <- paste0("call dolt_add(", tables, ")");
+  dolt_call(query, conn, show_sql)
   invisible(dolt_status())
 }
 
@@ -44,9 +44,11 @@ dolt_commit <- function(all = TRUE, message = NULL, author = NULL, date = NULL,
   if (!is.null(author)) args <- c(args, "'--author'", paste0("'", author, "'"))
   if (!is.null(date)) args <- c(args, "'--date'", paste0("'", date, "'"))
   if (allow_empty) args <- c(args, "'--allow-empty'")
-  query <- paste0("select dolt_commit(", paste0(args, collapse = ", "), ")");
-  dolt_query(query, conn, collect, show_sql)
-  invisible(dolt_state())
+  query <- paste0("call dolt_commit(", paste0(args, collapse = ", "), ")");
+  dolt_call(query, conn, show_sql)
+  state <- dolt_state()
+  message(paste0("head commit: ", state$head))
+  invisible(state)
 }
 
 #' @param hard Reset working and staged tables? If FALSE (default), a "soft"
@@ -62,7 +64,7 @@ dolt_reset <- function(hard = FALSE, tables = NULL, conn = dolt(),
   args <- c()
   if (!is.null(tables)) args <- paste0(sql_quote(tables, "'"), collapse = ", ")
   if (hard) args <- c(sql_quote("--hard", "'"), args)
-  query <- paste0("select dolt_reset(", paste(args, collapse = ", ", ")"))
-  dolt_query(query, conn, collect, show_sql)
+  query <- paste0("call dolt_reset(", paste(args, collapse = ", ", ")"))
+  dolt_call(query, conn, show_sql)
   invisible(dolt_state())
 }

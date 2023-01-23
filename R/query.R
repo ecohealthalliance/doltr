@@ -9,7 +9,6 @@ dolt_query <- function(query, conn = dolt(),
   result
 }
 
-
 .collect <- function(collect) {
   if (is.null(collect))
     return(Sys.getboolenv("DOLT_COLLECT", TRUE))
@@ -23,3 +22,13 @@ dolt_query <- function(query, conn = dolt(),
   else
     return(show_sql)
 }
+
+dolt_call <- function(query, conn = dolt(),
+                    show_sql = Sys.getboolenv("DOLT_VERBOSE", FALSE)) {
+
+  query <- sql(query)
+  if (show_sql) message(query)
+  result <- RMariaDB::dbExecute(conn, query)
+  result
+}
+
