@@ -13,7 +13,8 @@
   overwrite = FALSE,
   append = FALSE,
   temporary = FALSE,
-  batch_size = NULL
+  batch_size = NULL,
+  ...
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ when the connection is closed. For \code{dbRemoveTable()}, only temporary
 tables are considered if this argument is set to \code{TRUE}}
 
 \item{batch_size}{The number of records to insert in a single statement (defaults to all)}
+
+\item{...}{for additional parameters passed on. Not currently used.}
 }
 \description{
 This method uses \code{\link[dbx:dbxInsert]{dbx::dbxInsert()}} as that implementation

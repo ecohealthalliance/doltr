@@ -27,13 +27,14 @@ NULL
 #'   when the connection is closed. For `dbRemoveTable()`, only temporary
 #'   tables are considered if this argument is set to `TRUE`
 #' @param batch_size The number of records to insert in a single statement (defaults to all)
+#' @param ... for additional parameters passed on. Not currently used.
 #' @export
 #' @rdname dolt-write
 #' @seealso dolt-read
 setMethod("dbWriteTable", c("DoltConnection", "character", "data.frame"),
           function(conn, name, value, field.types = NULL, row.names = FALSE,
                    overwrite = FALSE, append = FALSE, temporary = FALSE,
-                   batch_size = NULL) {
+                   batch_size = NULL, ...) {
             if (!is.data.frame(value))  {
               stopc("`value` must be data frame")
             }
