@@ -30,8 +30,8 @@ sf_read <- function(conn, table_name = "us_state_capitals_NCL") {
 
   # Set the crs of the simple feature collection and
   # rename wkb column to geometry type
-  sf_via_dbi |>
-    st_set_crs(sf_via_dbi$crs[3]) |>
-    select(-crs) |>
-    rename(!!st_geometry_type(sf_via_dbi, by_geometry = F) |> as.character() := wkb )
+  # Add in error protection for unkown crs
+  possibly(st_set_crs, sf_via_dbi)(sf_via_dbi$crs[1]) |>
+  select(-crs) |>
+  rename(!!st_geometry_type(sf_via_dbi, by_geometry = F) |> as.character() := wkb)
 }
