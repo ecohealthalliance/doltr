@@ -31,7 +31,42 @@ sf_read <- function(conn, table_name = "us_state_capitals_NCL") {
   # Set the crs of the simple feature collection and
   # rename wkb column to geometry type
   # Add in error protection for unkown crs
-  possibly(st_set_crs, sf_via_dbi)(sf_via_dbi$crs[1]) |>
+  sf_via_dbi <- possibly(st_set_crs, sf_via_dbi)(sf_via_dbi$crs[1]) |>
   select(-crs) |>
   rename(!!st_geometry_type(sf_via_dbi, by_geometry = F) |> as.character() := wkb)
+
+  sf_via_dbi
+}
+
+
+
+#' Title
+#'
+#' @param conn
+#' @param sfc
+#' @param table_name
+#'
+#' @return
+#' @export
+#'
+#' @examples
+sf_write <- function(conn, sfc, table_name) {
+
+  # 1. Strip out crs
+  crs <- unlist(str_split(st_crs(sfc)$input, ":"))[2] |> as.numeric()
+
+  # 2. Convert crs to hex taking care of NA handling
+  crs <- ifelse(is.na(crs), "0000", R.utils::intToHex(crs))
+
+  # 3. Identify geometry column
+  sf_col <- names(sfc)[which(map_lgl(map(sfc, class), ~any("sfc" %in% .x)))]
+
+  # 4. Get wkb hex string and append crs
+  # This might need some work if there are multiple sf columns?
+  # sf_col is just the FIRST one.
+  query <- sf:::to_postgis(conn, sfc, binary = T) |>
+    mutate(across(any_of(sf_col), ~paste0(crs, .x)))
+
+  # 5. Convert to blob and dbExecute. Re-use sf machinery?
+
 }
