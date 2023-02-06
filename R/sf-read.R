@@ -13,10 +13,9 @@ sf_read <- function(conn, table_name = "us_state_capitals") {
   # Read raw table
   sf_via_dbi <- DBI::dbReadTable(conn, table_name)
 
-  # Identify geometry column. Sadly DBI::dbReadTable only returns 'char' for wkb columns
-  # This still needs to be resolved. For now in our tests it's the 3rd column
-  names(sf_via_dbi)[3] <- "coord"
-  geom_col <- names(sf_via_dbi)[3]
+  # Identify geometry column. The type will be 'blob'.
+  # Right now just grab the first blob. We should test them all eventually.
+  geom_col <- which(map_lgl(sf_via_dbi, ~inherits(.x, "blob")))[1] |> names()
 
   # This only works for text. lapply is uglier but works
   # Split raw into crs and wkb columns
