@@ -73,7 +73,6 @@ setMethod("dbWriteTable", c("DoltConnection", "character", "data.frame"),
               found <- FALSE
             }
 
-
             if (overwrite) {
               dbRemoveTable(conn, name, temporary = temporary,
                             fail_if_missing = FALSE)
@@ -104,6 +103,9 @@ setMethod("dbWriteTable", c("DoltConnection", "character", "data.frame"),
               )
 
               if (nrow(value) > 0) {
+
+                print(map(value, class))
+
                 dbxInsert(
                   conn = conn,
                   table = name,
@@ -116,6 +118,22 @@ setMethod("dbWriteTable", c("DoltConnection", "character", "data.frame"),
           })
 
 
+# Have to add this to stop sf's method from taking over
+setMethod("dbWriteTable", c("DoltConnection", "character", "sf"),
+          function(conn, name, value, field.types = NULL, row.names = FALSE,
+                   overwrite = FALSE, append = FALSE, temporary = FALSE,
+                   batch_size = NULL, ...) {
+
+            FUN  <- selectMethod("dbWriteTable", signature = c("DoltConnection", "character", "data.frame"))
+
+            FUN(conn, name, value,
+                field.types = field.types,
+                row.names = row.names,
+                overwrite = overwrite,
+                append = append,
+                temporary = temporary,
+                batch_size = batch_size, ...)
+          })
 
 
 # dolt_import_csv <- function(conn = dolt()) {
