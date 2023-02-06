@@ -11,7 +11,7 @@ NULL
 #'
 #' @param batch_size The number of records to insert in a single SQL statement
 #'   (defaults to all)
-#' @importFrom dbx dbxInsert
+#' importFrom dbx dbxInsert. REMOVED BY NCL. CUSTOM SF FRIENDLY dbxInsert
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @param conn a database connection
 #' @param overwrite a logical specifying whether to overwrite an existing table
