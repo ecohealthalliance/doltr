@@ -72,3 +72,5 @@ Collate:
     'state.R'
     'utils.R'
     'write-table.R'
+    'dbxInsert.R'
+    'sf-read.R'
