@@ -35,14 +35,10 @@ sf_read <- function(conn, table_name = "us_state_capitals") {
     mutate(crs = readBin(crs, what = "int", n = 1, size = 4L)) |>
     sf::st_as_sf()
 
-  # Do all rows have the same crs? If not error out
-  # Change this to set sync the crs columns based on some logic.
-  testthat::expect_equal(length(unique(sf_via_dbi$crs)), 1L)
-
-  # Set the crs of the simple feature collection and
+  # Set the crs of the simple feature collection with the first row crs
   # rename wkb column to geometry type
-  # Add in error protection for unkown crs
-  sf_via_dbi <- possibly(sf::st_set_crs, sf_via_dbi)(sf_via_dbi$crs[1]) |>
+  # Possibly adds in error protection for unknown crs
+  sf_via_dbi <- possibly(sf::st_set_crs, sf_via_dbi)(sf_via_dbi, sf_via_dbi$crs[1]) |>
   select(-crs) |>
   rename(!!geom_col := wkb)
 
