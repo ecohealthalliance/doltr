@@ -89,5 +89,4 @@ hex_to_raw <- function(x) {
   as.raw(bitwShiftL(digits[c(TRUE, FALSE)],4) + digits[c(FALSE, TRUE)])
 }
 
-dbWriteTable(conn, "test4000", sfc, overwrite = T)
 
