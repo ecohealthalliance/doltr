@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-sf_read <- function(conn, table_name = "us_state_capitals_NCL") {
+sf_read <- function(conn, table_name = "us_state_capitals") {
 
   # Read raw table
   sf_via_dbi <- DBI::dbReadTable(conn, table_name)
@@ -41,7 +41,7 @@ sf_read <- function(conn, table_name = "us_state_capitals_NCL") {
   # Set the crs of the simple feature collection and
   # rename wkb column to geometry type
   # Add in error protection for unkown crs
-  sf_via_dbi <- possibly(st_set_crs, sf_via_dbi)(sf_via_dbi$crs[1]) |>
+  sf_via_dbi <- possibly(sf::st_set_crs, sf_via_dbi)(sf_via_dbi$crs[1]) |>
   select(-crs) |>
   rename(!!geom_col := wkb)
 

@@ -79,7 +79,7 @@ setMethod("dbWriteTable", c("DoltConnection", "character", "data.frame"),
                             fail_if_missing = FALSE)
             }
 
-            row.names <- compatRowNames(row.names)
+            # row.names <- compatRowNames(row.names) # Already done on line 42
             value <- sqlRownamesToColumn(value, row.names)
             value <- factor_to_string(value)
 

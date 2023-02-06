@@ -47,7 +47,7 @@ quoteRecords <- function(conn, records) {
     col <- DBI::dbQuoteLiteral(conn, castData(conn, records[, i, drop=T]))
 
     if(isSf(records[, i, drop=T])) {
-      crs <- unlist(str_split(st_crs(records)$input, ":"))[2] |> as.numeric()
+      crs <- unlist(str_split(sf::st_crs(records)$input, ":"))[2] |> as.numeric()
       if(!is.na(crs))
         col <- paste0("ST_GeomFromWKB(X", DBI::dbQuoteLiteral(conn, col), ",", crs, ")")
       else {
@@ -98,3 +98,4 @@ castData <- function(conn, col) {
 
   col
 }
+
