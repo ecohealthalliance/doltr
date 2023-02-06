@@ -24,6 +24,12 @@ insertClause <- function(conn, table, records) {
   paste0("INSERT INTO ", quoted_table, " (", cols_sql, ") VALUES ", records_sql)
 }
 
+valuesClause <- function(conn, records) {
+  quoted_records <- quoteRecords(conn, records)
+  rows <- apply(quoted_records, 1, function(x) { paste0(x, collapse=", ") })
+  paste0("(", rows, ")", collapse=", ")
+}
+
 ########################################################################
 ################# PR to dbx would be the following #####################
 ########################################################################
