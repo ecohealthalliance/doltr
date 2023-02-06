@@ -4,7 +4,7 @@
 # object and decode the WKB blob with my version of sf_read.
 # Not sure yet if dbWriteTable works.
 
-dbxInsert <- function(conn, table, records, batch_size=NULL, returning=NULL, show_sql) {
+dbxInsert <- function(conn, table, records, batch_size=NULL, returning=NULL, show_sql = T) {
   dbx:::inBatches(records, batch_size, function(batch) {
     sql <- insertClause(conn, table, batch)
     if(show_sql) message(sql)
