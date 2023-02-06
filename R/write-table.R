@@ -104,8 +104,6 @@ setMethod("dbWriteTable", c("DoltConnection", "character", "data.frame"),
 
               if (nrow(value) > 0) {
 
-                print(map(value, class))
-
                 dbxInsert(
                   conn = conn,
                   table = name,

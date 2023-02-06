@@ -43,16 +43,19 @@ isSf <- function(col) {
 quoteRecords <- function(conn, records) {
   quoted_records <- data.frame(matrix(ncol=0, nrow=nrow(records)))
   for (i in 1:ncol(records)) {
-
-    col <- DBI::dbQuoteLiteral(conn, castData(conn, records[, i, drop=T]))
-
-    if(isSf(records[, i, drop=T])) {
-      crs <- unlist(str_split(sf::st_crs(records)$input, ":"))[2] |> as.numeric()
-      if(!is.na(crs))
-        col <- paste0("ST_GeomFromWKB(X", DBI::dbQuoteLiteral(conn, col), ",", crs, ")")
-      else {
+    col = records[, i, drop=T]
+    if(isSf(col)) {
+      crs <- unlist(str_split(sf::st_crs(col)$input, ":"))[2] |> as.numeric()
+      if(is.na(crs)) {
+        col <- DBI::dbQuoteLiteral(conn, castData(conn, col))
         col <- paste0("ST_GeomFromWKB(X", DBI::dbQuoteLiteral(conn, col), ")") # Not sure if this is needed. What does mySQL do if EPSG is null or missing?
+      } else {
+        sf::st_crs(col) = NA # First drop crs so it doesn't show up in a strange place in the WKB string
+        col <- DBI::dbQuoteLiteral(conn, castData(conn, col))
+        col <- paste0("ST_GeomFromWKB(X", DBI::dbQuoteLiteral(conn, col), ",", crs, ")")
       }
+    } else {
+      col <- DBI::dbQuoteLiteral(conn, castData(conn, col))
     }
     quoted_records[, i] <- col
   }
