@@ -36,6 +36,7 @@ sf_read <- function(conn, table_name = "us_state_capitals") {
     sf::st_as_sf()
 
   # Do all rows have the same crs? If not error out
+  # Change this to set sync the crs columns based on some logic.
   testthat::expect_equal(length(unique(sf_via_dbi$crs)), 1L)
 
   # Set the crs of the simple feature collection and
