@@ -33,7 +33,7 @@ sf_read <- function(conn, table_name = "us_state_capitals_NCL") {
   sf_via_dbi <- sf_via_dbi |>
     rowwise() |>
     mutate(crs = readBin(crs, what = "int", n = 1, size = 4L)) |>
-    st_as_sf()
+    sf::st_as_sf()
 
   # Do all rows have the same crs? If not error out
   testthat::expect_equal(length(unique(sf_via_dbi$crs)), 1L)
