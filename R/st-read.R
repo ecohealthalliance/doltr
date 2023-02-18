@@ -7,14 +7,15 @@
 #' @export
 #'
 #' @examples
-st_read.DBIObject = function(dsn = NULL,
-                             layer = NULL,
-                             query = NULL,
-                             EWKB = TRUE,
-                             quiet = TRUE,
-                             as_tibble = FALSE,
-                             geometry_column = NULL,
-                             ...) {
+setMethod("st_read", signature("DoltLocalConnection", "character"),
+          function(dsn = NULL,
+                   layer = NULL,
+                   query = NULL,
+                   EWKB = TRUE,
+                   quiet = TRUE,
+                   as_tibble = FALSE,
+                   geometry_column = NULL,
+                   ...) {
   if (is.null(dsn))
     stop("no connection provided") # nocov
 
@@ -145,7 +146,7 @@ st_read.DBIObject = function(dsn = NULL,
     x <- tibble::new_tibble(x, nrow = nrow(x), class = "sf")
   }
   return(x)
-}
+})
 
 # from: https://stackoverflow.com/questions/70884796/convert-hexadecimal-string-to-bytes-in-r
 hex_to_raw <- function(x) {
