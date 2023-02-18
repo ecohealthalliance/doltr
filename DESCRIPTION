@@ -25,6 +25,7 @@ Imports:
     jsonlite,
     methods,
     processx,
+    sf,
     ps,
     rlang,
     RMariaDB,
