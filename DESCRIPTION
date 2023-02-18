@@ -32,6 +32,7 @@ Imports:
     RMariaDB,
     R.utils,
     rstudioapi,
+    sf,
     utils
 Suggests: 
     covr,
