@@ -5,6 +5,7 @@
 #'
 #' @return
 #' @export
+#' @import sf
 #'
 #' @examples
 setMethod("st_read", signature("DoltLocalConnection", "character"),
