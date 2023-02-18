@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' @importFrom sf sf_read
+#' @import sf
 sf_read <- function(conn, table_name = "us_state_capitals_copy") {
 
   # Read raw table
