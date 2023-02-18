@@ -73,4 +73,4 @@ Collate:
     'utils.R'
     'write-table.R'
     'dbxInsert.R'
-    'sf-read.R'
+    'st-read.R'
