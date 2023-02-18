@@ -14,8 +14,6 @@ License: AGPL (>= 3)
 URL: https://ecohealthalliance.github.io/doltr,
     https://github.com/ecohealthalliance/doltr
 BugReports: https://github.com/ecohealthalliance/doltr/issues
-Depends:
-    sf
 Imports: 
     blob,
     cli,
