@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-sf_read <- function(conn, table_name = "us_state_capitals") {
+sf_read <- function(conn, table_name = "us_state_capitals_copy") {
 
   # Read raw table
   sf_via_dbi <- DBI::dbReadTable(conn, table_name)
@@ -83,6 +83,10 @@ sf_write <- function(conn, sfc, table_name) {
 hex_to_raw <- function(x) {
   digits <- strtoi(strsplit(x, "")[[1]], base=16L)
   as.raw(bitwShiftL(digits[c(TRUE, FALSE)],4) + digits[c(FALSE, TRUE)])
+}
+
+st_read.MySQLConnection <- function(...) {
+  st_read.DBIObject(...)
 }
 
 
