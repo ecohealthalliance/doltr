@@ -45,7 +45,7 @@ quoteRecords <- function(conn, records) {
   for (i in 1:ncol(records)) {
     col = records[, i, drop=T]
     if(isSf(col)) {
-      crs <- unlist(str_split(sf::st_crs(col)$input, ":"))[2] |> as.numeric()
+      crs <- unlist(strsplit(sf::st_crs(col)$input, ":"))[2] |> as.numeric()
       if(is.na(crs)) {
         col <- DBI::dbQuoteLiteral(conn, castData(conn, col))
         col <- paste0("ST_GeomFromWKB(X", DBI::dbQuoteLiteral(conn, col), ")") # Not sure if this is needed. What does mySQL do if EPSG is null or missing?
