@@ -42,13 +42,13 @@ setMethod("dbReadTable", c("DoltConnection", "character"),
             name <- dbQuoteIdentifier(conn, name)
 
             if (!is.null(as_of)) {
-              table_type <- dbListTableType(conn, name, as_of)
+              table_type <- dbGetTableType(conn, name, as_of)
               if(!length(table_type)) warning("table does not exist at as_of commit")
               if(length(table_type) > 0) {
                 if(table_type == "VIEW") {
-                  name <- query_hash_qualified(name, as_of)
+                  name <- query_hash_qualified(dolt(), name, as_of)
                 } else if (table_type == "BASE TABLE") {
-                  name <- query_as_of(name, as_of)
+                  name <- query_as_of(dolt(), name, as_of)
                 }
               }
             }
