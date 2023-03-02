@@ -28,7 +28,13 @@ NULL
 #' @export
 #' @rdname dolt-read
 setMethod("dbReadTable", c("DoltConnection", "character"),
-          function(conn, name, as_of = NULL, ..., row.names = FALSE, check.names = TRUE) {
+          function(conn, name,
+                   as_of = NULL,
+                   ...,
+                   row.names = FALSE,
+                   check.names = TRUE,
+                   show_sql = F) {
+
             row.names <- compatRowNames(row.names)
 
             if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
@@ -41,7 +47,6 @@ setMethod("dbReadTable", c("DoltConnection", "character"),
 
             if (!is.null(as_of)) {
               table_type <- dbGetTableType(conn, name, as_of)
-              print(paste0(name, as_of, "table_type:", table_type))
               if(!length(table_type)) warning("table does not exist at as_of commit")
               name <- query_hash_qualified(conn, name, as_of)
             } else {
@@ -49,7 +54,7 @@ setMethod("dbReadTable", c("DoltConnection", "character"),
             }
 
             query <- paste("SELECT * FROM ", name)
-            print(query)
+            if(show_sql) print(query)
 
             out <- dbGetQuery(conn,
                               query,
