@@ -45,13 +45,13 @@ setMethod("dbReadTable", c("DoltConnection", "character"),
               stopc("`check.names` must be a logical scalar")
             }
 
-            # if (!is.null(as_of)) {
-            #   table_type <- dbGetTableType(conn, name, as_of)
-            #   if(!length(table_type)) warning("table does not exist at as_of commit")
-            #   name <- query_hash_qualified(conn, name, as_of)
-            # } else {
-            #   name <- dbQuoteIdentifier(conn, name)
-            # }
+            if (!is.null(as_of)) {
+              table_type <- dbGetTableType(conn, name, as_of)
+              if(!length(table_type)) warning("table does not exist at as_of commit")
+              name <- query_hash_qualified(conn, name, as_of)
+            } else {
+              name <- dbQuoteIdentifier(conn, name)
+            }
 
             query <- paste("SELECT * FROM", name)
 
