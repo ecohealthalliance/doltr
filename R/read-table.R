@@ -28,7 +28,13 @@ NULL
 #' @export
 #' @rdname dolt-read
 setMethod("dbReadTable", c("DoltConnection", "character"),
-          function(conn, name, as_of = NULL, ..., row.names = FALSE, check.names = TRUE) {
+          function(conn, name,
+                   as_of = NULL,
+                   ...,
+                   row.names = FALSE,
+                   check.names = TRUE,
+                   show_sql = F) {
+
             row.names <- compatRowNames(row.names)
 
             if ((!is.logical(row.names) && !is.character(row.names)) || length(row.names) != 1L)  {
@@ -39,23 +45,21 @@ setMethod("dbReadTable", c("DoltConnection", "character"),
               stopc("`check.names` must be a logical scalar")
             }
 
-            name <- dbQuoteIdentifier(conn, name)
-
             if (!is.null(as_of)) {
-              table_type <- dbListTableType(conn, name, as_of)
+              table_type <- dbGetTableType(conn, name, as_of)
               if(!length(table_type)) warning("table does not exist at as_of commit")
-              if(length(table_type) > 0) {
-                if(table_type == "VIEW") {
-                  name <- query_hash_qualified(name, as_of)
-                } else if (table_type == "BASE TABLE") {
-                  name <- query_as_of(name, as_of)
-                }
-              }
+              name <- query_hash_qualified(conn, name, as_of)
+            } else {
+              name <- dbQuoteIdentifier(conn, name)
             }
 
-            query <- paste("SELECT * FROM ", name)
+            query <- paste("SELECT * FROM", name)
 
-            out <- dbGetQuery(conn, query,
+            if(!is.null(as_of)) query <- paste(query, "AS OF", DBI::dbQuoteString(dolt(), as_of))
+            if(show_sql) print(query)
+
+            out <- DBI::dbGetQuery(conn,
+                              query,
                               row.names = row.names)
 
             if (check.names) {
