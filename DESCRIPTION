@@ -30,6 +30,7 @@ Imports:
     RMariaDB,
     R.utils,
     rstudioapi,
+    sf,
     utils
 Suggests: 
     covr,
@@ -72,3 +73,5 @@ Collate:
     'state.R'
     'utils.R'
     'write-table.R'
+    'dbxInsert.R'
+    'st-read.R'

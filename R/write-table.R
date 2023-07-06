@@ -11,7 +11,7 @@ NULL
 #'
 #' @param batch_size The number of records to insert in a single SQL statement
 #'   (defaults to all)
-#' @importFrom dbx dbxInsert
+#' importFrom dbx dbxInsert. REMOVED BY NCL. CUSTOM SF FRIENDLY dbxInsert
 #' @inheritParams DBI::sqlRownamesToColumn
 #' @param conn a database connection
 #' @param overwrite a logical specifying whether to overwrite an existing table
@@ -27,13 +27,14 @@ NULL
 #'   when the connection is closed. For `dbRemoveTable()`, only temporary
 #'   tables are considered if this argument is set to `TRUE`
 #' @param batch_size The number of records to insert in a single statement (defaults to all)
+#' @param ... for additional parameters passed on. Not currently used.
 #' @export
 #' @rdname dolt-write
 #' @seealso dolt-read
 setMethod("dbWriteTable", c("DoltConnection", "character", "data.frame"),
           function(conn, name, value, field.types = NULL, row.names = FALSE,
                    overwrite = FALSE, append = FALSE, temporary = FALSE,
-                   batch_size = NULL) {
+                   batch_size = NULL, ...) {
             if (!is.data.frame(value))  {
               stopc("`value` must be data frame")
             }
@@ -72,13 +73,12 @@ setMethod("dbWriteTable", c("DoltConnection", "character", "data.frame"),
               found <- FALSE
             }
 
-
             if (overwrite) {
               dbRemoveTable(conn, name, temporary = temporary,
                             fail_if_missing = FALSE)
             }
 
-            row.names <- compatRowNames(row.names)
+            # row.names <- compatRowNames(row.names) # Already done on line 42
             value <- sqlRownamesToColumn(value, row.names)
             value <- factor_to_string(value)
 
@@ -103,6 +103,7 @@ setMethod("dbWriteTable", c("DoltConnection", "character", "data.frame"),
               )
 
               if (nrow(value) > 0) {
+
                 dbxInsert(
                   conn = conn,
                   table = name,
@@ -115,6 +116,22 @@ setMethod("dbWriteTable", c("DoltConnection", "character", "data.frame"),
           })
 
 
+# Have to add this to stop sf's method from taking over
+setMethod("dbWriteTable", c("DoltConnection", "character", "sf"),
+          function(conn, name, value, field.types = NULL, row.names = FALSE,
+                   overwrite = FALSE, append = FALSE, temporary = FALSE,
+                   batch_size = NULL, ...) {
+
+            FUN  <- selectMethod("dbWriteTable", signature = c("DoltConnection", "character", "data.frame"))
+
+            FUN(conn, name, value,
+                field.types = field.types,
+                row.names = row.names,
+                overwrite = overwrite,
+                append = append,
+                temporary = temporary,
+                batch_size = batch_size, ...)
+          })
 
 
 # dolt_import_csv <- function(conn = dolt()) {

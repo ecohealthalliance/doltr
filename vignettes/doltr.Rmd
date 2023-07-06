@@ -117,7 +117,7 @@ tbl(dolt(), "flights") %>%
 ```
 
 ```{r writetbl}
-dbWriteTable(dolt(), "mtcars", mtcars)
+dbWriteTable(dolt(), "mtcars", mtcars, overwrite = T)
 ```
 
 With the last command, we changed the database by adding a table.  This is
